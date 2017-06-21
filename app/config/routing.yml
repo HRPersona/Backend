@@ -1,0 +1,13 @@
+app:
+    resource: '@PersonaHrisBundle/Controller/'
+    type: 'annotation'
+    prefix: /api
+
+api:
+    resource: '.'
+    type: 'api_platform'
+    prefix: /api
+
+api_doc:
+    resource: "@NelmioApiDocBundle/Resources/config/routing.yml"
+    prefix: /api/doc

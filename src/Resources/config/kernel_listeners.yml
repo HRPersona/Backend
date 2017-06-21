@@ -1,0 +1,61 @@
+services:
+    persona.subscriber.response_subscriber:
+        class: 'Persona\Hris\Core\Subscriber\ResponseCacheSubscriber'
+        arguments:
+            - '@kernel'
+            - '@security.token_storage'
+            - '%persona.cache.response_lifetime%'
+        tags:
+            - { name: 'kernel.event_subscriber' }
+
+    persona.client.check_api_key_subscriber:
+        class: 'Persona\Hris\Core\Client\ApiKeyCheckSubscriber'
+        arguments:
+            - '@persona.repository.orm.client_repository'
+            - '@kernel'
+        tags:
+            - { name: 'kernel.event_subscriber' }
+
+    persona.security.normalize_request_subscriber:
+        class: 'Persona\Hris\Core\Security\Subscriber\NormalizeRequestSubscriber'
+        arguments:
+            - '@serializer'
+        tags:
+            - { name: 'kernel.event_subscriber' }
+
+    persona.request.request_normalizer:
+        class: 'Persona\Hris\Core\Request\NormalizeRequest'
+        arguments:
+            - '@api_platform.serializer'
+            - '@api_platform.serializer.context_builder'
+            - '@api_platform.listener.request.deserialize'
+        tags:
+            - { name: 'kernel.event_subscriber' }
+
+    persona.subscriber.exception_subscriber:
+        class: 'Persona\Hris\Core\Subscriber\ExceptionSubscriber'
+        arguments:
+            - '@serializer'
+            - '@logger'
+        tags:
+            - { name: 'kernel.event_subscriber' }
+
+    persona.security.authorization.authorization_checker:
+        class: 'Persona\Hris\Core\Security\Subscriber\AuthorizationCheckerSubscriber'
+        arguments:
+            - '@persona.manager.manager_factory'
+            - '@persona.repository.orm.module_repository'
+            - '@persona.repository.orm.role_hierarchy_repository'
+            - '@persona.security.authorization.authorization_factory'
+        tags:
+            - { name: 'kernel.event_subscriber' }
+
+    persona.security.multiple_login:
+        class: 'Persona\Hris\Core\Security\Subscriber\UserSessionSubscriber'
+        arguments:
+            - '@kernel'
+            - '@persona.manager.manager_factory'
+            - '@persona.repository.orm.user_repository'
+            - '@session'
+        tags:
+            - { name: 'kernel.event_subscriber' }

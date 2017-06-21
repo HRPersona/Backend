@@ -1,0 +1,42 @@
+services:
+    persona.repository.orm.client_repository:
+        class: 'Persona\Hris\Repository\ORM\ClientRepository'
+        calls:
+            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\Client'
+            
+    persona.repository.orm.module_repository:
+        class: 'Persona\Hris\Repository\ORM\ModuleRepository'
+        calls:
+            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\Module'
+            
+    persona.repository.orm.role_hierarchy_repository:
+        class: 'Persona\Hris\Repository\ORM\RoleHierarchyRepository'
+        calls:
+            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
+        arguments:
+            - '@persona.repository.orm.role_repository'
+            - '@security.token_storage'
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\User'
+
+    persona.repository.orm.role_repository:
+        class: 'Persona\Hris\Repository\ORM\RoleRepository'
+        calls:
+            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\Role'
+            
+    persona.repository.orm.user_repository:
+        class: 'Persona\Hris\Repository\ORM\UserRepository'
+        calls:
+            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\User'

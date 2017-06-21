@@ -1,0 +1,81 @@
+services:
+    persona.filter.order_filter:
+        parent: 'api_platform.doctrine.orm.order_filter'
+        arguments: [ ~ ]
+        tags:
+            - { name: 'api_platform.filter', id: 'order.filter' }
+            
+    persona.filter.created_at_filter:
+        parent:    'api_platform.doctrine.orm.date_filter'
+        arguments: [ { createdAt: 'exclude_null' } ]
+        tags:      [ { name: 'api_platform.filter', id: 'created_at.filter' } ]
+            
+    persona.filter.updated_at_filter:
+        parent:    'api_platform.doctrine.orm.date_filter'
+        arguments: [ { updatedAt: 'exclude_null' } ]
+        tags:      [ { name: 'api_platform.filter', id: 'updated_at.filter' } ]
+            
+    persona.filter.parent_filter:
+        parent:    'api_platform.doctrine.orm.search_filter'
+        arguments: [ { parent.id: 'exact', parent.name: 'partial' } ]
+        tags:      [ { name: 'api_platform.filter', id: 'parent.search' } ]
+            
+    persona.filter.user_search:
+        parent:    'api_platform.doctrine.orm.search_filter'
+        arguments: [ { user.id: 'exact', user.username: 'exact', user.email: 'exact' } ]
+        tags:      [ { name: 'api_platform.filter', id: 'user.search' } ]
+            
+    persona.filter.module_search:
+        parent:    'api_platform.doctrine.orm.search_filter'
+        arguments: [ { module.id: 'exact', module.code: 'exact' } ]
+        tags:      [ { name: 'api_platform.filter', id: 'module.search' } ]
+            
+    persona.filter.menu_display_search:
+        parent:    'api_platform.doctrine.orm.boolean_filter'
+        arguments: [ { module.menuDisplay: ~ } ]
+        tags:      [ { name: 'api_platform.filter', id: 'menu_display.search' } ]
+            
+    persona.filter.path_filter:
+        parent:    'api_platform.doctrine.orm.search_filter'
+        arguments: [ { method: 'partial' } ]
+        tags:      [ { name: 'api_platform.filter', id: 'path.search' } ]
+            
+    persona.filter.method_filter:
+        parent:    'api_platform.doctrine.orm.search_filter'
+        arguments: [ { method: 'exact' } ]
+        tags:      [ { name: 'api_platform.filter', id: 'method.search' } ]
+            
+    persona.filter.client_name_filter:
+        parent:    'api_platform.doctrine.orm.search_filter'
+        arguments: [ { clientName: 'partial' } ]
+        tags:      [ { name: 'api_platform.filter', id: 'client_name.search' } ]
+            
+    persona.filter.code_search:
+        parent:    'api_platform.doctrine.orm.search_filter'
+        arguments: [ { code: 'partial' } ]
+        tags:      [ { name: 'api_platform.filter', id: 'code.search' } ]
+            
+    persona.filter.name_search:
+        parent:    'api_platform.doctrine.orm.search_filter'
+        arguments: [ { name: 'partial' } ]
+        tags:      [ { name: 'api_platform.filter', id: 'name.search' } ]
+            
+    persona.filter.fullname_search:
+        parent:    'api_platform.doctrine.orm.search_filter'
+        arguments: [ { fullname: 'partial' } ]
+        tags:      [ { name: 'api_platform.filter', id: 'fullname.search' } ]
+            
+    persona.filter.username_search:
+        parent:    'api_platform.doctrine.orm.search_filter'
+        arguments: [ { username: 'partial' } ]
+        tags:      [ { name: 'api_platform.filter', id: 'username.search' } ]
+            
+    persona.filter.email_search:
+        parent:    'api_platform.doctrine.orm.search_filter'
+        arguments: [ { email: 'partial' } ]
+        tags:      [ { name: 'api_platform.filter', id: 'email.search' } ]
+            
+    persona.filter.year_search:
+        parent:    'api_platform.doctrine.orm.search_filter'
+        arguments: [ { year: 'exact' } ]
+        tags:      [ { name: 'api_platform.filter', id: 'year.search' } ]

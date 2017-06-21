@@ -1,0 +1,123 @@
+services:
+    persona.doctrine_read_registry:
+        class: 'Doctrine\Bundle\DoctrineBundle\Registry'
+        arguments:
+            - '@service_container'
+            - '%doctrine.connections%'
+            - '%doctrine.entity_managers%'
+            - 'read'
+            - 'read'
+
+    persona.doctrine_write_registry:
+        class: 'Doctrine\Bundle\DoctrineBundle\Registry'
+        arguments:
+            - '@service_container'
+            - '%doctrine.connections%'
+            - '%doctrine.entity_managers%'
+            - 'default'
+            - 'default'
+
+    persona.manager.manager_factory:
+        class: 'Persona\Hris\Core\Manager\ManagerFactory'
+        arguments:
+            - '@snc_redis.cache'
+            - {'read': '@persona.doctrine_read_registry', 'write':'@persona.doctrine_write_registry'}
+            - '%kernel.environment%'
+
+    persona.data_provider.collection_provider:
+        class: 'Persona\Hris\Core\DataProvider\ORM\CollectionDataProvider'
+        arguments:
+            - '@persona.manager.manager_factory'
+            - []
+            - '%persona.cache.query_result_lifetime%'
+        public: false
+        tags:
+            -  { name: 'api_platform.collection_data_provider', priority: 3 }
+
+    persona.data_provider.item_provider:
+        class: 'Persona\Hris\Core\DataProvider\ORM\ItemDataProvider'
+        arguments:
+            - '@persona.manager.manager_factory'
+            - '@api_platform.metadata.property.name_collection_factory'
+            - '@api_platform.doctrine.orm.metadata.property.metadata_factory'
+            - []
+            - '%persona.cache.query_result_lifetime%'
+        public: false
+        tags:
+            -  { name: 'api_platform.item_data_provider', priority: 3 }
+            
+    persona.operation.path_resolver:
+        class: 'Persona\Hris\Core\Operation\ChainPathResolver'
+        arguments:
+            - []
+        public: false
+            
+    persona.operation.operation_path_resolver:
+        class: 'Persona\Hris\Core\Operation\ApiPlatformPathResolver'
+        arguments:
+            - '@persona.operation.path_resolver'
+        public: false
+
+    persona.security.authorization.role_hierarchy:
+        class: 'Persona\Hris\Core\Security\Authorization\RoleHierarchy'
+        arguments:
+            - '@persona.repository.orm.role_hierarchy_repository'
+
+    persona.security.authorization.role_hierarchy_voter:
+        class: 'Symfony\Component\Security\Core\Authorization\Voter\RoleHierarchyVoter'
+        public: false
+        arguments:
+            - '@persona.security.authorization.role_hierarchy'
+        tags:
+            - { name: 'security.voter', priority: 247 }
+            
+    persona.cache.apcu_adapter:
+        parent: 'cache.adapter.apcu'
+    
+    persona.formula.expression_language:
+        class: 'Symfony\Component\ExpressionLanguage\ExpressionLanguage'
+        arguments:
+            - '@persona.cache.apcu_adapter'
+            
+    persona.logger.exclude_logger_factory:
+        class: 'Persona\Hris\Core\Logger\ExcludeLoggerFactory'
+        arguments:
+            - []
+            
+    persona.security.authorization.authorization_factory:
+        class: 'Persona\Hris\Core\Security\Authorization\AuthorizationFactory'
+        arguments:
+            - []
+            
+    persona.security.authorization.exclude_profiler:
+        class: 'Persona\Hris\Core\Security\Authorization\ExcludeProfilerPath'
+        tags:
+            - { name: 'persona.exclude_path' }
+            
+    persona.security.authorization.exclude_web_asset:
+        class: 'Persona\Hris\Core\Security\Authorization\ExcludeWebAssetPath'
+        tags:
+            - { name: 'persona.exclude_path' }
+            
+    persona.security.authorization.exclude:
+        class: 'Persona\Hris\Security\Authorization\ExcludePath'
+        arguments:
+            - '@request_stack'
+        tags:
+            - { name: 'persona.exclude_path' }
+            
+    persona.logger.exclude_path:
+        class: 'Persona\Hris\Logger\ExcludePath'
+        tags:
+            - { name: 'persona.exclude_log' }
+            
+    persona.upload.uploader:
+        class: 'Persona\Hris\Core\Upload\Uploader'
+        arguments:
+            - '%persona.upload_dir%'
+            
+    ad3n.username.generator_factory:
+        class: 'Ihsan\UsernameGenerator\UsernameFactory'
+        arguments:
+            - '@persona.repository.orm.user_repository'
+            - ''

@@ -1,0 +1,243 @@
+imports:
+    - { resource: security.yml }
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
+parameters:
+    locale: en
+
+framework:
+    #esi:             ~
+    translator:      { fallbacks: ["%locale%"] }
+    secret:          "%secret%"
+    router:
+        resource: "%kernel.root_dir%/config/routing.yml"
+        strict_requirements: ~
+    form:            ~
+    csrf_protection: ~
+    validation:      { enable_annotations: true }
+    serializer:      { enable_annotations: true }
+    templating:
+        engines: ['twig']
+    default_locale:  "%locale%"
+    trusted_hosts:   ~
+    trusted_proxies: ~
+    session:
+        # http://symfony.com/doc/current/reference/configuration/framework.html#handler-id
+        handler_id:  session.handler.native_file
+        save_path:   "%kernel.root_dir%/../var/sessions/%kernel.environment%"
+    fragments:       ~
+    http_method_override: true
+    assets: ~
+    php_errors:
+        log: true
+
+# Twig Configuration
+twig:
+    debug:            "%kernel.debug%"
+    strict_variables: "%kernel.debug%"
+
+# Doctrine Configuration
+doctrine:
+    dbal:
+        default_connection: 'default'
+        connections:
+            default:
+                driver:   'pdo_mysql'
+                host:     '%write_database_host%'
+                port:     '%write_database_port%'
+                dbname:   '%write_database_name%'
+                user:     '%write_database_user%'
+                password: '%write_database_password%'
+                charset:  'UTF8'
+            read:
+                driver:   'pdo_mysql'
+                host:     '%read_database_host%'
+                port:     '%read_database_port%'
+                dbname:   '%read_database_name%'
+                user:     '%read_database_user%'
+                password: '%read_database_password%'
+                charset:  'UTF8'
+        # if using pdo_sqlite as your database driver:
+        #   1. add the path in parameters.yml
+        #     e.g. database_path: '%kernel.root_dir%/data/data.db3'
+        #   2. Uncomment database_path in parameters.yml.dist
+        #   3. Uncomment next line:
+        #     path:     '%database_path%'
+
+    orm:
+        auto_generate_proxy_classes: '%kernel.debug%'
+        default_entity_manager: 'default'
+        entity_managers:
+            default:
+                naming_strategy: 'doctrine.orm.naming_strategy.underscore'
+                connection: 'default'
+                mappings:
+                    PersonaHrisBundle:  ~
+                metadata_cache_driver:
+                    type: 'service'
+                    id: 'snc_redis.cache_client'
+                query_cache_driver:
+                    type: 'service'
+                    id: 'snc_redis.cache_clien'
+                result_cache_driver:
+                    type: 'service'
+                    id: 'snc_redis.cache_clien'
+            read:
+                naming_strategy: 'doctrine.orm.naming_strategy.underscore'
+                connection: 'read'
+                mappings:
+                    PersonaHrisBundle: ~
+                metadata_cache_driver:
+                    type: 'service'
+                    id: 'snc_redis.cache_clien'
+                query_cache_driver:
+                    type: 'service'
+                    id: 'snc_redis.cache_clien'
+                result_cache_driver:
+                    type: 'service'
+                    id: 'snc_redis.cache_clien'
+
+# Swiftmailer Configuration
+swiftmailer:
+    transport: '%mailer_transport%'
+    host:      '%mailer_host%'
+    username:  '%mailer_user%'
+    password:  '%mailer_password%'
+    spool:     { type: 'memory' }
+
+# Nelmio CORS
+nelmio_cors:
+    defaults:
+        allow_origin:   ['%cors_allow_origin%']
+        allow_methods:  ['POST', 'PUT', 'GET', 'DELETE', 'OPTIONS']
+        allow_headers:  ['content-type', 'authorization']
+        expose_headers: ['link']
+        max_age:        '%session_ttl%'
+
+snc_redis:
+    clients:
+        default:
+            type: 'predis'
+            alias: 'default'
+            dsn: 'redis://%redis_server%'
+            logging: '%kernel.debug%'
+        session:
+            type: 'predis'
+            alias: 'session'
+            dsn: 'redis://%redis_server%/1'
+        cache:
+            type: 'predis'
+            alias: 'cache'
+            dsn: 'redis://%redis_server%/2'
+            options:
+                profile: '2.2'
+                connection_timeout: 10
+                read_write_timeout: 30
+    session:
+        client: 'session'
+        prefix: '%session_prefix%'
+        ttl: '%session_ttl%'
+    doctrine:
+        metadata_cache:
+            client: 'cache'
+            namespace: 'bigerp:dcmc:'
+            entity_manager: ['default', 'read']
+        result_cache:
+            client: 'cache'
+            namespace: 'bigerp:dcrc:'
+            entity_manager: ['default', 'read']
+        query_cache:
+            client: 'cache'
+            namespace: 'bigerp:dcqc:'
+            entity_manager: ['default', 'read']
+        second_level_cache:
+            client: 'cache'
+            namespace: 'bigerp:dcslc:'
+            entity_manager: ['default', 'read']
+    profiler_storage:
+        client: 'default'
+        ttl: '%session_ttl%'
+
+api_platform:
+    title: 'Persona API'
+    description: 'Persona HRIS API'
+    version: '0.0.1'
+    enable_fos_user: true
+    enable_nelmio_api_doc: true
+    enable_swagger: false
+    enable_swagger_ui: false
+    default_operation_path_resolver: 'persona.operation.operation_path_resolver'
+    eager_loading:
+        enabled: true
+        force_eager: true
+        max_joins: 27
+    collection:
+        pagination:
+            enabled: true
+            items_per_page: 17
+    formats:
+        jsonld:   ['application/ld+json']
+        jsonhal:  ['application/hal+json']
+        json:     ['application/json']
+        xml:      ['application/xml', 'text/xml']
+
+nelmio_api_doc:
+    name: 'BIG Internal API'
+    cache:
+        enabled: true
+    sandbox:
+#        accept_type: 'application/json'
+        body_format:
+            formats: ['json', 'jsonld']
+            default_format: 'json'
+        request_format:
+            formats:
+                json: 'application/json'
+                jsonld: 'application/ld+json'
+        authentication:
+            name: 'api_key'
+            delivery: 'query'
+        endpoint: '%api_endpoint%'
+
+knp_doctrine_behaviors:
+    blameable: ~
+    geocodable: ~
+    loggable: ~
+    sluggable: ~
+    soft_deletable: true
+    timestampable: true
+    translatable: ~
+    tree: ~
+
+fos_user:
+    db_driver: 'orm' # other valid values are 'mongodb' and 'couchdb'
+    firewall_name: 'main'
+    user_class: 'Persona\Hris\Entity\User'
+    from_email:
+        address: '%mailer_user%'
+        sender_name: '%mailer_user%'
+
+lexik_jwt_authentication:
+    private_key_path: '%jwt_private_key_path%'
+    public_key_path:  '%jwt_public_key_path%'
+    pass_phrase:      '%jwt_key_pass_phrase%'
+    token_ttl:        '%session_ttl%'
+    token_extractors:
+        authorization_header:
+            enabled: true
+            prefix: 'Bearer'
+            name: 'Authorization'
+        cookie:
+            enabled: false
+            name: 'BEARER'
+        query_parameter:
+            enabled: true
+            name: 'access_token'
+
+persona:
+    default_password: '654321'
+    upload_dir: '/tmp/uploads'
+    cache_lifetime:
+        result_lifetime: 1
+        response_lifetime: 1

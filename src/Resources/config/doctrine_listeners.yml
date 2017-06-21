@@ -1,0 +1,53 @@
+services:
+    persona.logger.action_logger:
+        class: 'Persona\Hris\Core\Logger\ActionLoggerSubscriber'
+        arguments:
+            - '@security.token_storage'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
+    persona.client.check_api_key_generator_subscriber:
+        class: 'Persona\Hris\Core\Client\ApiKeyGeneratorSubscriber'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
+    persona.logger.activity_log_subscriber:
+        class: 'Persona\Hris\Core\Logger\ActivityLogSubscriber'
+        arguments:
+            - '@persona.manager.manager_factory'
+            - '@security.token_storage'
+            - '@persona.repository.orm.client_repository'
+            - '@persona.logger.exclude_logger_factory'
+            - 'Persona\Hris\Entity\UserActivity'
+        tags:
+            - { name: 'doctrine.event_subscriber', connection: 'default' }
+            - { name: 'kernel.event_listener', event: 'kernel.exception', method: 'onKernelException' }
+            - { name: 'kernel.event_listener', event: 'kernel.terminate', method: 'onKernelTerminate' }
+            
+    persona.security.delete_user_subscriber:
+        class: 'Persona\Hris\Core\Security\Subscriber\DeleteUserSubscriber'
+        arguments:
+            - '@security.token_storage'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+            
+    persona.security.default_password_subscriber:
+        class: 'Persona\Hris\Core\Security\Subscriber\DefaultPasswordSubscriber'
+        arguments:
+            - '%persona.default_password%'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+            
+    persona.security.authorization.module_delete_checker_subscriber:
+        class: 'Persona\Hris\Core\Security\Subscriber\ModuleDeleteCheckerSubscriber'
+        arguments:
+            - '@persona.repository.orm.role_repository'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+            
+    persona.upload.upload_subscriber:
+        class: 'Persona\Hris\Core\Upload\UploadSubscriber'
+        arguments:
+            - '@persona.upload.uploader'
+        tags:
+            - { name: 'doctrine.event_subscriber' }

@@ -1,0 +1,25 @@
+# This file is auto-generated during the composer install
+parameters:
+    write_database_host: 'localhost'
+    write_database_port: '3306'
+    write_database_name: 'persona_hris'
+    write_database_user: 'root'
+    write_database_password: null
+    read_database_host: '10.5.5.208'
+    read_database_port: 3306
+    read_database_name: 'persona_hris'
+    read_database_user: 'root'
+    read_database_password: null
+    redis_server: 'localhost'
+    mailer_transport: 'smtp'
+    mailer_host: '127.0.0.1'
+    mailer_user: 'surya.iksanudin@binis.com'
+    mailer_password: null
+    jwt_private_key_path: '%kernel.root_dir%/../app/jwt/private.pem'
+    jwt_public_key_path: '%kernel.root_dir%/../app/jwt/public.pem'
+    jwt_key_pass_phrase: 'aden'
+    session_prefix: 'persona_hris'
+    session_ttl: 10800
+    cors_allow_origin: 'http://localhost'
+    api_endpoint: 'http://localhost:8000'
+    secret: 'MuhammadRasulullahSAWPersonaHRIS'

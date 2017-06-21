@@ -1,0 +1,5 @@
+- {name: 'klien', group: 'admin', menuOrder: 4, diplay: true, description: '', path: '/api/clients', ref: 'mod1'}
+- {name: 'modul', group: 'admin', menuOrder: 2, diplay: true, description: '', path: '/api/modules', ref: 'mod2'}
+- {name: 'hak akses', group: 'admin', menuOrder: 3, diplay: false, description: '', path: '/api/roles', ref: 'mod3'}
+- {name: 'pengguna', group: 'admin', menuOrder: 1, diplay: true, description: '', path: '/api/users', ref: 'mod4'}
+- {name: 'aktifitas pengguna', menuOrder: 5, diplay: true, group: 'admin', description: '', path: '/api/user-activities', ref: 'mod5'}
