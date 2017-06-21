@@ -2,6 +2,7 @@
 
 namespace Persona\Hris\Employee\Model;
 
+use Persona\Hris\Organization\Model\CompanyInterface;
 use Persona\Hris\Organization\Model\JobTitleInterface;
 use Persona\Hris\Share\Model\CityInterface;
 use Persona\Hris\Share\Model\ProvinceInterface;
@@ -41,9 +42,19 @@ interface EmployeeInterface
     public function getLetterNumber():? string;
 
     /**
+     * @param string $letterNumber
+     */
+    public function setLetterNumber(string $letterNumber): void;
+
+    /**
      * @return \DateTime
      */
     public function getContractEndDate():? \DateTime;
+
+    /**
+     * @param \DateTime $dateTime
+     */
+    public function setContractEndDate(\DateTime $dateTime): void;
 
     /**
      * @return null|JobTitleInterface
@@ -54,6 +65,16 @@ interface EmployeeInterface
      * @param JobTitleInterface $jobTitle
      */
     public function setJobTitle(JobTitleInterface $jobTitle): void;
+
+    /**
+     * @return null|CompanyInterface
+     */
+    public function getCompany():? CompanyInterface;
+
+    /**
+     * @param CompanyInterface $company
+     */
+    public function setCompany(CompanyInterface $company): void;
 
     /**
      * @return string
