@@ -17,7 +17,7 @@ interface PromotionInterface
     /**
      * @return null|EmployeeInterface
      */
-    public function getEmployee():? EmployeeInterface;
+    public function getEmployee(): ? EmployeeInterface;
 
     /**
      * @param EmployeeInterface $employee
@@ -27,7 +27,7 @@ interface PromotionInterface
     /**
      * @return null|JobTitleInterface
      */
-    public function getOldJobTitle():? JobTitleInterface;
+    public function getOldJobTitle(): ? JobTitleInterface;
 
     /**
      * @param JobTitleInterface $jobTitle
@@ -37,7 +37,7 @@ interface PromotionInterface
     /**
      * @return null|JobTitleInterface
      */
-    public function getNewJobTitle():? JobTitleInterface;
+    public function getNewJobTitle(): ? JobTitleInterface;
 
     /**
      * @param JobTitleInterface $jobTitle

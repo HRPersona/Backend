@@ -1,11 +1,13 @@
 <?php
 
-namespace Persona\Hris\Employee\Model;
+namespace Persona\Hris\Attendance\Model;
+
+use Persona\Hris\Employee\Model\EmployeeInterface;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-interface EmployeeExperienceInterface
+interface EmployeeAbsentInterface
 {
     /**
      * @return string
@@ -25,20 +27,20 @@ interface EmployeeExperienceInterface
     /**
      * @return \DateTime
      */
-    public function getStartDate(): \DateTime;
+    public function getAbsentDate(): \DateTime;
 
     /**
-     * @return \DateTime
+     * @return null|AbsentReasonInterface
      */
-    public function getEndDate(): \DateTime;
+    public function getAbsentReason(): ? AbsentReasonInterface;
+
+    /**
+     * @param AbsentReasonInterface $absentReason
+     */
+    public function setAbsentReason(AbsentReasonInterface $absentReason): void;
 
     /**
      * @return string
      */
-    public function getCompany(): string;
-
-    /**
-     * @return string
-     */
-    public function getJobTitle(): string;
+    public function getRemark():? string;
 }

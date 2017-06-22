@@ -39,7 +39,7 @@ interface EmployeeInterface
     /**
      * @return string
      */
-    public function getLetterNumber():? string;
+    public function getLetterNumber(): ? string;
 
     /**
      * @param string $letterNumber
@@ -49,7 +49,7 @@ interface EmployeeInterface
     /**
      * @return \DateTime
      */
-    public function getContractEndDate():? \DateTime;
+    public function getContractEndDate(): ? \DateTime;
 
     /**
      * @param \DateTime $dateTime
@@ -59,7 +59,7 @@ interface EmployeeInterface
     /**
      * @return null|JobTitleInterface
      */
-    public function getJobTitle():? JobTitleInterface;
+    public function getJobTitle(): ? JobTitleInterface;
 
     /**
      * @param JobTitleInterface $jobTitle
@@ -69,7 +69,7 @@ interface EmployeeInterface
     /**
      * @return null|CompanyInterface
      */
-    public function getCompany():? CompanyInterface;
+    public function getCompany(): ? CompanyInterface;
 
     /**
      * @param CompanyInterface $company
@@ -89,7 +89,7 @@ interface EmployeeInterface
     /**
      * @return null|CityInterface
      */
-    public function getPlaceOfBirth():? CityInterface;
+    public function getPlaceOfBirth(): ? CityInterface;
 
     /**
      * @param CityInterface $city
@@ -124,7 +124,7 @@ interface EmployeeInterface
     /**
      * @return null|CityInterface
      */
-    public function getCity():? CityInterface;
+    public function getCity(): ? CityInterface;
 
     /**
      * @param CityInterface $city
@@ -134,7 +134,7 @@ interface EmployeeInterface
     /**
      * @return null|ProvinceInterface
      */
-    public function getProvince():? ProvinceInterface;
+    public function getProvince(): ? ProvinceInterface;
 
     /**
      * @param ProvinceInterface $province

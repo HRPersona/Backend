@@ -17,7 +17,7 @@ interface EmployeeTrainingInterface
     /**
      * @return null|EmployeeInterface
      */
-    public function getEmployee():? EmployeeInterface;
+    public function getEmployee(): ? EmployeeInterface;
 
     /**
      * @param EmployeeInterface $employee
@@ -37,7 +37,7 @@ interface EmployeeTrainingInterface
     /**
      * @return null|UniversityInterface
      */
-    public function getUniversity():? UniversityInterface;
+    public function getUniversity(): ? UniversityInterface;
 
     /**
      * @param UniversityInterface $university
@@ -52,5 +52,5 @@ interface EmployeeTrainingInterface
     /**
      * @return string
      */
-    public function getCerfiticateFile():? string;
+    public function getCerfiticateFile(): ? string;
 }

@@ -1,19 +1,14 @@
 <?php
 
-namespace Persona\Hris\Employee\Model;
+namespace Persona\Hris\Overtime\Model;
 
-use Persona\Hris\Share\Model\SkillInterface;
+use Persona\Hris\Employee\Model\EmployeeInterface;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-interface EmployeeSkillInterface
+interface EmployeeOvertimeInterface
 {
-    const LEVEL_BEGINNER = 'b';
-    const LEVEL_INTERMEDIATE = 'i';
-    const LEVEL_ADVANCED = 'a';
-    const LEVEL_EXPERT = 'e';
-
     /**
      * @return string
      */
@@ -30,17 +25,22 @@ interface EmployeeSkillInterface
     public function setEmployee(EmployeeInterface $employee): void;
 
     /**
-     * @return SkillInterface
+     * @return \DateTime
      */
-    public function getSkill(): ? SkillInterface;
-
-    /**
-     * @param SkillInterface $skill
-     */
-    public function setSkill(SkillInterface $skill): void;
+    public function getOvertimeDate(): \DateTime;
 
     /**
      * @return string
      */
-    public function getLevel(): string;
+    public function getOvertimeStart(): string;
+
+    /**
+     * @return string
+     */
+    public function getOvertimeEnd(): string;
+
+    /**
+     * @return null|string
+     */
+    public function getRemark():? string;
 }

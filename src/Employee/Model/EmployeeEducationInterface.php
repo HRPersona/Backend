@@ -18,7 +18,7 @@ interface EmployeeEducationInterface
     /**
      * @return null|EmployeeInterface
      */
-    public function getEmployee():? EmployeeInterface;
+    public function getEmployee(): ? EmployeeInterface;
 
     /**
      * @param EmployeeInterface $employee
@@ -38,7 +38,7 @@ interface EmployeeEducationInterface
     /**
      * @return null|UniversityInterface
      */
-    public function getUniversity():? UniversityInterface;
+    public function getUniversity(): ? UniversityInterface;
 
     /**
      * @param UniversityInterface $university
@@ -48,7 +48,7 @@ interface EmployeeEducationInterface
     /**
      * @return null|EducationTitleInterface
      */
-    public function getEducationTitle():? EducationTitleInterface;
+    public function getEducationTitle(): ? EducationTitleInterface;
 
     /**
      * @param EducationTitleInterface $educationTitle

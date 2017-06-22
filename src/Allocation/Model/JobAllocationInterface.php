@@ -18,7 +18,7 @@ interface JobAllocationInterface
     /**
      * @return null|EmployeeInterface
      */
-    public function getEmployee():? EmployeeInterface;
+    public function getEmployee(): ? EmployeeInterface;
 
     /**
      * @param EmployeeInterface $employee
@@ -28,7 +28,7 @@ interface JobAllocationInterface
     /**
      * @return null|JobTitleInterface
      */
-    public function getJobTitle():? JobTitleInterface;
+    public function getJobTitle(): ? JobTitleInterface;
 
     /**
      * @param JobTitleInterface $jobTitle
@@ -38,7 +38,7 @@ interface JobAllocationInterface
     /**
      * @return null|CompanyInterface
      */
-    public function getCompany():? CompanyInterface;
+    public function getCompany(): ? CompanyInterface;
 
     /**
      * @param CompanyInterface $company
@@ -53,7 +53,7 @@ interface JobAllocationInterface
     /**
      * @return \DateTime|null
      */
-    public function getEndDate():? \DateTime;
+    public function getEndDate(): ? \DateTime;
 
     /**
      * @return string

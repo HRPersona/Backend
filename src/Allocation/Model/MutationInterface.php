@@ -18,7 +18,7 @@ interface MutationInterface
     /**
      * @return null|EmployeeInterface
      */
-    public function getEmployee():? EmployeeInterface;
+    public function getEmployee(): ? EmployeeInterface;
 
     /**
      * @param EmployeeInterface $employee
@@ -28,7 +28,7 @@ interface MutationInterface
     /**
      * @return null|JobTitleInterface
      */
-    public function getOldJobTitle():? JobTitleInterface;
+    public function getOldJobTitle(): ? JobTitleInterface;
 
     /**
      * @param JobTitleInterface $jobTitle
@@ -38,7 +38,7 @@ interface MutationInterface
     /**
      * @return null|JobTitleInterface
      */
-    public function getNewJobTitle():? JobTitleInterface;
+    public function getNewJobTitle(): ? JobTitleInterface;
 
     /**
      * @param JobTitleInterface $jobTitle
@@ -48,7 +48,7 @@ interface MutationInterface
     /**
      * @return null|CompanyInterface
      */
-    public function getOldCompany():? CompanyInterface;
+    public function getOldCompany(): ? CompanyInterface;
 
     /**
      * @param CompanyInterface $company
@@ -58,7 +58,7 @@ interface MutationInterface
     /**
      * @return null|CompanyInterface
      */
-    public function getNewCompany():? CompanyInterface;
+    public function getNewCompany(): ? CompanyInterface;
 
     /**
      * @param CompanyInterface $company

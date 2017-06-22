@@ -47,5 +47,5 @@ interface ClientInterface
     /**
      * @return UserInterface|null
      */
-    public function getUser():? UserInterface;
+    public function getUser(): ? UserInterface;
 }

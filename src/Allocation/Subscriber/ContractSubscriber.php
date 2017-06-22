@@ -15,7 +15,7 @@ final class ContractSubscriber implements EventSubscriber
     /**
      * @param LifecycleEventArgs $eventArgs
      */
-    public function prePersist(LifecycleEventArgs $eventArgs)
+    public function prePersist(LifecycleEventArgs $eventArgs): void
     {
         $entity = $eventArgs->getEntity();
         if ($entity instanceof ContractInterface) {
@@ -28,7 +28,7 @@ final class ContractSubscriber implements EventSubscriber
     /**
      * @param LifecycleEventArgs $eventArgs
      */
-    public function preUpdate(LifecycleEventArgs $eventArgs)
+    public function preUpdate(LifecycleEventArgs $eventArgs): void
     {
         $entity = $eventArgs->getEntity();
         if ($entity instanceof ContractInterface) {

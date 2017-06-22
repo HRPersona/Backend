@@ -1,11 +1,13 @@
 <?php
 
-namespace Persona\Hris\Employee\Model;
+namespace Persona\Hris\Attendance\Model;
+
+use Persona\Hris\Employee\Model\EmployeeInterface;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-interface EmployeeExperienceInterface
+interface EmployeeShiftmentInterface
 {
     /**
      * @return string
@@ -33,12 +35,12 @@ interface EmployeeExperienceInterface
     public function getEndDate(): \DateTime;
 
     /**
-     * @return string
+     * @return null|ShiftmentInterface
      */
-    public function getCompany(): string;
+    public function getShiftment(): ? ShiftmentInterface;
 
     /**
-     * @return string
+     * @param ShiftmentInterface $shiftment
      */
-    public function getJobTitle(): string;
+    public function setShiftment(ShiftmentInterface $shiftment): void;
 }
