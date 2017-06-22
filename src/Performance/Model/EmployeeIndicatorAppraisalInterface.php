@@ -48,4 +48,54 @@ interface EmployeeIndicatorAppraisalInterface
      * @param IndicatorInterface $indicator
      */
     public function setIndicator(IndicatorInterface $indicator): void;
+
+    /**
+     * @return null|EmployeeInterface
+     */
+    public function getFirstSupervisorAppraisalBy(): ? EmployeeInterface;
+
+    /**
+     * @param EmployeeInterface $employee
+     */
+    public function setFirstSupervisorAppraisalBy(EmployeeInterface $employee): void;
+
+    /**
+     * @return null|EmployeeInterface
+     */
+    public function getSecondSupervisorAppraisalBy(): ? EmployeeInterface;
+
+    /**
+     * @param EmployeeInterface $employee
+     */
+    public function setSecondSupervisorAppraisalBy(EmployeeInterface $employee): void;
+
+    /**
+     * @return string
+     */
+    public function getSelfAppraisal(): string;
+
+    /**
+     * @return string
+     */
+    public function getFirstSupervisorAppraisal(): string;
+
+    /**
+     * @return string
+     */
+    public function getSecondSupervisorAppraisal(): string;
+
+    /**
+     * @return string
+     */
+    public function getSelfAppraisalComment(): string;
+
+    /**
+     * @return string
+     */
+    public function getFirstSupervisorAppraisalComment(): string;
+
+    /**
+     * @return string
+     */
+    public function getSecondSupervisorAppraisalComment(): string;
 }
