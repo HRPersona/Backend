@@ -10,10 +10,12 @@ use Persona\Hris\Employee\Model\EmployeeInterface;
 interface EmployeeAttendanceRepositoryInterface
 {
     /**
-     * @param EmployeeInterface $employee
-     * @param \DateTime $attendanceDate
+     * When record is not found then create new object
      *
-     * @return null|EmployeeAttendanceInterface
+     * @param EmployeeInterface $employee
+     * @param \DateTime         $attendanceDate
+     *
+     * @return EmployeeAttendanceInterface
      */
-    public function findByEmployeeAndDate(EmployeeInterface $employee, \DateTime $attendanceDate):? EmployeeAttendanceInterface;
+    public function findByEmployeeAndDate(EmployeeInterface $employee, \DateTime $attendanceDate): EmployeeAttendanceInterface;
 }

@@ -112,7 +112,7 @@ interface EmployeeAttendanceInterface
     /**
      * @return string
      */
-    public function getRemark():? string;
+    public function getRemark(): ? string;
 
     /**
      * @param string $remark

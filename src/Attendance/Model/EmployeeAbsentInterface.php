@@ -42,5 +42,10 @@ interface EmployeeAbsentInterface
     /**
      * @return string
      */
-    public function getRemark():? string;
+    public function getRemark(): ? string;
+
+    /**
+     * @param string $remark
+     */
+    public function setRemark(string $remark): void;
 }

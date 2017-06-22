@@ -17,6 +17,16 @@ interface EmployeeOvertimeInterface
     /**
      * @return null|EmployeeInterface
      */
+    public function getProposedBy(): ? EmployeeInterface;
+
+    /**
+     * @param EmployeeInterface $employee
+     */
+    public function setProposedBy(EmployeeInterface $employee): void;
+
+    /**
+     * @return null|EmployeeInterface
+     */
     public function getEmployee(): ? EmployeeInterface;
 
     /**
@@ -42,5 +52,5 @@ interface EmployeeOvertimeInterface
     /**
      * @return null|string
      */
-    public function getRemark():? string;
+    public function getRemark(): ? string;
 }

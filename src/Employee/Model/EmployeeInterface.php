@@ -155,4 +155,14 @@ interface EmployeeInterface
      * @return string
      */
     public function getEmail(): string;
+
+    /**
+     * @return bool
+     */
+    public function isHaveOvertimeBenefit(): bool;
+
+    /**
+     * @param bool $haveOvertimeBenefit
+     */
+    public function setHaveOvertimeBenefit(bool $haveOvertimeBenefit): void;
 }

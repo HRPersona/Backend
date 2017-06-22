@@ -71,7 +71,6 @@ final class AbsentSubscriber implements EventSubscriber
         }
 
         $this->manager->persist($employeeAttendance);
-        $this->manager->flush();
     }
 
     /**
