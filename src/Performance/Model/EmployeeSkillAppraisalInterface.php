@@ -1,13 +1,14 @@
 <?php
 
-namespace Persona\Hris\Employee\Model;
+namespace Persona\Hris\Performance\Model;
 
+use Persona\Hris\Employee\Model\EmployeeInterface;
 use Persona\Hris\Share\Model\SkillInterface;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-interface EmployeeSkillInterface
+interface EmployeeSkillAppraisalInterface
 {
     /**
      * @return string
@@ -25,6 +26,21 @@ interface EmployeeSkillInterface
     public function setEmployee(EmployeeInterface $employee): void;
 
     /**
+     * @return null|AppraisalPeriodInterface
+     */
+    public function getAppraisalPeriod(): ? AppraisalPeriodInterface;
+
+    /**
+     * @param AppraisalPeriodInterface $appraisalPeriod
+     */
+    public function setAppraisalPeriod(AppraisalPeriodInterface $appraisalPeriod): void;
+
+    /**
+     * @return \DateTime
+     */
+    public function getInputDate(): \DateTime;
+
+    /**
      * @return SkillInterface
      */
     public function getSkill(): ? SkillInterface;
@@ -33,9 +49,4 @@ interface EmployeeSkillInterface
      * @param SkillInterface $skill
      */
     public function setSkill(SkillInterface $skill): void;
-
-    /**
-     * @return string
-     */
-    public function getLevel(): string;
 }

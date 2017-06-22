@@ -23,13 +23,22 @@ final class SalaryCalculator
      */
     private $benefit;
 
+    /**
+     * @param AdditionalBenefitRepositoryInterface $additionalBenefitRepository
+     * @param EmployeeBenefitRepositoryInterface   $employeeBenefitRepository
+     */
     public function __construct(AdditionalBenefitRepositoryInterface $additionalBenefitRepository, EmployeeBenefitRepositoryInterface $employeeBenefitRepository)
     {
         $this->additionalBenefit = $additionalBenefitRepository;
         $this->benefit = $employeeBenefitRepository;
     }
 
-    public function calculate(EmployeeInterface $employee)
+    /**
+     * @param EmployeeInterface $employee
+     *
+     * @return float
+     */
+    public function calculate(EmployeeInterface $employee): float
     {
         $addition = 0;
         $reduction = 0;

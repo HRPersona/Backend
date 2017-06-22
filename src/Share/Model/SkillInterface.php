@@ -7,6 +7,11 @@ namespace Persona\Hris\Share\Model;
  */
 interface SkillInterface
 {
+    const LEVEL_BEGINNER = 'b';
+    const LEVEL_INTERMEDIATE = 'i';
+    const LEVEL_ADVANCED = 'a';
+    const LEVEL_EXPERT = 'e';
+
     /**
      * @return string
      */
