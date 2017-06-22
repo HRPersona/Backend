@@ -165,4 +165,9 @@ interface EmployeeInterface
      * @param bool $haveOvertimeBenefit
      */
     public function setHaveOvertimeBenefit(bool $haveOvertimeBenefit): void;
+
+    /**
+     * @return float
+     */
+    public function getBasicSalary(): float;
 }

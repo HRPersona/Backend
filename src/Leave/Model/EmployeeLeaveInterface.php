@@ -32,7 +32,7 @@ interface EmployeeLeaveInterface
     /**
      * @return null|LeaveInterface
      */
-    public function getLeave():? LeaveInterface;
+    public function getLeave(): ? LeaveInterface;
 
     /**
      * @param LeaveInterface $leave
@@ -62,7 +62,7 @@ interface EmployeeLeaveInterface
     /**
      * @return null|EmployeeInterface
      */
-    public function getApprovedBy():? EmployeeInterface;
+    public function getApprovedBy(): ? EmployeeInterface;
 
     /**
      * @param EmployeeInterface $employee

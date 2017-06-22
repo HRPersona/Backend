@@ -37,5 +37,5 @@ interface LeaveInterface
     /**
      * @return int
      */
-    public function getDayBenefit():? int;
+    public function getDayBenefit(): ? int;
 }

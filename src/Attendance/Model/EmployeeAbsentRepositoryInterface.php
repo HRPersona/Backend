@@ -10,7 +10,7 @@ use Persona\Hris\Employee\Model\EmployeeInterface;
 interface EmployeeAbsentRepositoryInterface
 {
     /**
-     * When record is not found then create new object
+     * When record is not found then create new object.
      *
      * @param EmployeeInterface $employee
      * @param \DateTime         $absentDate
