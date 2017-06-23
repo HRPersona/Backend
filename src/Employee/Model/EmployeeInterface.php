@@ -214,7 +214,7 @@ interface EmployeeInterface
     /**
      * @return \DateTime|null
      */
-    public function getResignDate():? \DateTime;
+    public function getResignDate(): ? \DateTime;
 
     /**
      * @param \DateTime $dateTime

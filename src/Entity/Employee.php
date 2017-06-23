@@ -27,7 +27,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         "filters"={
  *             "order.filter",
  *             "code.search",
- *             "name.search"
+ *             "name.search",
+ *             "email.search"
  *         },
  *         "normalization_context"={"groups"={"read"}},
  *         "denormalization_context"={"groups"={"write"}}
@@ -48,7 +49,7 @@ class Employee implements EmployeeInterface, ActionLoggerAwareInterface
     use SoftDeletable;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
@@ -97,6 +98,7 @@ class Employee implements EmployeeInterface, ActionLoggerAwareInterface
      * @Groups({"read", "write"})
      * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\JobTitle", fetch="EAGER")
      * @ORM\JoinColumn(name="jobtitle_id", referencedColumnName="id")
+     * @Assert\NotBlank()
      *
      * @var JobTitleInterface
      */
@@ -106,6 +108,7 @@ class Employee implements EmployeeInterface, ActionLoggerAwareInterface
      * @Groups({"read", "write"})
      * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Company", fetch="EAGER")
      * @ORM\JoinColumn(name="company_id", referencedColumnName="id")
+     * @Assert\NotBlank()
      *
      * @var CompanyInterface
      */
@@ -115,6 +118,7 @@ class Employee implements EmployeeInterface, ActionLoggerAwareInterface
      * @Groups({"read", "write"})
      * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Department", fetch="EAGER")
      * @ORM\JoinColumn(name="department_id", referencedColumnName="id")
+     * @Assert\NotBlank()
      *
      * @var DepartmentInterface
      */
@@ -142,6 +146,7 @@ class Employee implements EmployeeInterface, ActionLoggerAwareInterface
      * @Groups({"read", "write"})
      * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\City", fetch="EAGER")
      * @ORM\JoinColumn(name="birth_city_id", referencedColumnName="id")
+     * @Assert\NotBlank()
      *
      * @var CityInterface
      */
@@ -196,6 +201,7 @@ class Employee implements EmployeeInterface, ActionLoggerAwareInterface
      * @Groups({"read", "write"})
      * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\City", fetch="EAGER")
      * @ORM\JoinColumn(name="city_id", referencedColumnName="id")
+     * @Assert\NotBlank()
      *
      * @var CityInterface
      */
@@ -205,6 +211,7 @@ class Employee implements EmployeeInterface, ActionLoggerAwareInterface
      * @Groups({"read", "write"})
      * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Province", fetch="EAGER")
      * @ORM\JoinColumn(name="province_id", referencedColumnName="id")
+     * @Assert\NotBlank()
      *
      * @var ProvinceInterface
      */

@@ -32,7 +32,7 @@ final class EmployeeAbsentSubscriber implements EventSubscriber
 
     /**
      * @param EmployeeAbsentRepositoryInterface $absentRepository
-     * @param string $leaveBalanceClass
+     * @param string                            $leaveBalanceClass
      */
     public function __construct(EmployeeAbsentRepositoryInterface $absentRepository, string $leaveBalanceClass)
     {

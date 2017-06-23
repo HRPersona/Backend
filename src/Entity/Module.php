@@ -34,7 +34,7 @@ class Module implements ModuleInterface, ActionLoggerAwareInterface
     use SoftDeletable;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")

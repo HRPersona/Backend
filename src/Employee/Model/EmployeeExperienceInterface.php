@@ -41,4 +41,9 @@ interface EmployeeExperienceInterface
      * @return string
      */
     public function getJobTitle(): string;
+
+    /**
+     * @return null|string
+     */
+    public function getResignReason(): ? string;
 }

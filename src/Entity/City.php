@@ -42,7 +42,7 @@ class City implements CityInterface, ActionLoggerAwareInterface
     use SoftDeletable;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
@@ -98,7 +98,7 @@ class City implements CityInterface, ActionLoggerAwareInterface
     /**
      * @return ProvinceInterface
      */
-    public function getProvince():? ProvinceInterface
+    public function getProvince(): ? ProvinceInterface
     {
         return $this->province;
     }
@@ -146,7 +146,7 @@ class City implements CityInterface, ActionLoggerAwareInterface
     /**
      * @return string
      */
-    public function getPostalCode():? string
+    public function getPostalCode(): ? string
     {
         return $this->postalCode;
     }

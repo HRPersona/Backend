@@ -37,7 +37,7 @@ class CompanyDepartment implements CompanyDepartmentInterface, ActionLoggerAware
     use SoftDeletable;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")

@@ -41,7 +41,7 @@ class JobTitle implements JobTitleInterface, ActionLoggerAwareInterface
     use SoftDeletable;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")

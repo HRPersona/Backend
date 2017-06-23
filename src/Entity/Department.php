@@ -41,7 +41,7 @@ class Department implements DepartmentInterface, ActionLoggerAwareInterface
     use SoftDeletable;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
@@ -88,7 +88,7 @@ class Department implements DepartmentInterface, ActionLoggerAwareInterface
     /**
      * @return DepartmentInterface
      */
-    public function getParent():? DepartmentInterface
+    public function getParent(): ? DepartmentInterface
     {
         return $this->parent;
     }

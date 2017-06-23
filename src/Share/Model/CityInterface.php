@@ -35,5 +35,5 @@ interface CityInterface
     /**
      * @return string
      */
-    public function getPostalCode():? string;
+    public function getPostalCode(): ? string;
 }

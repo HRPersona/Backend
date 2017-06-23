@@ -45,7 +45,7 @@ class Company implements CompanyInterface, ActionLoggerAwareInterface
     use SoftDeletable;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
@@ -145,7 +145,7 @@ class Company implements CompanyInterface, ActionLoggerAwareInterface
     /**
      * @return CompanyInterface
      */
-    public function getParent():? CompanyInterface
+    public function getParent(): ? CompanyInterface
     {
         return $this->parent;
     }

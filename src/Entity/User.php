@@ -52,7 +52,7 @@ class User extends BaseUser implements UserInterface, UploadableInterface, Actio
     use SoftDeletable;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
