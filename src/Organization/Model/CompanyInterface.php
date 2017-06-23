@@ -35,7 +35,7 @@ interface CompanyInterface
     /**
      * @return string
      */
-    public function getAdress(): string;
+    public function getAddress(): string;
 
     /**
      * @return string

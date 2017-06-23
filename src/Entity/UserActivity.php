@@ -76,7 +76,7 @@ class UserActivity implements ActivityLoggerInterface
     /**
      * @ORM\Column(type="array")
      *
-     * @var string
+     * @var array
      */
     private $request;
 
@@ -114,11 +114,6 @@ class UserActivity implements ActivityLoggerInterface
      * @var array
      */
     private $dataChanges;
-
-    /**
-     * @ODM\Field(type="date")
-     */
-    protected $createdAt;
 
     public function __construct()
     {

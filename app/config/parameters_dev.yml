@@ -4,12 +4,12 @@ parameters:
     write_database_port: '3306'
     write_database_name: 'persona_hris'
     write_database_user: 'root'
-    write_database_password: null
+    write_database_password: aden
     read_database_host: 'localhost'
     read_database_port: 3306
     read_database_name: 'persona_hris'
     read_database_user: 'root'
-    read_database_password: null
+    read_database_password: aden
     redis_server: 'localhost'
     mailer_transport: 'smtp'
     mailer_host: '127.0.0.1'
