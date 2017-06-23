@@ -31,7 +31,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @UniqueEntity("name")
  *
- * @author Muhamad Surya Iksanudin <surya.iksanudin@bisnis.com>
+ * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
 class University implements UniversityInterface, ActionLoggerAwareInterface
 {

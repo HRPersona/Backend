@@ -6,7 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
-use Persona\Hris\Core\Client\ClientInterface as ApiClient;
+use Persona\Hris\Core\Client\ClientInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Security\Model\UserInterface;
@@ -33,9 +33,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @UniqueEntity("email")
  *
- * @author Muhamad Surya Iksanudin <surya.iksanudin@bisnis.com>
+ * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class Client implements ApiClient, ActionLoggerAwareInterface
+class Client implements ClientInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -105,7 +105,7 @@ class Client implements ApiClient, ActionLoggerAwareInterface
     /**
      * @param string $name
      */
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = StringUtil::uppercase($name);
     }
@@ -121,7 +121,7 @@ class Client implements ApiClient, ActionLoggerAwareInterface
     /**
      * @param string $email
      */
-    public function setEmail(string $email)
+    public function setEmail(string $email): void
     {
         $this->email = StringUtil::lowercase($email);
     }
@@ -137,7 +137,7 @@ class Client implements ApiClient, ActionLoggerAwareInterface
     /**
      * @param string $apiKey
      */
-    public function setApiKey(string $apiKey)
+    public function setApiKey(string $apiKey): void
     {
         $this->apiKey = $apiKey;
     }
@@ -153,7 +153,7 @@ class Client implements ApiClient, ActionLoggerAwareInterface
     /**
      * @param UserInterface $user
      */
-    public function setUser(UserInterface $user = null)
+    public function setUser(UserInterface $user = null): void
     {
         $this->user = $user;
     }

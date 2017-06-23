@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="s_job_titles", indexes={@ORM\Index(name="job_title_search_idx", columns={"code"})})
+ * @ORM\Table(name="o_job_titles", indexes={@ORM\Index(name="job_title_search_idx", columns={"code"})})
  *
  * @ApiResource(
  *     attributes={
@@ -32,9 +32,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @UniqueEntity("code")
  *
- * @author Muhamad Surya Iksanudin <surya.iksanudin@bisnis.com>
+ * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class OrganizationJobTitle implements JobTitleInterface, ActionLoggerAwareInterface
+class JobTitle implements JobTitleInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -52,7 +52,7 @@ class OrganizationJobTitle implements JobTitleInterface, ActionLoggerAwareInterf
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=7)
      * @Assert\NotBlank()
      *
      * @var string

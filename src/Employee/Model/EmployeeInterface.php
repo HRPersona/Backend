@@ -3,6 +3,7 @@
 namespace Persona\Hris\Employee\Model;
 
 use Persona\Hris\Organization\Model\CompanyInterface;
+use Persona\Hris\Organization\Model\DepartmentInterface;
 use Persona\Hris\Organization\Model\JobTitleInterface;
 use Persona\Hris\Share\Model\CityInterface;
 use Persona\Hris\Share\Model\ProvinceInterface;
@@ -15,6 +16,10 @@ interface EmployeeInterface
     const IDENTITY_DRIVER_LISENCE = 's';
     const IDENTITY_PASSPORT = 'p';
     const IDENTITY_ID_CARD = 'k';
+
+    const MARITAL_SINGLE = 's';
+    const MARITAL_MARRIED = 'm';
+    const MARITAL_DISVORCE = 'd';
 
     const STATUS_CONTRACT = 'c';
     const STATUS_INTERSHIP = 'i';
@@ -34,7 +39,7 @@ interface EmployeeInterface
     /**
      * @return string
      */
-    public function getStatus(): string;
+    public function getEmployeeStatus(): string;
 
     /**
      * @return string
@@ -64,7 +69,7 @@ interface EmployeeInterface
     /**
      * @param JobTitleInterface $jobTitle
      */
-    public function setJobTitle(JobTitleInterface $jobTitle): void;
+    public function setJobTitle(JobTitleInterface $jobTitle = null): void;
 
     /**
      * @return null|CompanyInterface
@@ -74,7 +79,17 @@ interface EmployeeInterface
     /**
      * @param CompanyInterface $company
      */
-    public function setCompany(CompanyInterface $company): void;
+    public function setCompany(CompanyInterface $company = null): void;
+
+    /**
+     * @return null|DepartmentInterface
+     */
+    public function getDepartment(): ? DepartmentInterface;
+
+    /**
+     * @param DepartmentInterface $department
+     */
+    public function setDepartment(DepartmentInterface $department = null): void;
 
     /**
      * @return string
@@ -94,7 +109,7 @@ interface EmployeeInterface
     /**
      * @param CityInterface $city
      */
-    public function setPlaceOfBirth(CityInterface $city): void;
+    public function setPlaceOfBirth(CityInterface $city = null): void;
 
     /**
      * @return \DateTime
@@ -129,7 +144,7 @@ interface EmployeeInterface
     /**
      * @param CityInterface $city
      */
-    public function setCity(CityInterface $city): void;
+    public function setCity(CityInterface $city = null): void;
 
     /**
      * @return null|ProvinceInterface
@@ -139,7 +154,7 @@ interface EmployeeInterface
     /**
      * @param ProvinceInterface $province
      */
-    public function setProvince(ProvinceInterface $province): void;
+    public function setProvince(ProvinceInterface $province = null): void;
 
     /**
      * @return string
@@ -170,4 +185,39 @@ interface EmployeeInterface
      * @return float
      */
     public function getBasicSalary(): float;
+
+    /**
+     * @param float $basicSalary
+     */
+    public function setBasicSalary(float $basicSalary): void;
+
+    /**
+     * @return int
+     */
+    public function getLeaveBalance(): int;
+
+    /**
+     * @param int $leaveBalance
+     */
+    public function setLeaveBalance(int $leaveBalance): void;
+
+    /**
+     * @return bool
+     */
+    public function isResign(): bool;
+
+    /**
+     * @param bool $resign
+     */
+    public function setResign(bool $resign): void;
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getResignDate():? \DateTime;
+
+    /**
+     * @param \DateTime $dateTime
+     */
+    public function setResignDate(\DateTime $dateTime): void;
 }

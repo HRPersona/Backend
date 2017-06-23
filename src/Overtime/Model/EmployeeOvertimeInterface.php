@@ -22,7 +22,7 @@ interface EmployeeOvertimeInterface
     /**
      * @param EmployeeInterface $employee
      */
-    public function setProposedBy(EmployeeInterface $employee): void;
+    public function setProposedBy(EmployeeInterface $employee = null): void;
 
     /**
      * @return null|EmployeeInterface
@@ -32,7 +32,7 @@ interface EmployeeOvertimeInterface
     /**
      * @param EmployeeInterface $employee
      */
-    public function setEmployee(EmployeeInterface $employee): void;
+    public function setEmployee(EmployeeInterface $employee = null): void;
 
     /**
      * @return \DateTime

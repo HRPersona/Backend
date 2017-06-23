@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="s_companies", indexes={@ORM\Index(name="company_search_idx", columns={"code"})})
+ * @ORM\Table(name="o_companies", indexes={@ORM\Index(name="company_search_idx", columns={"code", "email", "tax_number", "phone_number"})})
  *
  * @ApiResource(
  *     attributes={
@@ -31,10 +31,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  *
  * @UniqueEntity("code")
+ * @UniqueEntity("phoneNumber")
+ * @UniqueEntity("faxNumber")
+ * @UniqueEntity("email")
+ * @UniqueEntity("taxNumber")
  *
- * @author Muhamad Surya Iksanudin <surya.iksanudin@bisnis.com>
+ * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class OrganizationCompany implements CompanyInterface, ActionLoggerAwareInterface
+class Company implements CompanyInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -52,7 +56,7 @@ class OrganizationCompany implements CompanyInterface, ActionLoggerAwareInterfac
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\OrganizationDepartment", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Company", fetch="EAGER")
      * @ORM\JoinColumn(name="company_id", referencedColumnName="id")
      *
      * @var CompanyInterface
@@ -61,7 +65,16 @@ class OrganizationCompany implements CompanyInterface, ActionLoggerAwareInterfac
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="date")
+     * @Assert\NotBlank()
+     *
+     * @var \DateTime
+     */
+    private $birthDay;
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="string", length=7)
      * @Assert\NotBlank()
      *
      * @var string
@@ -97,7 +110,7 @@ class OrganizationCompany implements CompanyInterface, ActionLoggerAwareInterfac
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=17)
      * @Assert\NotBlank()
      *
      * @var string
@@ -106,8 +119,7 @@ class OrganizationCompany implements CompanyInterface, ActionLoggerAwareInterfac
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
+     * @ORM\Column(type="string", length=17, nullable=true)
      *
      * @var string
      */
@@ -115,7 +127,7 @@ class OrganizationCompany implements CompanyInterface, ActionLoggerAwareInterfac
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=27)
      * @Assert\NotBlank()
      *
      * @var string
@@ -141,9 +153,25 @@ class OrganizationCompany implements CompanyInterface, ActionLoggerAwareInterfac
     /**
      * @param CompanyInterface $parent
      */
-    public function setParent(CompanyInterface $parent): void
+    public function setParent(CompanyInterface $parent = null): void
     {
         $this->parent = $parent;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getBirthDay(): \DateTime
+    {
+        return $this->birthDay;
+    }
+
+    /**
+     * @param \DateTime $birthDay
+     */
+    public function setBirthDay(\DateTime $birthDay): void
+    {
+        $this->birthDay = $birthDay;
     }
 
     /**

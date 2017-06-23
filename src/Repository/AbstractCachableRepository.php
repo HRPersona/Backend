@@ -6,7 +6,7 @@ use Doctrine\Common\Cache\Cache;
 use Persona\Hris\Core\Manager\ManagerFactory;
 
 /**
- * @author Muhamad Surya Iksanudin <surya.iksanudin@bisnis.com>
+ * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
 abstract class AbstractCachableRepository implements CachableRepositoryInterface
 {

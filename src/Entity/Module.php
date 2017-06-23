@@ -25,7 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     }
  * )
  *
- * @author Muhamad Surya Iksanudin <surya.iksanudin@bisnis.com>
+ * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
 class Module implements ModuleInterface, ActionLoggerAwareInterface
 {

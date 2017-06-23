@@ -32,7 +32,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @UniqueEntity("code")
  *
- * @author Muhamad Surya Iksanudin <surya.iksanudin@bisnis.com>
+ * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
 class Province implements ProvinceInterface, ActionLoggerAwareInterface
 {
@@ -52,7 +52,7 @@ class Province implements ProvinceInterface, ActionLoggerAwareInterface
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=7)
      * @Assert\NotBlank()
      *
      * @var string

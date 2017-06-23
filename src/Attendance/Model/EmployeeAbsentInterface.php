@@ -22,7 +22,7 @@ interface EmployeeAbsentInterface
     /**
      * @param EmployeeInterface $employee
      */
-    public function setEmployee(EmployeeInterface $employee): void;
+    public function setEmployee(EmployeeInterface $employee = null): void;
 
     /**
      * @return \DateTime
@@ -37,7 +37,7 @@ interface EmployeeAbsentInterface
     /**
      * @param AbsentReasonInterface $absentReason
      */
-    public function setAbsentReason(AbsentReasonInterface $absentReason): void;
+    public function setAbsentReason(AbsentReasonInterface $absentReason = null): void;
 
     /**
      * @return string
@@ -47,5 +47,5 @@ interface EmployeeAbsentInterface
     /**
      * @param string $remark
      */
-    public function setRemark(string $remark): void;
+    public function setRemark(string $remark = null): void;
 }

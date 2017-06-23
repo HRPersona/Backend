@@ -23,7 +23,7 @@ interface MutationInterface
     /**
      * @param EmployeeInterface $employee
      */
-    public function setEmployee(EmployeeInterface $employee): void;
+    public function setEmployee(EmployeeInterface $employee = null): void;
 
     /**
      * @return null|JobTitleInterface
@@ -33,7 +33,7 @@ interface MutationInterface
     /**
      * @param JobTitleInterface $jobTitle
      */
-    public function setOldJobTitle(JobTitleInterface $jobTitle): void;
+    public function setOldJobTitle(JobTitleInterface $jobTitle = null): void;
 
     /**
      * @return null|JobTitleInterface
@@ -43,7 +43,7 @@ interface MutationInterface
     /**
      * @param JobTitleInterface $jobTitle
      */
-    public function setNewJobTitle(JobTitleInterface $jobTitle): void;
+    public function setNewJobTitle(JobTitleInterface $jobTitle = null): void;
 
     /**
      * @return null|CompanyInterface
@@ -53,7 +53,7 @@ interface MutationInterface
     /**
      * @param CompanyInterface $company
      */
-    public function setOldCompany(CompanyInterface $company): void;
+    public function setOldCompany(CompanyInterface $company = null): void;
 
     /**
      * @return null|CompanyInterface
@@ -63,7 +63,7 @@ interface MutationInterface
     /**
      * @param CompanyInterface $company
      */
-    public function setNewCompany(CompanyInterface $company): void;
+    public function setNewCompany(CompanyInterface $company = null): void;
 
     /**
      * @return \DateTime

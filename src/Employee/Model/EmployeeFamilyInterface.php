@@ -28,7 +28,7 @@ interface EmployeeFamilyInterface
     /**
      * @param EmployeeInterface $employee
      */
-    public function setEmployee(EmployeeInterface $employee): void;
+    public function setEmployee(EmployeeInterface $employee = null): void;
 
     /**
      * @return string
@@ -48,7 +48,7 @@ interface EmployeeFamilyInterface
     /**
      * @param CityInterface $city
      */
-    public function setPlaceOfBirth(CityInterface $city): void;
+    public function setPlaceOfBirth(CityInterface $city = null): void;
 
     /**
      * @return \DateTime
@@ -63,7 +63,7 @@ interface EmployeeFamilyInterface
     /**
      * @param UniversityInterface $university
      */
-    public function setUniversity(UniversityInterface $university): void;
+    public function setUniversity(UniversityInterface $university = null): void;
 
     /**
      * @return null|EducationTitleInterface
@@ -73,5 +73,5 @@ interface EmployeeFamilyInterface
     /**
      * @param EducationTitleInterface $educationTitle
      */
-    public function setEducationTitle(EducationTitleInterface $educationTitle): void;
+    public function setEducationTitle(EducationTitleInterface $educationTitle = null): void;
 }

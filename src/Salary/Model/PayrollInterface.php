@@ -22,7 +22,7 @@ interface PayrollInterface
     /**
      * @param EmployeeInterface $employee
      */
-    public function setEmployee(EmployeeInterface $employee): void;
+    public function setEmployee(EmployeeInterface $employee = null): void;
 
     /**
      * @return int

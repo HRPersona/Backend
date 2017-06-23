@@ -30,7 +30,7 @@ use Symfony\Component\HttpFoundation\Response;
  *     itemOperations={"get"={"method"="GET"}}
  * )
  *
- * @author Muhamad Surya Iksanudin <surya.iksanudin@bisnis.com>
+ * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
 class UserActivity implements ActivityLoggerInterface
 {

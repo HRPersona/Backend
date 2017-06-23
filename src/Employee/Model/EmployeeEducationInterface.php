@@ -23,7 +23,7 @@ interface EmployeeEducationInterface
     /**
      * @param EmployeeInterface $employee
      */
-    public function setEmployee(EmployeeInterface $employee): void;
+    public function setEmployee(EmployeeInterface $employee = null): void;
 
     /**
      * @return int
@@ -43,7 +43,7 @@ interface EmployeeEducationInterface
     /**
      * @param UniversityInterface $university
      */
-    public function setUniversity(UniversityInterface $university): void;
+    public function setUniversity(UniversityInterface $university = null): void;
 
     /**
      * @return null|EducationTitleInterface
@@ -53,7 +53,7 @@ interface EmployeeEducationInterface
     /**
      * @param EducationTitleInterface $educationTitle
      */
-    public function setEducationTitle(EducationTitleInterface $educationTitle): void;
+    public function setEducationTitle(EducationTitleInterface $educationTitle = null): void;
 
     /**
      * @return bool

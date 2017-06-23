@@ -22,7 +22,7 @@ interface EmployeeLeaveInterface
     /**
      * @param EmployeeInterface $employee
      */
-    public function setEmployee(EmployeeInterface $employee): void;
+    public function setEmployee(EmployeeInterface $employee = null): void;
 
     /**
      * @return \DateTime
@@ -37,7 +37,7 @@ interface EmployeeLeaveInterface
     /**
      * @param LeaveInterface $leave
      */
-    public function setLeave(LeaveInterface $leave): void;
+    public function setLeave(LeaveInterface $leave = null): void;
 
     /**
      * @return int
@@ -67,5 +67,5 @@ interface EmployeeLeaveInterface
     /**
      * @param EmployeeInterface $employee
      */
-    public function setApprovedBy(EmployeeInterface $employee): void;
+    public function setApprovedBy(EmployeeInterface $employee = null): void;
 }

@@ -33,7 +33,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     }
  * )
  *
- * @author Muhamad Surya Iksanudin <surya.iksanudin@bisnis.com>
+ * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
 class Role implements RoleInterface, ActionLoggerAwareInterface
 {

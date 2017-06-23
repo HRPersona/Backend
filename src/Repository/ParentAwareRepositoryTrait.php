@@ -5,7 +5,7 @@ namespace Persona\Hris\Repository;
 use Doctrine\Common\Persistence\ObjectRepository;
 
 /**
- * @author Muhamad Surya Iksanudin <surya.iksanudin@bisnis.com>
+ * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
 trait ParentAwareRepositoryTrait
 {

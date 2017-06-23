@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="s_company_departments")
+ * @ORM\Table(name="o_company_departments")
  *
  * @ApiResource(
  *     attributes={
@@ -28,9 +28,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     }
  * )
  *
- * @author Muhamad Surya Iksanudin <surya.iksanudin@bisnis.com>
+ * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class OrganizationCompanyDepartment implements CompanyDepartmentInterface, ActionLoggerAwareInterface
+class CompanyDepartment implements CompanyDepartmentInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -48,7 +48,7 @@ class OrganizationCompanyDepartment implements CompanyDepartmentInterface, Actio
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\OrganizationCompany", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Company", fetch="EAGER")
      * @ORM\JoinColumn(name="company_id", referencedColumnName="id")
      * @Assert\NotBlank()
      *
@@ -58,7 +58,7 @@ class OrganizationCompanyDepartment implements CompanyDepartmentInterface, Actio
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\OrganizationDepartment", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Department", fetch="EAGER")
      * @ORM\JoinColumn(name="department_id", referencedColumnName="id")
      * @Assert\NotBlank()
      *
@@ -85,7 +85,7 @@ class OrganizationCompanyDepartment implements CompanyDepartmentInterface, Actio
     /**
      * @param CompanyInterface $company
      */
-    public function setCompany(CompanyInterface $company): void
+    public function setCompany(CompanyInterface $company = null): void
     {
         $this->company = $company;
     }
@@ -101,7 +101,7 @@ class OrganizationCompanyDepartment implements CompanyDepartmentInterface, Actio
     /**
      * @param DepartmentInterface $department
      */
-    public function setDepartment(DepartmentInterface $department): void
+    public function setDepartment(DepartmentInterface $department = null): void
     {
         $this->department = $department;
     }

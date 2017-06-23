@@ -50,12 +50,16 @@ final class EmployeeAbsentSubscriber implements EventSubscriber
             $this->manager = $eventArgs->getEntityManager();
             $this->absentModication($entity);
 
+            $employee = $entity->getEmployee();
+
             /** @var EmployeeLeaveBalanceInterface $leaveBalance */
             $leaveBalance = new $this->leaveBalanceClass();
-            $leaveBalance->setEmployee($entity->getEmployee());
+            $leaveBalance->setEmployee($employee);
             $leaveBalance->setLeaveDay($entity->getLeaveDay());
             $leaveBalance->setLeaveBalance($leaveBalance->getLeaveBalance() - $leaveBalance->getLeaveDay());
             $leaveBalance->setRemark(sprintf('LEAVE_REQUEST{#ID:%s#EMPLOYEE:%s#NOTE:%s}', $entity->getId(), $entity->getEmployee()->getFullName(), $entity->getRemark()));
+
+            $employee->setLeaveBalance($leaveBalance->getLeaveBalance());
 
             $this->manager->persist($leaveBalance);
         }
@@ -83,9 +87,7 @@ final class EmployeeAbsentSubscriber implements EventSubscriber
 
             $employeeAbsent = $this->absentRepository->findByEmployeeAndDate($employeeLeave->getEmployee(), $leaveDate);
             $employeeAbsent->setAbsentReason($employeeLeave->getLeave()->getAbsentReason());
-            if ($remark = $employeeLeave->getRemark()) {
-                $employeeAbsent->setRemark($remark);
-            }
+            $employeeAbsent->setRemark($employeeLeave->getRemark());
 
             $this->manager->persist($employeeAbsent);
         }

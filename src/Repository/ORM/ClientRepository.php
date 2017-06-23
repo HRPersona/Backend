@@ -8,7 +8,7 @@ use Persona\Hris\Core\Manager\ManagerFactory;
 use Persona\Hris\Repository\AbstractCachableRepository;
 
 /**
- * @author Muhamad Surya Iksanudin <surya.iksanudin@bisnis.com>
+ * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
 final class ClientRepository extends AbstractCachableRepository implements ClientRepositoryInterface
 {

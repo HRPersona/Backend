@@ -23,7 +23,7 @@ interface EmployeeSkillAppraisalInterface
     /**
      * @param EmployeeInterface $employee
      */
-    public function setEmployee(EmployeeInterface $employee): void;
+    public function setEmployee(EmployeeInterface $employee = null): void;
 
     /**
      * @return null|AppraisalPeriodInterface
@@ -33,7 +33,7 @@ interface EmployeeSkillAppraisalInterface
     /**
      * @param AppraisalPeriodInterface $appraisalPeriod
      */
-    public function setAppraisalPeriod(AppraisalPeriodInterface $appraisalPeriod): void;
+    public function setAppraisalPeriod(AppraisalPeriodInterface $appraisalPeriod = null): void;
 
     /**
      * @return \DateTime
@@ -48,7 +48,7 @@ interface EmployeeSkillAppraisalInterface
     /**
      * @param SkillInterface $skill
      */
-    public function setSkill(SkillInterface $skill): void;
+    public function setSkill(SkillInterface $skill = null): void;
 
     /**
      * @return null|EmployeeInterface
@@ -58,7 +58,7 @@ interface EmployeeSkillAppraisalInterface
     /**
      * @param EmployeeInterface $employee
      */
-    public function setFirstSupervisorAppraisalBy(EmployeeInterface $employee): void;
+    public function setFirstSupervisorAppraisalBy(EmployeeInterface $employee = null): void;
 
     /**
      * @return null|EmployeeInterface
@@ -68,7 +68,7 @@ interface EmployeeSkillAppraisalInterface
     /**
      * @param EmployeeInterface $employee
      */
-    public function setSecondSupervisorAppraisalBy(EmployeeInterface $employee): void;
+    public function setSecondSupervisorAppraisalBy(EmployeeInterface $employee = null): void;
 
     /**
      * @return string

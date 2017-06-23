@@ -20,7 +20,7 @@ interface CityInterface
     /**
      * @param ProvinceInterface $province
      */
-    public function setProvince(ProvinceInterface $province): void;
+    public function setProvince(ProvinceInterface $province = null): void;
 
     /**
      * @return string

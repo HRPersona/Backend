@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="s_departments", indexes={@ORM\Index(name="department_search_idx", columns={"code"})})
+ * @ORM\Table(name="o_departments", indexes={@ORM\Index(name="department_search_idx", columns={"code"})})
  *
  * @ApiResource(
  *     attributes={
@@ -32,9 +32,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @UniqueEntity("code")
  *
- * @author Muhamad Surya Iksanudin <surya.iksanudin@bisnis.com>
+ * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class OrganizationDepartment implements DepartmentInterface, ActionLoggerAwareInterface
+class Department implements DepartmentInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -52,7 +52,7 @@ class OrganizationDepartment implements DepartmentInterface, ActionLoggerAwareIn
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\OrganizationDepartment", fetch="EAGER")
+     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Department", fetch="EAGER")
      * @ORM\JoinColumn(name="department_id", referencedColumnName="id")
      *
      * @var DepartmentInterface
@@ -61,7 +61,7 @@ class OrganizationDepartment implements DepartmentInterface, ActionLoggerAwareIn
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=7)
      * @Assert\NotBlank()
      *
      * @var string
@@ -96,7 +96,7 @@ class OrganizationDepartment implements DepartmentInterface, ActionLoggerAwareIn
     /**
      * @param DepartmentInterface $parent
      */
-    public function setParent(DepartmentInterface $parent): void
+    public function setParent(DepartmentInterface $parent = null): void
     {
         $this->parent = $parent;
     }

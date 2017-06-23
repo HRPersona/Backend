@@ -5,7 +5,7 @@ namespace Persona\Hris\Repository;
 use Doctrine\Common\Cache\Cache;
 
 /**
- * @author Muhamad Surya Iksanudin <surya.iksanudin@bisnis.com>
+ * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
 interface CachableRepositoryInterface
 {

@@ -22,7 +22,7 @@ interface EmployeeBenefitInterface
     /**
      * @param EmployeeInterface $employee
      */
-    public function setEmployee(EmployeeInterface $employee): void;
+    public function setEmployee(EmployeeInterface $employee = null): void;
 
     /**
      * @return null|BenefitInterface
@@ -32,7 +32,7 @@ interface EmployeeBenefitInterface
     /**
      * @param BenefitInterface $benefit
      */
-    public function setBenefit(BenefitInterface $benefit): void;
+    public function setBenefit(BenefitInterface $benefit = null): void;
 
     /**
      * @return float|null

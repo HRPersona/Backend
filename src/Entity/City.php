@@ -33,7 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @UniqueEntity("code")
  *
- * @author Muhamad Surya Iksanudin <surya.iksanudin@bisnis.com>
+ * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
 class City implements CityInterface, ActionLoggerAwareInterface
 {
@@ -63,7 +63,7 @@ class City implements CityInterface, ActionLoggerAwareInterface
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", length=7)
      * @Assert\NotBlank()
      *
      * @var string
@@ -106,7 +106,7 @@ class City implements CityInterface, ActionLoggerAwareInterface
     /**
      * @param ProvinceInterface $province
      */
-    public function setProvince(ProvinceInterface $province): void
+    public function setProvince(ProvinceInterface $province = null): void
     {
         $this->province = $province;
     }
@@ -122,7 +122,7 @@ class City implements CityInterface, ActionLoggerAwareInterface
     /**
      * @param string $code
      */
-    public function setCode(string $code)
+    public function setCode(string $code): void
     {
         $this->code = StringUtil::uppercase($code);
     }
@@ -138,7 +138,7 @@ class City implements CityInterface, ActionLoggerAwareInterface
     /**
      * @param string $name
      */
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = StringUtil::uppercase($name);
     }

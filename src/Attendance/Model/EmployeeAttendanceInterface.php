@@ -22,7 +22,7 @@ interface EmployeeAttendanceInterface
     /**
      * @param EmployeeInterface $employee
      */
-    public function setEmployee(EmployeeInterface $employee): void;
+    public function setEmployee(EmployeeInterface $employee = null): void;
 
     /**
      * @return null|ShiftmentInterface
@@ -32,7 +32,7 @@ interface EmployeeAttendanceInterface
     /**
      * @param ShiftmentInterface $shiftment
      */
-    public function setShiftment(ShiftmentInterface $shiftment): void;
+    public function setShiftment(ShiftmentInterface $shiftment = null): void;
 
     /**
      * @return \DateTime
@@ -107,7 +107,7 @@ interface EmployeeAttendanceInterface
     /**
      * @param AbsentReasonInterface $absentReason
      */
-    public function setAbsentReason(AbsentReasonInterface $absentReason): void;
+    public function setAbsentReason(AbsentReasonInterface $absentReason = null): void;
 
     /**
      * @return string
@@ -117,5 +117,5 @@ interface EmployeeAttendanceInterface
     /**
      * @param string $remark
      */
-    public function setRemark(string $remark): void;
+    public function setRemark(string $remark = null): void;
 }
