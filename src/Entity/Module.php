@@ -25,7 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     }
  * )
  *
- * @author Muhamad Surya Iksanudin <surya.iksanudin@bisnis.com>
+ * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
 class Module implements ModuleInterface, ActionLoggerAwareInterface
 {
@@ -34,7 +34,7 @@ class Module implements ModuleInterface, ActionLoggerAwareInterface
     use SoftDeletable;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")

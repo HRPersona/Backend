@@ -8,7 +8,7 @@ use Persona\Hris\Core\Security\Model\ModuleRepositoryInterface;
 use Persona\Hris\Repository\AbstractCachableRepository;
 
 /**
- * @author Muhamad Surya Iksanudin <surya.iksanudin@bisnis.com>
+ * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
 final class ModuleRepository extends AbstractCachableRepository implements ModuleRepositoryInterface
 {

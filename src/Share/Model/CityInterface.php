@@ -20,7 +20,7 @@ interface CityInterface
     /**
      * @param ProvinceInterface $province
      */
-    public function setProvince(ProvinceInterface $province): void;
+    public function setProvince(ProvinceInterface $province = null): void;
 
     /**
      * @return string
@@ -35,5 +35,5 @@ interface CityInterface
     /**
      * @return string
      */
-    public function getPostalCode(): string;
+    public function getPostalCode(): ? string;
 }

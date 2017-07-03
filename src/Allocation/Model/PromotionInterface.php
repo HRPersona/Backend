@@ -22,7 +22,7 @@ interface PromotionInterface
     /**
      * @param EmployeeInterface $employee
      */
-    public function setEmployee(EmployeeInterface $employee): void;
+    public function setEmployee(EmployeeInterface $employee = null): void;
 
     /**
      * @return null|JobTitleInterface
@@ -32,7 +32,7 @@ interface PromotionInterface
     /**
      * @param JobTitleInterface $jobTitle
      */
-    public function setOldJobTitle(JobTitleInterface $jobTitle): void;
+    public function setOldJobTitle(JobTitleInterface $jobTitle = null): void;
 
     /**
      * @return null|JobTitleInterface
@@ -42,7 +42,7 @@ interface PromotionInterface
     /**
      * @param JobTitleInterface $jobTitle
      */
-    public function setNewJobTitle(JobTitleInterface $jobTitle): void;
+    public function setNewJobTitle(JobTitleInterface $jobTitle = null): void;
 
     /**
      * @return \DateTime

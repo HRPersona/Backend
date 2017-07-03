@@ -22,7 +22,7 @@ interface EmployeeTrainingInterface
     /**
      * @param EmployeeInterface $employee
      */
-    public function setEmployee(EmployeeInterface $employee): void;
+    public function setEmployee(EmployeeInterface $employee = null): void;
 
     /**
      * @return \DateTime
@@ -42,7 +42,7 @@ interface EmployeeTrainingInterface
     /**
      * @param UniversityInterface $university
      */
-    public function setUniversity(UniversityInterface $university): void;
+    public function setUniversity(UniversityInterface $university = null): void;
 
     /**
      * @return string

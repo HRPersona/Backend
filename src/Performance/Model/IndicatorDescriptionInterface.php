@@ -20,7 +20,7 @@ interface IndicatorDescriptionInterface
     /**
      * @param IndicatorInterface $indicator
      */
-    public function setIndicator(IndicatorInterface $indicator): void;
+    public function setIndicator(IndicatorInterface $indicator = null): void;
 
     /**
      * @return string

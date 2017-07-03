@@ -20,7 +20,7 @@ interface CompanyDepartmentInterface
     /**
      * @param CompanyInterface $company
      */
-    public function setCompany(CompanyInterface $company): void;
+    public function setCompany(CompanyInterface $company = null): void;
 
     /**
      * @return DepartmentInterface
@@ -30,5 +30,5 @@ interface CompanyDepartmentInterface
     /**
      * @param DepartmentInterface $department
      */
-    public function setDepartment(DepartmentInterface $department): void;
+    public function setDepartment(DepartmentInterface $department = null): void;
 }

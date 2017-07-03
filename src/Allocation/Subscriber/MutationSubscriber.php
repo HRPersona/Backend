@@ -21,9 +21,7 @@ final class MutationSubscriber implements EventSubscriber
         if ($entity instanceof MutationInterface) {
             $employee = $entity->getEmployee();
             $employee->setJobTitle($entity->getNewJobTitle());
-            if ($company = $entity->getNewCompany()) {
-                $employee->setCompany($company);
-            }
+            $employee->setCompany($entity->getNewCompany());
         }
     }
 
@@ -36,9 +34,7 @@ final class MutationSubscriber implements EventSubscriber
         if ($entity instanceof MutationInterface) {
             $employee = $entity->getEmployee();
             $employee->setJobTitle($entity->getNewJobTitle());
-            if ($company = $entity->getNewCompany()) {
-                $employee->setCompany($company);
-            }
+            $employee->setCompany($entity->getNewCompany());
         }
     }
 

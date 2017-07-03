@@ -33,7 +33,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *     }
  * )
  *
- * @author Muhamad Surya Iksanudin <surya.iksanudin@bisnis.com>
+ * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
 class Role implements RoleInterface, ActionLoggerAwareInterface
 {
@@ -42,7 +42,7 @@ class Role implements RoleInterface, ActionLoggerAwareInterface
     use SoftDeletable;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\Id()
      * @ORM\GeneratedValue(strategy="UUID")
      * @ORM\Column(type="guid")
@@ -55,6 +55,7 @@ class Role implements RoleInterface, ActionLoggerAwareInterface
      * @Groups({"write"})
      * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\User", fetch="EAGER")
      * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @Assert\NotBlank()
      *
      * @var UserInterface
      */
@@ -64,6 +65,7 @@ class Role implements RoleInterface, ActionLoggerAwareInterface
      * @Groups({"write", "read"})
      * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Module", fetch="EAGER")
      * @ORM\JoinColumn(name="module_id", referencedColumnName="id")
+     * @Assert\NotBlank()
      *
      * @var ModuleInterface
      */

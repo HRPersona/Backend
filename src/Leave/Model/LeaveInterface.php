@@ -22,7 +22,7 @@ interface LeaveInterface
     /**
      * @param AbsentReasonInterface $absentReason
      */
-    public function setAbsentReason(AbsentReasonInterface $absentReason): void;
+    public function setAbsentReason(AbsentReasonInterface $absentReason = null = null): void;
 
     /**
      * @return string

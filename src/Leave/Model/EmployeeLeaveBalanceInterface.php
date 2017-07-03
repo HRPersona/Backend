@@ -1,13 +1,13 @@
 <?php
 
-namespace Persona\Hris\Attendance\Model;
+namespace Persona\Hris\Leave\Model;
 
 use Persona\Hris\Employee\Model\EmployeeInterface;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-interface EmployeeAbsentInterface
+interface EmployeeLeaveBalanceInterface
 {
     /**
      * @return string
@@ -25,27 +25,32 @@ interface EmployeeAbsentInterface
     public function setEmployee(EmployeeInterface $employee = null): void;
 
     /**
-     * @return \DateTime
+     * @return int
      */
-    public function getAbsentDate(): \DateTime;
+    public function getLeaveDay(): int;
 
     /**
-     * @return null|AbsentReasonInterface
+     * @param int $leaveDay
      */
-    public function getAbsentReason(): ? AbsentReasonInterface;
+    public function setLeaveDay(int $leaveDay): void;
 
     /**
-     * @param AbsentReasonInterface $absentReason
+     * @return int
      */
-    public function setAbsentReason(AbsentReasonInterface $absentReason = null): void;
+    public function getLeaveBalance(): int;
+
+    /**
+     * @param int $leaveBalance
+     */
+    public function setLeaveBalance(int $leaveBalance): void;
 
     /**
      * @return string
      */
-    public function getRemark(): ? string;
+    public function getRemark(): string;
 
     /**
      * @param string $remark
      */
-    public function setRemark(string $remark = null): void;
+    public function setRemark(string $remark): void;
 }

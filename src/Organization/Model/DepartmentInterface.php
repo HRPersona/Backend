@@ -20,7 +20,7 @@ interface DepartmentInterface
     /**
      * @param DepartmentInterface $department
      */
-    public function setParent(DepartmentInterface $department): void;
+    public function setParent(DepartmentInterface $department = null): void;
 
     /**
      * @return string

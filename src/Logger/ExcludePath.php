@@ -5,7 +5,7 @@ namespace Persona\Hris\Logger;
 use Persona\Hris\Core\Logger\ExcludePathInterface;
 
 /**
- * @author Muhamad Surya Iksanudin <surya.iksanudin@bisnis.com>
+ * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
 class ExcludePath implements ExcludePathInterface
 {

@@ -20,7 +20,7 @@ interface EmployeeExperienceInterface
     /**
      * @param EmployeeInterface $employee
      */
-    public function setEmployee(EmployeeInterface $employee): void;
+    public function setEmployee(EmployeeInterface $employee = null): void;
 
     /**
      * @return \DateTime
@@ -41,4 +41,9 @@ interface EmployeeExperienceInterface
      * @return string
      */
     public function getJobTitle(): string;
+
+    /**
+     * @return null|string
+     */
+    public function getResignReason(): ? string;
 }

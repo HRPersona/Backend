@@ -20,12 +20,17 @@ interface CompanyInterface
     /**
      * @param CompanyInterface $company
      */
-    public function setParent(CompanyInterface $company): void;
+    public function setParent(CompanyInterface $company = null): void;
 
     /**
      * @return string
      */
     public function getCode(): string;
+
+    /**
+     * @return \DateTime
+     */
+    public function getBirthDay(): \DateTime;
 
     /**
      * @return string
@@ -35,7 +40,7 @@ interface CompanyInterface
     /**
      * @return string
      */
-    public function getAdress(): string;
+    public function getAddress(): string;
 
     /**
      * @return string

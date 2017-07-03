@@ -30,7 +30,7 @@ use Symfony\Component\HttpFoundation\Response;
  *     itemOperations={"get"={"method"="GET"}}
  * )
  *
- * @author Muhamad Surya Iksanudin <surya.iksanudin@bisnis.com>
+ * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
 class UserActivity implements ActivityLoggerInterface
 {
@@ -76,7 +76,7 @@ class UserActivity implements ActivityLoggerInterface
     /**
      * @ORM\Column(type="array")
      *
-     * @var string
+     * @var array
      */
     private $request;
 
@@ -114,11 +114,6 @@ class UserActivity implements ActivityLoggerInterface
      * @var array
      */
     private $dataChanges;
-
-    /**
-     * @ODM\Field(type="date")
-     */
-    protected $createdAt;
 
     public function __construct()
     {

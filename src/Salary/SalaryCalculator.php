@@ -38,7 +38,7 @@ final class SalaryCalculator
      *
      * @return float
      */
-    public function calculate(EmployeeInterface $employee): float
+    public function calculate(EmployeeInterface $employee = null): float
     {
         $addition = 0;
         $reduction = 0;

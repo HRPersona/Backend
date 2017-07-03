@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use Persona\Hris\Attendance\Model\EmployeeAbsentRepositoryInterface;
+use Persona\Hris\Leave\Model\EmployeeLeaveBalanceInterface;
 use Persona\Hris\Leave\Model\EmployeeLeaveInterface;
 
 /**
@@ -20,16 +21,23 @@ final class EmployeeAbsentSubscriber implements EventSubscriber
     private $absentRepository;
 
     /**
+     * @var string
+     */
+    private $leaveBalanceClass;
+
+    /**
      * @var EntityManager
      */
     private $manager;
 
     /**
      * @param EmployeeAbsentRepositoryInterface $absentRepository
+     * @param string                            $leaveBalanceClass
      */
-    public function __construct(EmployeeAbsentRepositoryInterface $absentRepository)
+    public function __construct(EmployeeAbsentRepositoryInterface $absentRepository, string $leaveBalanceClass)
     {
         $this->absentRepository = $absentRepository;
+        $this->leaveBalanceClass = $leaveBalanceClass;
     }
 
     /**
@@ -41,6 +49,19 @@ final class EmployeeAbsentSubscriber implements EventSubscriber
         if ($entity instanceof EmployeeLeaveInterface && $entity->isApproved()) {
             $this->manager = $eventArgs->getEntityManager();
             $this->absentModication($entity);
+
+            $employee = $entity->getEmployee();
+
+            /** @var EmployeeLeaveBalanceInterface $leaveBalance */
+            $leaveBalance = new $this->leaveBalanceClass();
+            $leaveBalance->setEmployee($employee);
+            $leaveBalance->setLeaveDay($entity->getLeaveDay());
+            $leaveBalance->setLeaveBalance($leaveBalance->getLeaveBalance() - $leaveBalance->getLeaveDay());
+            $leaveBalance->setRemark(sprintf('LEAVE_REQUEST{#ID:%s#EMPLOYEE:%s#NOTE:%s}', $entity->getId(), $entity->getEmployee()->getFullName(), $entity->getRemark()));
+
+            $employee->setLeaveBalance($leaveBalance->getLeaveBalance());
+
+            $this->manager->persist($leaveBalance);
         }
     }
 
@@ -66,9 +87,7 @@ final class EmployeeAbsentSubscriber implements EventSubscriber
 
             $employeeAbsent = $this->absentRepository->findByEmployeeAndDate($employeeLeave->getEmployee(), $leaveDate);
             $employeeAbsent->setAbsentReason($employeeLeave->getLeave()->getAbsentReason());
-            if ($remark = $employeeLeave->getRemark()) {
-                $employeeAbsent->setRemark($remark);
-            }
+            $employeeAbsent->setRemark($employeeLeave->getRemark());
 
             $this->manager->persist($employeeAbsent);
         }

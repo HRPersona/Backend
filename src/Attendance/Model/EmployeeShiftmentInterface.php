@@ -22,7 +22,7 @@ interface EmployeeShiftmentInterface
     /**
      * @param EmployeeInterface $employee
      */
-    public function setEmployee(EmployeeInterface $employee): void;
+    public function setEmployee(EmployeeInterface $employee = null): void;
 
     /**
      * @return \DateTime
@@ -42,5 +42,5 @@ interface EmployeeShiftmentInterface
     /**
      * @param ShiftmentInterface $shiftment
      */
-    public function setShiftment(ShiftmentInterface $shiftment): void;
+    public function setShiftment(ShiftmentInterface $shiftment = null): void;
 }

@@ -23,7 +23,7 @@ interface JobAllocationInterface
     /**
      * @param EmployeeInterface $employee
      */
-    public function setEmployee(EmployeeInterface $employee): void;
+    public function setEmployee(EmployeeInterface $employee = null): void;
 
     /**
      * @return null|JobTitleInterface
@@ -33,7 +33,7 @@ interface JobAllocationInterface
     /**
      * @param JobTitleInterface $jobTitle
      */
-    public function setJobTitle(JobTitleInterface $jobTitle): void;
+    public function setJobTitle(JobTitleInterface $jobTitle = null): void;
 
     /**
      * @return null|CompanyInterface
@@ -43,7 +43,7 @@ interface JobAllocationInterface
     /**
      * @param CompanyInterface $company
      */
-    public function setCompany(CompanyInterface $company): void;
+    public function setCompany(CompanyInterface $company = null): void;
 
     /**
      * @return \DateTime

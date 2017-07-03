@@ -12,7 +12,7 @@ use Persona\Hris\Core\Security\Model\UserRepositoryInterface;
 use Persona\Hris\Repository\AbstractCachableRepository;
 
 /**
- * @author Muhamad Surya Iksanudin <surya.iksanudin@bisnis.com>
+ * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
 final class UserRepository extends AbstractCachableRepository implements UserRepositoryInterface, UsernameRepositoryInterface
 {

@@ -65,9 +65,7 @@ final class AbsentSubscriber implements EventSubscriber
         if ($employeeAttendance) {
             $employeeAttendance->setAbsent(true);
             $employeeAttendance->setAbsentReason($employeeAbsent->getAbsentReason());
-            if ($remark = $employeeAbsent->getRemark()) {
-                $employeeAttendance->setRemark($remark);
-            }
+            $employeeAttendance->setRemark($employeeAbsent->getRemark());
         }
 
         $this->manager->persist($employeeAttendance);

@@ -6,36 +6,36 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
-use Persona\Hris\Core\Client\ClientInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
-use Persona\Hris\Core\Security\Model\UserInterface;
 use Persona\Hris\Core\Util\StringUtil;
+use Persona\Hris\Share\Model\CityInterface;
+use Persona\Hris\Share\Model\ProvinceInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="c_clients", indexes={@ORM\Index(name="client_search_idx", columns={"email"})})
+ * @ORM\Table(name="s_cities", indexes={@ORM\Index(name="city_search_idx", columns={"code"})})
  *
  * @ApiResource(
  *     attributes={
  *         "filters"={
  *             "order.filter",
- *             "name.search",
- *             "email.search"
+ *             "code.search",
+ *             "name.search"
  *         },
  *         "normalization_context"={"groups"={"read"}},
  *         "denormalization_context"={"groups"={"write"}}
  *     }
  * )
  *
- * @UniqueEntity("email")
+ * @UniqueEntity("code")
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class Client implements ClientInterface, ActionLoggerAwareInterface
+class City implements CityInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -53,6 +53,25 @@ class Client implements ClientInterface, ActionLoggerAwareInterface
 
     /**
      * @Groups({"read", "write"})
+     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Province", fetch="EAGER")
+     * @ORM\JoinColumn(name="province_id", referencedColumnName="id")
+     * @Assert\NotBlank()
+     *
+     * @var ProvinceInterface
+     */
+    private $province;
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="string", length=7)
+     * @Assert\NotBlank()
+     *
+     * @var string
+     */
+    private $code;
+
+    /**
+     * @Groups({"read", "write"})
      * @ORM\Column(type="string")
      * @Assert\NotBlank()
      *
@@ -62,36 +81,50 @@ class Client implements ClientInterface, ActionLoggerAwareInterface
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
+     * @ORM\Column(type="string", nullable=true)
      *
      * @var string
      */
-    private $email;
-
-    /**
-     * @Groups({"read"})
-     * @ORM\Column(type="string")
-     *
-     * @var string
-     */
-    private $apiKey;
-
-    /**
-     * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\User", fetch="EAGER")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     *
-     * @var UserInterface
-     */
-    private $user;
+    private $postalCode;
 
     /**
      * @return string
      */
     public function getId(): string
     {
-        return (string) $this->id;
+        return $this->id;
+    }
+
+    /**
+     * @return ProvinceInterface
+     */
+    public function getProvince(): ? ProvinceInterface
+    {
+        return $this->province;
+    }
+
+    /**
+     * @param ProvinceInterface $province
+     */
+    public function setProvince(ProvinceInterface $province = null): void
+    {
+        $this->province = $province;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param string $code
+     */
+    public function setCode(string $code): void
+    {
+        $this->code = StringUtil::uppercase($code);
     }
 
     /**
@@ -113,48 +146,16 @@ class Client implements ClientInterface, ActionLoggerAwareInterface
     /**
      * @return string
      */
-    public function getEmail(): string
+    public function getPostalCode(): ? string
     {
-        return $this->email;
+        return $this->postalCode;
     }
 
     /**
-     * @param string $email
+     * @param string $postalCode
      */
-    public function setEmail(string $email): void
+    public function setPostalCode(string $postalCode)
     {
-        $this->email = StringUtil::lowercase($email);
-    }
-
-    /**
-     * @return string
-     */
-    public function getApiKey(): string
-    {
-        return $this->apiKey;
-    }
-
-    /**
-     * @param string $apiKey
-     */
-    public function setApiKey(string $apiKey): void
-    {
-        $this->apiKey = $apiKey;
-    }
-
-    /**
-     * @return UserInterface|null
-     */
-    public function getUser(): ? UserInterface
-    {
-        return $this->user;
-    }
-
-    /**
-     * @param UserInterface $user
-     */
-    public function setUser(UserInterface $user = null): void
-    {
-        $this->user = $user;
+        $this->postalCode = $postalCode;
     }
 }
