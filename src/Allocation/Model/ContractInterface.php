@@ -10,7 +10,7 @@ interface ContractInterface
     const TYPE_PERMANENT = 'p';
     const TYPE_CONTRACT = 'c';
     const TYPE_OUTSOURCE = 'o';
-     const TYPE_INTERSHIP = 'i';
+    const TYPE_INTERSHIP = 'i';
 
     /**
      * @return string
