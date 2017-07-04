@@ -47,10 +47,10 @@ interface EmployeeTrainingInterface
     /**
      * @return string
      */
-    public function getCerficateNumber(): string;
+    public function getCertificateNumber(): string;
 
     /**
      * @return string
      */
-    public function getCerfiticateFile(): ? string;
+    public function getCertificateFile(): ? string;
 }

@@ -7,6 +7,11 @@ namespace Persona\Hris\Employee\Model;
  */
 interface ContractInterface
 {
+    const TYPE_PERMANENT = 'p';
+    const TYPE_CONTRACT = 'c';
+    const TYPE_OUTSOURCE = 'o';
+     const TYPE_INTERSHIP = 'i';
+
     /**
      * @return string
      */
@@ -36,4 +41,9 @@ interface ContractInterface
      * @return string
      */
     public function getLetterNumber(): string;
+
+    /**
+     * @return string
+     */
+    public function getContractType(): string;
 }
