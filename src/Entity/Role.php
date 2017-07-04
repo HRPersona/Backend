@@ -12,6 +12,7 @@ use Persona\Hris\Core\Security\Model\ModuleInterface;
 use Persona\Hris\Core\Security\Model\RoleInterface;
 use Persona\Hris\Core\Security\Model\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
