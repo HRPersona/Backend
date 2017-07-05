@@ -1,6 +1,8 @@
 <?php
 
-namespace Persona\Hris\Employee\Model;
+namespace Persona\Hris\Allocation\Model;
+
+use Persona\Hris\Employee\Model\EmployeeInterface;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>

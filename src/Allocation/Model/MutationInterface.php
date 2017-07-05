@@ -1,8 +1,10 @@
 <?php
 
-namespace Persona\Hris\Employee\Model;
+namespace Persona\Hris\Allocation\Model;
 
+use Persona\Hris\Employee\Model\EmployeeInterface;
 use Persona\Hris\Organization\Model\CompanyInterface;
+use Persona\Hris\Organization\Model\DepartmentInterface;
 use Persona\Hris\Organization\Model\JobTitleInterface;
 
 /**
@@ -64,6 +66,26 @@ interface MutationInterface
      * @param CompanyInterface $company
      */
     public function setNewCompany(CompanyInterface $company = null): void;
+
+    /**
+     * @return null|DepartmentInterface
+     */
+    public function getOldDepartment(): ? DepartmentInterface;
+
+    /**
+     * @param DepartmentInterface $department
+     */
+    public function setOldDepartment(DepartmentInterface $department = null): void;
+
+    /**
+     * @return null|DepartmentInterface
+     */
+    public function getNewDepartment(): ? DepartmentInterface;
+
+    /**
+     * @param DepartmentInterface $department
+     */
+    public function setNewDepartment(DepartmentInterface $department = null): void;
 
     /**
      * @return \DateTime
