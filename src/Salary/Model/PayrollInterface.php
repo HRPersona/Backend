@@ -25,27 +25,27 @@ interface PayrollInterface
     public function setEmployee(EmployeeInterface $employee = null): void;
 
     /**
-     * @return int
+     * @return string
      */
-    public function getPayrollYear(): int;
+    public function getPayrollYear(): string;
 
     /**
-     * @return int
+     * @return string
      */
-    public function getPayrollMonth(): int;
-
-    /**
-     * @return null|BenefitInterface
-     */
-    public function getBenefit(): ? BenefitInterface;
-
-    /**
-     * @param BenefitInterface $benefit
-     */
-    public function setBenefit(BenefitInterface $benefit): void;
+    public function getPayrollMonth(): string;
 
     /**
      * @return float
      */
-    public function getBenefitValue(): float;
+    public function getTakeHomePay(): float;
+
+    /**
+     * @return bool
+     */
+    public function isClosed(): bool;
+
+    /**
+     * @param bool $closed
+     */
+    public function setClosed(bool $closed): void;
 }
