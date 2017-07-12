@@ -93,7 +93,7 @@ class PayrollDetail implements PayrollDetailInterface, ActionLoggerAwareInterfac
     /**
      * @return PayrollInterface
      */
-    public function getPayroll():? PayrollInterface
+    public function getPayroll(): ? PayrollInterface
     {
         return $this->payroll;
     }
@@ -109,7 +109,7 @@ class PayrollDetail implements PayrollDetailInterface, ActionLoggerAwareInterfac
     /**
      * @return BenefitInterface
      */
-    public function getBenefit():? BenefitInterface
+    public function getBenefit(): ? BenefitInterface
     {
         return $this->benefit;
     }

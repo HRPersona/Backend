@@ -25,11 +25,6 @@ interface EmployeeLeaveInterface
     public function setEmployee(EmployeeInterface $employee = null): void;
 
     /**
-     * @return \DateTime
-     */
-    public function getLeaveDate(): \DateTime;
-
-    /**
      * @return null|LeaveInterface
      */
     public function getLeave(): ? LeaveInterface;
@@ -38,6 +33,11 @@ interface EmployeeLeaveInterface
      * @param LeaveInterface $leave
      */
     public function setLeave(LeaveInterface $leave = null): void;
+
+    /**
+     * @return \DateTime
+     */
+    public function getLeaveDate(): \DateTime;
 
     /**
      * @return int

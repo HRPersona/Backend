@@ -11,7 +11,7 @@ interface EmployeeShiftmentRepositoryInterface
 {
     /**
      * @param EmployeeInterface $employee
-     * @param \DateTime $attendanceDate
+     * @param \DateTime         $attendanceDate
      *
      * @return bool
      */

@@ -9,6 +9,7 @@ class HolidayFormula implements OvertimeFormulaInterface
 {
     /**
      * @param float $overtimeHour
+     *
      * @return float
      */
     public function getCalculatedValue(float $overtimeHour): float

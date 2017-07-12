@@ -47,7 +47,7 @@ interface EmployeeBenefitInterface
     /**
      * @return float
      */
-    public function getBenefitValue():? float;
+    public function getBenefitValue(): ? float;
 
     /**
      * @return bool

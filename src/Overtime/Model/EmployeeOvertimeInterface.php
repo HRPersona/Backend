@@ -40,9 +40,9 @@ interface EmployeeOvertimeInterface
     public function getOvertimeDate(): \DateTime;
 
     /**
-     * @return int
+     * @return float
      */
-    public function getOvertimeValue(): int;
+    public function getOvertimeValue(): float;
 
     /**
      * @return bool

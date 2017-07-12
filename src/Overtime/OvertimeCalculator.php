@@ -127,7 +127,7 @@ final class OvertimeCalculator
 
     /**
      * @param EmployeeInterface $employee
-     * @param \DateTime $date
+     * @param \DateTime         $date
      *
      * @return bool
      */

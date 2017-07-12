@@ -9,6 +9,7 @@ class WorkdayFormula implements OvertimeFormulaInterface
 {
     /**
      * @param float $overtimeHour
+     *
      * @return float
      */
     public function getCalculatedValue(float $overtimeHour): float
@@ -21,7 +22,7 @@ class WorkdayFormula implements OvertimeFormulaInterface
             if (2 < $overtimeHour) {
                 //Dua jam kedua kali 2
                 $calculatedValue = $calculatedValue + (2 * 2);
-                $overtimeHour = $overtimeHour -2;
+                $overtimeHour = $overtimeHour - 2;
 
                 //Selebihnya kali 3
                 return $calculatedValue + (3 * $overtimeHour);

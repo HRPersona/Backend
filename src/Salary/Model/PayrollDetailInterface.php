@@ -15,7 +15,7 @@ interface PayrollDetailInterface
     /**
      * @return null|PayrollInterface
      */
-    public function getPayroll():? PayrollInterface;
+    public function getPayroll(): ? PayrollInterface;
 
     /**
      * @param PayrollInterface $payroll
@@ -25,7 +25,7 @@ interface PayrollDetailInterface
     /**
      * @return null|BenefitInterface
      */
-    public function getBenefit():? BenefitInterface;
+    public function getBenefit(): ? BenefitInterface;
 
     /**
      * @param BenefitInterface $benefit
