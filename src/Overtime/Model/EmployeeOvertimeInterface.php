@@ -40,14 +40,14 @@ interface EmployeeOvertimeInterface
     public function getOvertimeDate(): \DateTime;
 
     /**
-     * @return string
+     * @return int
      */
-    public function getOvertimeStart(): string;
+    public function getOvertimeValue(): int;
 
     /**
-     * @return string
+     * @return bool
      */
-    public function getOvertimeEnd(): string;
+    public function isOffTime(): bool;
 
     /**
      * @return null|string
