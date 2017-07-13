@@ -40,6 +40,11 @@ interface EmployeeAttendanceInterface
     public function getAttendanceDate(): \DateTime;
 
     /**
+     * @param \DateTime $attendanceDate
+     */
+    public function setAttendanceDate(\DateTime $attendanceDate): void;
+
+    /**
      * @return string
      */
     public function getTimeIn(): string;

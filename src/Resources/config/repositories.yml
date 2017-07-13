@@ -40,3 +40,19 @@ services:
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\User'
+
+    persona.repository.orm.employee_absent_repository:
+        class: 'Persona\Hris\Repository\ORM\EmployeeAbsentRepository'
+        calls:
+            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\EmployeeAbsent'
+
+    persona.repository.orm.employee_attendance_repository:
+        class: 'Persona\Hris\Repository\ORM\EmployeeAttendanceRepository'
+        calls:
+            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\EmployeeAttendance'

@@ -5,6 +5,7 @@ namespace Persona\Hris\Repository\ORM;
 use Persona\Hris\Core\Manager\ManagerFactory;
 use Persona\Hris\Core\Security\Model\ModuleInterface;
 use Persona\Hris\Core\Security\Model\RoleHierarchyRepositoryInterface;
+use Persona\Hris\Core\Security\Model\RoleInterface;
 use Persona\Hris\Core\Security\Model\RoleRepositoryInterface;
 use Persona\Hris\Core\Security\Model\UserInterface;
 use Persona\Hris\Repository\AbstractCachableRepository;
@@ -89,6 +90,7 @@ final class RoleHierarchyRepository extends AbstractCachableRepository implement
                 $cache->save($cacheId, $r, 3);
             }
 
+            /** @var RoleInterface $item */
             foreach ($r as $item) {
                 if ($item->getAddable()) {
                     $roles[sprintf('ROLE_%s', $userRole[0])][] = sprintf('ROLE_%s_ADD', $item->getModule()->getPath());

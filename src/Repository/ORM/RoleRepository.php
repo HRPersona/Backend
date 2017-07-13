@@ -64,7 +64,7 @@ final class RoleRepository extends AbstractCachableRepository implements RoleRep
             $data = $cache->fetch($cacheId);
             $this->managerFactory->merge([$data]);
         } else {
-            /** @var RoleInterface $data */
+            /** @var array $data */
             $data = $this->managerFactory->getWriteManager()->getRepository($this->class)->findBy(['module' => $module, 'deletedAt' => null]);
             $cache->save($cacheId, $data, $this->getCacheLifetime());
         }

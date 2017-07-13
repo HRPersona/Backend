@@ -30,6 +30,11 @@ interface EmployeeAbsentInterface
     public function getAbsentDate(): \DateTime;
 
     /**
+     * @param \DateTime $absentDate
+     */
+    public function setAbsentDate(\DateTime $absentDate): void;
+
+    /**
      * @return null|AbsentReasonInterface
      */
     public function getAbsentReason(): ? AbsentReasonInterface;
