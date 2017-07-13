@@ -70,19 +70,19 @@ interface EmployeeIndicatorAppraisalInterface
     public function setSecondSupervisorAppraisalBy(EmployeeInterface $employee = null): void;
 
     /**
-     * @return string
+     * @return int
      */
-    public function getSelfAppraisal(): string;
+    public function getSelfAppraisal(): int;
 
     /**
-     * @return string
+     * @return int
      */
-    public function getFirstSupervisorAppraisal(): string;
+    public function getFirstSupervisorAppraisal(): int;
 
     /**
-     * @return string
+     * @return int
      */
-    public function getSecondSupervisorAppraisal(): string;
+    public function getSecondSupervisorAppraisal(): int;
 
     /**
      * @return string
