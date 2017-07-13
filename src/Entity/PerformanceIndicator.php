@@ -10,7 +10,6 @@ use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Util\StringUtil;
 use Persona\Hris\Performance\Model\IndicatorInterface;
-use Persona\Hris\Salary\Model\BenefitInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
