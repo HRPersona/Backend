@@ -28,6 +28,8 @@ interface IndicatorDescriptionInterface
     public function getDescription(): string;
 
     /**
+     * @see IndicatorInterface consts
+     *
      * @return int
      */
     public function getAppraisalValue(): int;
