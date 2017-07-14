@@ -56,3 +56,19 @@ services:
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\EmployeeAttendance'
+
+    persona.repository.orm.holiday_repository:
+        class: 'Persona\Hris\Repository\ORM\HolidayRepository'
+        calls:
+            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\Holiday'
+
+    persona.repository.orm.employee_overtime_repository:
+        class: 'Persona\Hris\Repository\ORM\EmployeeOvertimeRepository'
+        calls:
+            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\EmployeeOvertime'

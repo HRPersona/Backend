@@ -63,15 +63,15 @@ final class OvertimeCalculator
     }
 
     /**
+     * @param \DateTime $date
      * @param EmployeeInterface|null $employee
-     *
      * @return float
      */
-    public function calculate(EmployeeInterface $employee = null): float
+    public function calculate(\DateTime $date, EmployeeInterface $employee = null): float
     {
         $calculatedValue = 0;
         $fixedSalary = $this->getFixedSalary($employee);
-        foreach ($this->employeeOvertimeRepository->findByEmployee($employee) as $employeeOvertime) {
+        foreach ($this->employeeOvertimeRepository->findByEmployee($date, $employee) as $employeeOvertime) {
             if ($employeeOvertime->isOffTime() || $this->isTimeOff($employee, $employeeOvertime->getOvertimeDate())) {
                 $calculatedValue += $this->holidayFormula->getCalculatedValue($employeeOvertime->getOvertimeValue());
             } else {

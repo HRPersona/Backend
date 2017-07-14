@@ -10,9 +10,10 @@ use Persona\Hris\Employee\Model\EmployeeInterface;
 interface EmployeeOvertimeRepositoryInterface
 {
     /**
+     * @param \DateTime $date
      * @param EmployeeInterface $employee
      *
      * @return EmployeeOvertimeInterface[]
      */
-    public function findByEmployee(EmployeeInterface $employee): array;
+    public function findByEmployee(\DateTime $date, EmployeeInterface $employee): array;
 }
