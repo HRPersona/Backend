@@ -112,3 +112,11 @@ services:
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\EmployeeOvertimeCalculation'
+
+    persona.repository.orm.payroll_repository:
+        class: 'Persona\Hris\Repository\ORM\PayrollRepository'
+        calls:
+            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\Payroll'

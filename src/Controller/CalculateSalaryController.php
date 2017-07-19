@@ -50,9 +50,14 @@ final class CalculateSalaryController extends Controller
         $salaryCalculator = $this->container->get('persona.salary.salary_calculator');
         $employeeRepository = $this->container->get('persona.repository.orm.employee_repository');
         $employeeOvertime = $this->container->get('persona.repository.orm.employee_overtime_calculation_repository');
+        $payrollRepository = $this->container->get('persona.repository.orm.payroll_repository');
         $manager = $this->container->get('persona.manager.manager_factory')->getWriteManager();
 
         foreach ($employeeRepository->findActiveEmployee() as $key => $employee) {
+            if ($payrollRepository->isClosed($employee, $year, $month)) {
+                continue;
+            }
+
             $salary = $salaryCalculator->calculate($employee);
             $overtime = 0;
 
