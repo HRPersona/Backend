@@ -30,7 +30,7 @@ final class EmployeeOvertimeRepository extends AbstractCachableRepository implem
     }
 
     /**
-     * @param \DateTime $date
+     * @param \DateTime         $date
      * @param EmployeeInterface $employee
      *
      * @return EmployeeOvertimeInterface[]

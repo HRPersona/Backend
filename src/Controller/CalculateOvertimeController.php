@@ -59,8 +59,8 @@ final class CalculateOvertimeController extends Controller
                 $overtimeCalculation = new EmployeeOvertimeCalculation();
             }
             $overtimeCalculation->setEmployee($employee);
-            $overtimeCalculation->setYear($year);
-            $overtimeCalculation->setMonth($month);
+            $overtimeCalculation->setOvertimeYear($year);
+            $overtimeCalculation->setOvertimeMonth($month);
             $overtimeCalculation->setCalculatedValue($overtimeCalculator->calculate($date, $employee));
 
             $manager->persist($overtimeCalculation);

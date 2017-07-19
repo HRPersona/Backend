@@ -48,10 +48,10 @@ final class OvertimeCalculator
     private $holidayRepository;
 
     /**
-     * @param EmployeeOvertimeRepositoryInterface $overtimeRepository
-     * @param EmployeeBenefitRepositoryInterface $benefitRepository
+     * @param EmployeeOvertimeRepositoryInterface  $overtimeRepository
+     * @param EmployeeBenefitRepositoryInterface   $benefitRepository
      * @param EmployeeShiftmentRepositoryInterface $shiftmentRepository
-     * @param HolidayRepositoryInterface $holidayRepository
+     * @param HolidayRepositoryInterface           $holidayRepository
      */
     public function __construct(
         EmployeeOvertimeRepositoryInterface $overtimeRepository,
@@ -69,8 +69,9 @@ final class OvertimeCalculator
     }
 
     /**
-     * @param \DateTime $date
+     * @param \DateTime              $date
      * @param EmployeeInterface|null $employee
+     *
      * @return float
      */
     public function calculate(\DateTime $date, EmployeeInterface $employee = null): float

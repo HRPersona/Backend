@@ -57,7 +57,7 @@ class EmployeeOvertimeCalculation implements EmployeeOvertimeCalculationInterfac
      *
      * @var int
      */
-    private $year;
+    private $overtimeYear;
 
     /**
      * @Groups({"read"})
@@ -65,7 +65,7 @@ class EmployeeOvertimeCalculation implements EmployeeOvertimeCalculationInterfac
      *
      * @var int
      */
-    private $month;
+    private $overtimeMonth;
 
     /**
      * @Groups({"read"})
@@ -102,33 +102,33 @@ class EmployeeOvertimeCalculation implements EmployeeOvertimeCalculationInterfac
     /**
      * @return int
      */
-    public function getYear(): int
+    public function getOvertimeYear(): int
     {
-        return $this->year;
+        return $this->overtimeYear;
     }
 
     /**
      * @param int $year
      */
-    public function setYear(int $year): void
+    public function setOvertimeYear(int $year): void
     {
-        $this->year = $year;
+        $this->overtimeYear = $year;
     }
 
     /**
      * @return int
      */
-    public function getMonth(): int
+    public function getOvertimeMonth(): int
     {
-        return $this->month;
+        return $this->overtimeMonth;
     }
 
     /**
      * @param int $month
      */
-    public function setMonth(int $month): void
+    public function setOvertimeMonth(int $month): void
     {
-        $this->month = $month;
+        $this->overtimeMonth = $month;
     }
 
     /**

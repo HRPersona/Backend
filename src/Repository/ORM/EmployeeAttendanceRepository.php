@@ -32,7 +32,7 @@ final class EmployeeAttendanceRepository extends AbstractCachableRepository impl
      * When record is not found then create new object.
      *
      * @param EmployeeInterface $employee
-     * @param \DateTime $attendanceDate
+     * @param \DateTime         $attendanceDate
      *
      * @return EmployeeAttendanceInterface
      */

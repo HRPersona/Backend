@@ -123,6 +123,12 @@ services:
             - '@persona.repository.orm.employee_benefit_repository'
             - '@persona.repository.orm.employee_shiftment_repository'
             - '@persona.repository.orm.holiday_repository'
+
+    persona.salary.salary_calculator:
+        class: 'Persona\Hris\Salary\SalaryCalculator'
+        arguments:
+            - '@persona.repository.orm.employee_additional_benefit_repository'
+            - '@persona.repository.orm.employee_benefit_repository'
             
     ad3n.username.generator_factory:
         class: 'Ihsan\UsernameGenerator\UsernameFactory'

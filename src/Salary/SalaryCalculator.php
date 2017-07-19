@@ -24,6 +24,16 @@ final class SalaryCalculator
     private $benefit;
 
     /**
+     * @var array
+     */
+    private $plusBenefits = [];
+
+    /**
+     * @var array
+     */
+    private $minusBenefits = [];
+
+    /**
      * @param AdditionalBenefitRepositoryInterface $additionalBenefitRepository
      * @param EmployeeBenefitRepositoryInterface   $employeeBenefitRepository
      */
@@ -43,24 +53,54 @@ final class SalaryCalculator
         $addition = 0;
         $reduction = 0;
         $basicSalary = $employee->getBasicSalary();
+        $this->plusBenefits[$employee->getId()] = [];
+        $this->minusBenefits[$employee->getId()] = [];
 
         foreach ($this->additionalBenefit->findByEmployee($employee) as $additionalBenefit) {
             if (BenefitInterface::TYPE_PLUS === $additionalBenefit->getBenefit()->getBenefitType()) {
                 $addition += $additionalBenefit->getBenefitValue();
+
+                $this->plusBenefits[$employee->getId()][] = ['benefit' => $additionalBenefit->getBenefit(), 'value' => $additionalBenefit->getBenefitValue()];
             } else {
                 $reduction += $additionalBenefit->getBenefitValue();
+
+                $this->minusBenefits[$employee->getId()][] = ['benefit' => $additionalBenefit->getBenefit(), 'value' => $additionalBenefit->getBenefitValue()];
             }
         }
 
         foreach ($this->benefit->findByEmployee($employee) as $employeeBenefit) {
             if (BenefitInterface::TYPE_PLUS === $employeeBenefit->getBenefit()->getBenefitType()) {
                 $addition += $this->getBenefit($employeeBenefit, $basicSalary);
+
+                $this->plusBenefits[$employee->getId()][] = ['benefit' => $employeeBenefit->getBenefit(), 'value' => $employeeBenefit->getBenefitValue()];
             } else {
                 $reduction += $this->getBenefit($employeeBenefit, $basicSalary);
+
+                $this->minusBenefits[$employee->getId()][] = ['benefit' => $employeeBenefit->getBenefit(), 'value' => $employeeBenefit->getBenefitValue()];
             }
         }
 
         return $basicSalary + $addition - $reduction;
+    }
+
+    /**
+     * @param EmployeeInterface $employee
+     *
+     * @return array
+     */
+    public function getPlusBenefits(EmployeeInterface $employee): array
+    {
+        return $this->plusBenefits[$employee->getId()];
+    }
+
+    /**
+     * @param EmployeeInterface $employee
+     *
+     * @return array
+     */
+    public function getMinusBenefits(EmployeeInterface $employee): array
+    {
+        return $this->minusBenefits[$employee->getId()];
     }
 
     /**

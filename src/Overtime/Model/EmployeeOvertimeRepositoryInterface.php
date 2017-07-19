@@ -10,7 +10,7 @@ use Persona\Hris\Employee\Model\EmployeeInterface;
 interface EmployeeOvertimeRepositoryInterface
 {
     /**
-     * @param \DateTime $date
+     * @param \DateTime         $date
      * @param EmployeeInterface $employee
      *
      * @return EmployeeOvertimeInterface[]

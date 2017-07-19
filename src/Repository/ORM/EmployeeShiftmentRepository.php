@@ -30,7 +30,7 @@ final class EmployeeShiftmentRepository extends AbstractCachableRepository imple
 
     /**
      * @param EmployeeInterface $employee
-     * @param \DateTime $shiftmentDate
+     * @param \DateTime         $shiftmentDate
      *
      * @return bool
      */

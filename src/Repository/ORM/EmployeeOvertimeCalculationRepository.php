@@ -35,18 +35,42 @@ final class EmployeeOvertimeCalculationRepository extends AbstractCachableReposi
 
     /**
      * @param EmployeeInterface $employee
-     * @param int $year
-     * @param int $month
+     * @param int               $year
+     * @param int               $month
+     *
      * @return bool
      */
     public function isExisting(EmployeeInterface $employee, int $year, int $month): bool
     {
-        $this->exist = $this->managerFactory->getWriteManager()->getRepository($this->class)->findOneBy(['year' => $year, 'month' => $month, 'employee' => $employee]);
+        $this->exist = $this->managerFactory->getWriteManager()->getRepository($this->class)->findOneBy(['year' => $year, 'month' => $month, 'employee' => $employee, 'deletedAt' => null]);
         if ($this->exist) {
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * @param EmployeeInterface $employee
+     * @param int               $year
+     * @param int               $month
+     *
+     * @return float
+     */
+    public function getCalculationByEmployee(EmployeeInterface $employee, int $year, int $month): float
+    {
+        $cache = $this->getCacheDriver();
+        $cacheId = sprintf('%s_%s_%s_%s', $this->class, $employee->getId(), $year, $month);
+        if ($cache->contains($cacheId)) {
+            $data = $cache->fetch($cacheId);
+            $this->managerFactory->merge([$data]);
+        } else {
+            /** @var EmployeeOvertimeCalculationInterface $data */
+            $data = $this->managerFactory->getWriteManager()->getRepository($this->class)->findOneBy(['year' => $year, 'month' => $month, 'employee' => $employee, 'deletedAt' => null]);
+            $cache->save($cacheId, $data, $this->getCacheLifetime());
+        }
+
+        return $data->getCalculatedValue();
     }
 
     /**

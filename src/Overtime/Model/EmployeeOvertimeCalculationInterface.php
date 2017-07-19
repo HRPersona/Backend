@@ -27,22 +27,22 @@ interface EmployeeOvertimeCalculationInterface
     /**
      * @return int
      */
-    public function getYear(): int;
+    public function getOvertimeYear(): int;
 
     /**
      * @param int $year
      */
-    public function setYear(int $year): void;
+    public function setOvertimeYear(int $year): void;
 
     /**
      * @return int
      */
-    public function getMonth(): int;
+    public function getOvertimeMonth(): int;
 
     /**
      * @param int $month
      */
-    public function setMonth(int $month): void;
+    public function setOvertimeMonth(int $month): void;
 
     /**
      * @return float
@@ -52,5 +52,5 @@ interface EmployeeOvertimeCalculationInterface
     /**
      * @param float $calculatedValue
      */
-    public function setCalculatedValue(float $calculatedValue):void;
+    public function setCalculatedValue(float $calculatedValue): void;
 }
