@@ -206,7 +206,7 @@ class EmployeeAttendance implements EmployeeAttendanceInterface, ActionLoggerAwa
     /**
      * @param \DateTime $attendanceDate
      */
-    public function setAttendanceDate(\DateTime $attendanceDate)
+    public function setAttendanceDate(\DateTime $attendanceDate): void
     {
         $this->attendanceDate = $attendanceDate;
     }

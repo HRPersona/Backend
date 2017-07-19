@@ -117,7 +117,7 @@ class EmployeeAbsent implements EmployeeAbsentInterface, ActionLoggerAwareInterf
     /**
      * @param \DateTime $absentDate
      */
-    public function setAbsentDate(\DateTime $absentDate)
+    public function setAbsentDate(\DateTime $absentDate): void
     {
         $this->absentDate = $absentDate;
     }

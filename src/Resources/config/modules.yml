@@ -1,1 +1,5 @@
 services:
+    persona.employee:
+        class: 'Persona\Hris\PathResolver'
+        tags:
+            -  { name: 'persona.module' }

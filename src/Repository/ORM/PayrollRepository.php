@@ -29,8 +29,8 @@ class PayrollRepository extends AbstractCachableRepository implements PayrollRep
 
     /**
      * @param EmployeeInterface $employee
-     * @param int $year
-     * @param int $month
+     * @param int               $year
+     * @param int               $month
      *
      * @return bool
      */
