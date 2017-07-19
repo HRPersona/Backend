@@ -51,3 +51,43 @@ services:
             - '@persona.upload.uploader'
         tags:
             - { name: 'doctrine.event_subscriber' }
+
+    persona.allocation.contract_subscriber:
+        class: 'Persona\Hris\Allocation\Subscriber\ContractSubscriber'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
+    persona.allocation.job_allocation_subscriber:
+        class: 'Persona\Hris\Allocation\Subscriber\JobAllocationSubscriber'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
+    persona.allocation.mutation_subscriber:
+        class: 'Persona\Hris\Allocation\Subscriber\MutationSubscriber'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
+    persona.allocation.promotion_subscriber:
+        class: 'Persona\Hris\Allocation\Subscriber\PromotionSubscriber'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
+    persona.attendance.absent_subscriber:
+        class: 'Persona\Hris\Attendance\Subscriber\AbsentSubscriber'
+        arguments:
+            - '@persona.repository.orm.employee_attendance_repository'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
+    persona.attendance.attendance_calculator_subscriber:
+        class: 'Persona\Hris\Attendance\Subscriber\AttendanceCalculatorSubscriber'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
+    persona.leave.employee_absent_subscriber:
+        class: 'Persona\Hris\Leave\Subscriber\EmployeeAbsentSubscriber'
+        arguments:
+            - '@persona.repository.orm.employee_absent_repository'
+            - 'Persona\Hris\Entity\LeaveBalance'
+        tags:
+            - { name: 'doctrine.event_subscriber' }

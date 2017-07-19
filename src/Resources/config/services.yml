@@ -115,6 +115,14 @@ services:
         class: 'Persona\Hris\Core\Upload\Uploader'
         arguments:
             - '%persona.upload_dir%'
+
+    persona.overtime.overtime_calculator:
+        class: 'Persona\Hris\Overtime\OvertimeCalculator'
+        arguments:
+            - '@persona.repository.orm.employee_overtime_repository'
+            - '@persona.repository.orm.employee_benefit_repository'
+            - '@persona.repository.orm.employee_shiftment_repository'
+            - '@persona.repository.orm.holiday_repository'
             
     ad3n.username.generator_factory:
         class: 'Ihsan\UsernameGenerator\UsernameFactory'

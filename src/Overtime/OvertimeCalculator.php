@@ -47,6 +47,12 @@ final class OvertimeCalculator
      */
     private $holidayRepository;
 
+    /**
+     * @param EmployeeOvertimeRepositoryInterface $overtimeRepository
+     * @param EmployeeBenefitRepositoryInterface $benefitRepository
+     * @param EmployeeShiftmentRepositoryInterface $shiftmentRepository
+     * @param HolidayRepositoryInterface $holidayRepository
+     */
     public function __construct(
         EmployeeOvertimeRepositoryInterface $overtimeRepository,
         EmployeeBenefitRepositoryInterface $benefitRepository,

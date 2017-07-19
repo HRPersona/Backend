@@ -1,6 +1,6 @@
 <?php
 
-namespace Persona\Hris\Employee\Subscriber;
+namespace Persona\Hris\Attendance\Subscriber;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\EntityManager;
