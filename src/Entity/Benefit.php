@@ -78,6 +78,14 @@ class Benefit implements BenefitInterface, ActionLoggerAwareInterface
     private $benefitType;
 
     /**
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="boolean")
+     *
+     * @var bool
+     */
+    private $taxReduction;
+
+    /**
      * @return string
      */
     public function getId(): string
@@ -136,5 +144,21 @@ class Benefit implements BenefitInterface, ActionLoggerAwareInterface
         }
 
         $this->benefitType = $benefitType;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isTaxReduction(): bool
+    {
+        return $this->taxReduction;
+    }
+
+    /**
+     * @param bool $taxReduction
+     */
+    public function setTaxReduction(bool $taxReduction)
+    {
+        $this->taxReduction = $taxReduction;
     }
 }

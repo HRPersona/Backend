@@ -176,7 +176,7 @@ class EmployeeBenefit implements EmployeeBenefitInterface, ActionLoggerAwareInte
      */
     public function getBenefitValue(): ? float
     {
-        return $this->benefitValue;
+        return (float) $this->benefitValue;
     }
 
     /**

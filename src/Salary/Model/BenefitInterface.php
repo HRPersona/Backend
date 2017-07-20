@@ -29,4 +29,9 @@ interface BenefitInterface
      * @return string
      */
     public function getBenefitType(): string;
+
+    /**
+     * @return bool
+     */
+    public function isTaxReduction(): bool;
 }

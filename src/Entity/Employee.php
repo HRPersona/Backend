@@ -290,6 +290,11 @@ class Employee implements EmployeeInterface, ActionLoggerAwareInterface
     private $resignDate;
 
     /**
+     * @var string
+     */
+    private $taxGroup;
+
+    /**
      * @return string
      */
     public function getId(): string
@@ -695,5 +700,21 @@ class Employee implements EmployeeInterface, ActionLoggerAwareInterface
     public function setResignDate(\DateTime $resignDate): void
     {
         $this->resignDate = $resignDate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTaxGroup(): string
+    {
+        return $this->taxGroup;
+    }
+
+    /**
+     * @param string $taxGroup
+     */
+    public function setTaxGroup(string $taxGroup): void
+    {
+        $this->taxGroup = $taxGroup;
     }
 }
