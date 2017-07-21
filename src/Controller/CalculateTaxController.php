@@ -3,10 +3,7 @@
 namespace Persona\Hris\Controller;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Persona\Hris\Entity\Payroll;
-use Persona\Hris\Entity\PayrollDetail;
 use Persona\Hris\Entity\TaxHistory;
-use Persona\Hris\Salary\Model\BenefitInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;

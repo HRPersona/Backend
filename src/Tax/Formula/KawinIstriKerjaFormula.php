@@ -22,10 +22,10 @@ class KawinIstriKerjaFormula extends AbstractTaxFormula
      */
     public function getCalculatedValue(EmployeeInterface $employee): float
     {
-        $taxable = 12 * $this->getTaxableValue($employee);//Penghasilan netto setahun
-        $taxPercentage = TaxPercentage::getPercentageValue($taxable);//Persentase pajak berdasarkan netto
+        $taxable = 12 * $this->getTaxableValue($employee); //Penghasilan netto setahun
+        $taxPercentage = TaxPercentage::getPercentageValue($taxable); //Persentase pajak berdasarkan netto
 
-        $taxReduce = self::KI0;//PTKP
+        $taxReduce = self::KI0; //PTKP
         switch ($employee->getTaxGroup()) {
             case EmployeeInterface::TAX_KI_1:
                 $taxReduce = self::KI1;
@@ -40,6 +40,6 @@ class KawinIstriKerjaFormula extends AbstractTaxFormula
 
         $taxable = $taxable - $taxReduce;
 
-        return round($taxable * $taxPercentage, 0, PHP_ROUND_HALF_DOWN) / 12;//Potongan pajak sebulan
+        return round($taxable * $taxPercentage, 0, PHP_ROUND_HALF_DOWN) / 12; //Potongan pajak sebulan
     }
 }

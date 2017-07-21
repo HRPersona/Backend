@@ -30,10 +30,11 @@ final class TaxCalculator
     private $kawinIstriKerja;
 
     /**
-     * @param EmployeeBenefitRepositoryInterface $benefitRepository
+     * @param EmployeeBenefitRepositoryInterface   $benefitRepository
      * @param AdditionalBenefitRepositoryInterface $additionalBenefitRepositor
      */
-    public function __construct(EmployeeBenefitRepositoryInterface $benefitRepository, AdditionalBenefitRepositoryInterface $additionalBenefitRepositor) {
+    public function __construct(EmployeeBenefitRepositoryInterface $benefitRepository, AdditionalBenefitRepositoryInterface $additionalBenefitRepositor)
+    {
         $this->tidakKawin = new TidakKawinFormula($benefitRepository, $additionalBenefitRepositor);
         $this->kawinIstriTidakKerja = new KawinIstriTidakKerjaFormula($benefitRepository, $additionalBenefitRepositor);
         $this->kawinIstriKerja = new KawinIstriKerjaFormula($benefitRepository, $additionalBenefitRepositor);

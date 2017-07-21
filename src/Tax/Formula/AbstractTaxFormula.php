@@ -22,7 +22,7 @@ abstract class AbstractTaxFormula implements TaxFormulaInterface
     private $employeeAdditionalBenefitRepository;
 
     /**
-     * @param EmployeeBenefitRepositoryInterface $employeeBenefitRepository
+     * @param EmployeeBenefitRepositoryInterface   $employeeBenefitRepository
      * @param AdditionalBenefitRepositoryInterface $additionalBenefitRepository
      */
     public function __construct(EmployeeBenefitRepositoryInterface $employeeBenefitRepository, AdditionalBenefitRepositoryInterface $additionalBenefitRepository)
