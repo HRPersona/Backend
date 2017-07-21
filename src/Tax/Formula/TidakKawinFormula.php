@@ -22,10 +22,10 @@ class TidakKawinFormula extends AbstractTaxFormula
      */
     public function getCalculatedValue(EmployeeInterface $employee): float
     {
-        $taxable = $this->getTaxableValue($employee);
-        $taxPercentage = TaxPercentage::getPercentageValue($taxable);
+        $taxable = 12 * $this->getTaxableValue($employee);//Penghasilan netto setahun
+        $taxPercentage = TaxPercentage::getPercentageValue($taxable);//Persentase pajak berdasarkan netto
 
-        $taxReduce = self::TK0;
+        $taxReduce = self::TK0;//PTKP
         switch ($employee->getTaxGroup()) {
             case EmployeeInterface::TAX_TK_1:
                 $taxReduce = self::TK1;
@@ -40,6 +40,6 @@ class TidakKawinFormula extends AbstractTaxFormula
 
         $taxable = $taxable - $taxReduce;
 
-        return $taxable * $taxPercentage;
+        return round($taxable * $taxPercentage, 0, PHP_ROUND_HALF_DOWN) / 12;//Potongan pajak sebulan
     }
 }

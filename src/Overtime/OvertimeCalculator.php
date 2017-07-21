@@ -129,7 +129,7 @@ final class OvertimeCalculator
             return round(($percentage / 100) * $employeeBenefit->getBenefitValue(), 0, PHP_ROUND_HALF_DOWN);
         }
 
-        return $employeeBenefit->getBenefitValue();
+        return round($employeeBenefit->getBenefitValue(), 0, PHP_ROUND_HALF_DOWN);
     }
 
     /**

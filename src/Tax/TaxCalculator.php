@@ -3,6 +3,8 @@
 namespace Persona\Hris\Tax;
 
 use Persona\Hris\Employee\Model\EmployeeInterface;
+use Persona\Hris\Salary\Model\AdditionalBenefitRepositoryInterface;
+use Persona\Hris\Salary\Model\EmployeeBenefitRepositoryInterface;
 use Persona\Hris\Tax\Formula\KawinIstriKerjaFormula;
 use Persona\Hris\Tax\Formula\KawinIstriTidakKerjaFormula;
 use Persona\Hris\Tax\Formula\TidakKawinFormula;
@@ -28,18 +30,13 @@ final class TaxCalculator
     private $kawinIstriKerja;
 
     /**
-     * @param TidakKawinFormula $tidakKawinFormula
-     * @param KawinIstriTidakKerjaFormula $kawinIstriTidakKerjaFormula
-     * @param KawinIstriKerjaFormula $kawinIstriKerjaFormula
+     * @param EmployeeBenefitRepositoryInterface $benefitRepository
+     * @param AdditionalBenefitRepositoryInterface $additionalBenefitRepositor
      */
-    public function __construct(
-        TidakKawinFormula $tidakKawinFormula,
-        KawinIstriTidakKerjaFormula $kawinIstriTidakKerjaFormula,
-        KawinIstriKerjaFormula $kawinIstriKerjaFormula
-    ) {
-        $this->tidakKawin = $tidakKawinFormula;
-        $this->kawinIstriTidakKerja = $kawinIstriTidakKerjaFormula;
-        $this->kawinIstriKerja = $kawinIstriKerjaFormula;
+    public function __construct(EmployeeBenefitRepositoryInterface $benefitRepository, AdditionalBenefitRepositoryInterface $additionalBenefitRepositor) {
+        $this->tidakKawin = new TidakKawinFormula($benefitRepository, $additionalBenefitRepositor);
+        $this->kawinIstriTidakKerja = new KawinIstriTidakKerjaFormula($benefitRepository, $additionalBenefitRepositor);
+        $this->kawinIstriKerja = new KawinIstriKerjaFormula($benefitRepository, $additionalBenefitRepositor);
     }
 
     /**
