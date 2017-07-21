@@ -3,6 +3,7 @@
 namespace Persona\Hris\Tax\Formula;
 
 use Persona\Hris\Employee\Model\EmployeeInterface;
+use Persona\Hris\Salary\Model\AdditionalBenefitRepositoryInterface;
 use Persona\Hris\Salary\Model\EmployeeBenefitRepositoryInterface;
 
 /**
@@ -16,11 +17,18 @@ abstract class AbstractTaxFormula implements TaxFormulaInterface
     private $employeeBenefitRepository;
 
     /**
-     * @param EmployeeBenefitRepositoryInterface $employeeBenefitRepository
+     * @var AdditionalBenefitRepositoryInterface
      */
-    public function __construct(EmployeeBenefitRepositoryInterface $employeeBenefitRepository)
+    private $employeeAdditionalBenefitRepository;
+
+    /**
+     * @param EmployeeBenefitRepositoryInterface $employeeBenefitRepository
+     * @param AdditionalBenefitRepositoryInterface $additionalBenefitRepository
+     */
+    public function __construct(EmployeeBenefitRepositoryInterface $employeeBenefitRepository, AdditionalBenefitRepositoryInterface $additionalBenefitRepository)
     {
         $this->employeeBenefitRepository = $employeeBenefitRepository;
+        $this->employeeAdditionalBenefitRepository = $additionalBenefitRepository;
     }
 
     /**
@@ -28,9 +36,10 @@ abstract class AbstractTaxFormula implements TaxFormulaInterface
      *
      * @return float
      */
-    public function getTaxReduction(EmployeeInterface $employee): float
+    protected function getTaxReduction(EmployeeInterface $employee): float
     {
         $taxReductionBenefit = 0;
+
         $benefits = $this->employeeBenefitRepository->findByEmployee($employee);
         foreach ($benefits as $benefit) {
             if ($benefit->getBenefit()->isTaxReduction()) {
@@ -38,6 +47,27 @@ abstract class AbstractTaxFormula implements TaxFormulaInterface
             }
         }
 
+        $additionals = $this->employeeAdditionalBenefitRepository->findByEmployee($employee);
+        foreach ($additionals as $benefit) {
+            if ($benefit->getBenefit()->isTaxReduction()) {
+                $taxReductionBenefit += $benefit->getBenefitValue();
+            }
+        }
+
         return $taxReductionBenefit;
+    }
+
+    /**
+     * @param EmployeeInterface $employee
+     *
+     * @return float
+     */
+    protected function getTaxableValue(EmployeeInterface $employee): float
+    {
+        $basicSalary = $employee->getBasicSalary();
+        $benefitReduction = $this->getTaxReduction($employee);
+        $jobTitleCost = 0.05 * $basicSalary;
+
+        return $basicSalary - $benefitReduction - $jobTitleCost;
     }
 }

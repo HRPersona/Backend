@@ -5,7 +5,7 @@ namespace Persona\Hris\Tax;
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class TaxPercentage
+final class TaxPercentage
 {
     /**
      * @param float $grossYearlySalary

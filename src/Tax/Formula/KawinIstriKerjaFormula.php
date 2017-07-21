@@ -8,12 +8,12 @@ use Persona\Hris\Tax\TaxPercentage;
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class TidakKawinFormula extends AbstractTaxFormula
+class KawinIstriKerjaFormula extends AbstractTaxFormula
 {
-    const TK0 = 54000000;
-    const TK1 = 58500000;
-    const TK2 = 63000000;
-    const TK3 = 67500000;
+    const KI0 = 112500000;
+    const KI1 = 117000000;
+    const KI2 = 121500000;
+    const KI3 = 126000000;
 
     /**
      * @param EmployeeInterface $employee
@@ -25,16 +25,16 @@ class TidakKawinFormula extends AbstractTaxFormula
         $taxable = $this->getTaxableValue($employee);
         $taxPercentage = TaxPercentage::getPercentageValue($taxable);
 
-        $taxReduce = self::TK0;
+        $taxReduce = self::KI0;
         switch ($employee->getTaxGroup()) {
-            case EmployeeInterface::TAX_TK_1:
-                $taxReduce = self::TK1;
+            case EmployeeInterface::TAX_KI_1:
+                $taxReduce = self::KI1;
                 break;
-            case EmployeeInterface::TAX_TK_2:
-                $taxReduce = self::TK2;
+            case EmployeeInterface::TAX_KI_2:
+                $taxReduce = self::KI2;
                 break;
-            case EmployeeInterface::TAX_TK_3:
-                $taxReduce = self::TK3;
+            case EmployeeInterface::TAX_KI_3:
+                $taxReduce = self::KI3;
                 break;
         }
 

@@ -14,12 +14,5 @@ interface TaxFormulaInterface
      *
      * @return float
      */
-    public function getTaxReduction(EmployeeInterface $employee): float;
-
-    /**
-     * @param EmployeeInterface $employee
-     *
-     * @return float
-     */
     public function getCalculatedValue(EmployeeInterface $employee): float;
 }
