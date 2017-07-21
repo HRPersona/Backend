@@ -5,6 +5,7 @@ namespace Persona\Hris\Controller;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Persona\Hris\Entity\Payroll;
 use Persona\Hris\Entity\PayrollDetail;
+use Persona\Hris\Entity\TaxHistory;
 use Persona\Hris\Salary\Model\BenefitInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -57,7 +58,13 @@ final class CalculateTaxController extends Controller
                 continue;
             }
 
-            $tax = $taxCalculator->calculateTax($employee);
+            $taxHistory = new TaxHistory();
+            $taxHistory->setEmployee($employee);
+            $taxHistory->setTaxYear($year);
+            $taxHistory->setTaxMonth($month);
+            $taxHistory->setTaxValue($taxCalculator->calculateTax($employee));
+
+            $manager->persist($taxHistory);
 
             if (0 === $key % 17) {
                 $manager->flush();
