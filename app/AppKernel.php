@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new Nelmio\CorsBundle\NelmioCorsBundle(),
             new Lexik\Bundle\JWTAuthenticationBundle\LexikJWTAuthenticationBundle(),
             new Knp\DoctrineBehaviors\Bundle\DoctrineBehaviorsBundle(),
+            new \Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle(),
             new Nelmio\ApiDocBundle\NelmioApiDocBundle(),
             new Snc\RedisBundle\SncRedisBundle(),
             new FOS\UserBundle\FOSUserBundle(),

@@ -4,14 +4,14 @@ namespace Persona\Hris\Repository\ORM;
 
 use Persona\Hris\Core\Manager\ManagerFactory;
 use Persona\Hris\Employee\Model\EmployeeInterface;
-use Persona\Hris\Overtime\Model\EmployeeOvertimeCalculationInterface;
-use Persona\Hris\Overtime\Model\EmployeeOvertimeCalculationRepositoryInterface;
+use Persona\Hris\Overtime\Model\EmployeeOvertimeHistoryInterface;
+use Persona\Hris\Overtime\Model\EmployeeOvertimeHistoryRepositoryInterface;
 use Persona\Hris\Repository\AbstractRepository;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-final class EmployeeOvertimeCalculationRepository extends AbstractRepository implements EmployeeOvertimeCalculationRepositoryInterface
+final class EmployeeOvertimeHistoryRepository extends AbstractRepository implements EmployeeOvertimeHistoryRepositoryInterface
 {
     /**
      * @var string
@@ -19,7 +19,7 @@ final class EmployeeOvertimeCalculationRepository extends AbstractRepository imp
     private $class;
 
     /**
-     * @var EmployeeOvertimeCalculationInterface
+     * @var EmployeeOvertimeHistoryInterface
      */
     private $exist;
 
@@ -63,9 +63,9 @@ final class EmployeeOvertimeCalculationRepository extends AbstractRepository imp
     }
 
     /**
-     * @return EmployeeOvertimeCalculationInterface
+     * @return EmployeeOvertimeHistoryInterface
      */
-    public function getExistData(): EmployeeOvertimeCalculationInterface
+    public function getExistData(): EmployeeOvertimeHistoryInterface
     {
         return $this->exist;
     }

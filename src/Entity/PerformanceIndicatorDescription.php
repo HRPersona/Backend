@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="p_indicator_descriptions")
+ * @ORM\Table(name="ap_indicator_descriptions")
  *
  * @ApiResource(
  *     attributes={

@@ -9,14 +9,14 @@ use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Employee\Model\EmployeeInterface;
-use Persona\Hris\Leave\Model\EmployeeLeaveInterface;
-use Persona\Hris\Leave\Model\LeaveInterface;
+use Persona\Hris\Salary\Model\BenefitInterface;
+use Persona\Hris\Salary\Model\EmployeeBenefitInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="e_employee_leaves")
+ * @ORM\Table(name="sa_salary_benefits")
  *
  * @ApiResource(
  *     attributes={
@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class EmployeeLeave implements EmployeeLeaveInterface, ActionLoggerAwareInterface
+class SalaryBenefit implements EmployeeBenefitInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -56,40 +56,40 @@ class EmployeeLeave implements EmployeeLeaveInterface, ActionLoggerAwareInterfac
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Leave", fetch="EAGER")
-     * @ORM\JoinColumn(name="leave_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Benefit", fetch="EAGER")
+     * @ORM\JoinColumn(name="benefit_id", referencedColumnName="id")
      * @Assert\NotBlank()
      *
-     * @var LeaveInterface
+     * @var BenefitInterface
      */
-    private $leave;
+    private $benefit;
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="float", scale=27, precision=2)
      * @Assert\NotBlank()
      *
-     * @var \DateTime
+     * @var float
      */
-    private $leaveDate;
+    private $percentageFromBasicSalary;
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="float", scale=27, precision=2)
      * @Assert\NotBlank()
      *
-     * @var int
+     * @var float
      */
-    private $leaveDay;
+    private $percentageFromBenefitValue;
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="float", scale=27, precision=2)
      * @Assert\NotBlank()
      *
-     * @var string
+     * @var float
      */
-    private $remark;
+    private $benefitValue;
 
     /**
      * @Groups({"read", "write"})
@@ -97,21 +97,7 @@ class EmployeeLeave implements EmployeeLeaveInterface, ActionLoggerAwareInterfac
      *
      * @var bool
      */
-    private $approved;
-
-    /**
-     * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
-     * @ORM\JoinColumn(name="approved_by_id", referencedColumnName="id")
-     *
-     * @var EmployeeInterface
-     */
-    private $approvedBy;
-
-    public function __construct()
-    {
-        $this->approved = false;
-    }
+    private $usePercentage;
 
     /**
      * @return string
@@ -124,7 +110,7 @@ class EmployeeLeave implements EmployeeLeaveInterface, ActionLoggerAwareInterfac
     /**
      * @return EmployeeInterface
      */
-    public function getEmployee(): ? EmployeeInterface
+    public function getEmployee(): EmployeeInterface
     {
         return $this->employee;
     }
@@ -138,98 +124,82 @@ class EmployeeLeave implements EmployeeLeaveInterface, ActionLoggerAwareInterfac
     }
 
     /**
-     * @return LeaveInterface
+     * @return BenefitInterface
      */
-    public function getLeave(): ? LeaveInterface
+    public function getBenefit(): BenefitInterface
     {
-        return $this->leave;
+        return $this->benefit;
     }
 
     /**
-     * @param LeaveInterface $leave
+     * @param BenefitInterface $benefit
      */
-    public function setLeave(LeaveInterface $leave = null): void
+    public function setBenefit(BenefitInterface $benefit = null): void
     {
-        $this->leave = $leave;
+        $this->benefit = $benefit;
     }
 
     /**
-     * @return \DateTime
+     * @return float
      */
-    public function getLeaveDate(): \DateTime
+    public function getPercentageFromBasicSalary(): ? float
     {
-        return $this->leaveDate;
+        return $this->percentageFromBasicSalary;
     }
 
     /**
-     * @param \DateTime $leaveDate
+     * @param float $percentageFromBasicSalary
      */
-    public function setLeaveDate(\DateTime $leaveDate)
+    public function setPercentageFromBasicSalary(float $percentageFromBasicSalary)
     {
-        $this->leaveDate = $leaveDate;
+        $this->percentageFromBasicSalary = $percentageFromBasicSalary;
     }
 
     /**
-     * @return int
+     * @return float
      */
-    public function getLeaveDay(): int
+    public function getPercentageFromBenefitValue(): ? float
     {
-        return $this->leaveDay;
+        return $this->percentageFromBenefitValue;
     }
 
     /**
-     * @param int $leaveDay
+     * @param float $percentageFromBenefitValue
      */
-    public function setLeaveDay(int $leaveDay)
+    public function setPercentageFromBenefitValue(float $percentageFromBenefitValue)
     {
-        $this->leaveDay = $leaveDay;
+        $this->percentageFromBenefitValue = $percentageFromBenefitValue;
     }
 
     /**
-     * @return string
+     * @return float
      */
-    public function getRemark(): string
+    public function getBenefitValue(): ? float
     {
-        return $this->remark;
+        return (float) $this->benefitValue;
     }
 
     /**
-     * @param string $remark
+     * @param float $benefitValue
      */
-    public function setRemark(string $remark)
+    public function setBenefitValue(float $benefitValue)
     {
-        $this->remark = $remark;
+        $this->benefitValue = $benefitValue;
     }
 
     /**
      * @return bool
      */
-    public function isApproved(): bool
+    public function isUsePercentage(): bool
     {
-        return $this->approved;
+        return $this->usePercentage;
     }
 
     /**
-     * @param bool $approved
+     * @param bool $usePercentage
      */
-    public function setApproved(bool $approved): void
+    public function setUsePercentage(bool $usePercentage)
     {
-        $this->approved = $approved;
-    }
-
-    /**
-     * @return EmployeeInterface
-     */
-    public function getApprovedBy(): ? EmployeeInterface
-    {
-        return $this->approvedBy;
-    }
-
-    /**
-     * @param EmployeeInterface $approvedBy
-     */
-    public function setApprovedBy(EmployeeInterface $approvedBy = null): void
-    {
-        $this->approvedBy = $approvedBy;
+        $this->usePercentage = $usePercentage;
     }
 }

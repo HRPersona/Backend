@@ -22,7 +22,7 @@ final class LoadModuleData extends AbstractFixture implements OrderedFixtureInte
      */
     public function load(ObjectManager $manager)
     {
-        $path = sprintf('%s/Resources/data/%s', $this->container->getParameter('kernel.root_dir'), 'modules.yml');
+        $path = sprintf('%s/data/%s', $this->container->getParameter('kernel.root_dir'), 'modules.yml');
         $datas = Yaml::parse(file_get_contents($path));
         foreach ($datas as $data) {
             $module = new Module();
@@ -31,7 +31,7 @@ final class LoadModuleData extends AbstractFixture implements OrderedFixtureInte
             $module->setDescription($data['description']);
             $module->setPath($data['path']);
             $module->setMenuOrder($data['menuOrder']);
-            $module->setMenuDisplay($data['dispaly']);
+            $module->setMenuDisplay($data['display']);
             $this->setReference($data['ref'], $module);
 
             $manager->persist($module);

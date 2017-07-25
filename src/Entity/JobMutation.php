@@ -18,7 +18,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="e_employee_mutations")
+ * @ORM\Table(name="ja_mutations")
  *
  * @ApiResource(
  *     attributes={
@@ -30,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class EmployeeMutation implements MutationInterface, ActionLoggerAwareInterface
+class JobMutation implements MutationInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;

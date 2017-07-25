@@ -7,7 +7,7 @@ use Persona\Hris\Employee\Model\EmployeeInterface;
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-interface EmployeeOvertimeCalculationInterface
+interface EmployeeOvertimeHistoryInterface
 {
     /**
      * @return string

@@ -3,7 +3,7 @@
 namespace Persona\Hris\Controller;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Persona\Hris\Entity\EmployeeOvertimeCalculation;
+use Persona\Hris\Entity\OvertimeHistory;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -57,7 +57,7 @@ final class CalculateOvertimeController extends Controller
             if ($employeeCalculationRepository->isExisting($employee, $year, $month)) {
                 $overtimeCalculation = $employeeCalculationRepository->getExistData();
             } else {
-                $overtimeCalculation = new EmployeeOvertimeCalculation();
+                $overtimeCalculation = new OvertimeHistory();
             }
 
             $overtimeCalculation->setEmployee($employee);
@@ -122,7 +122,7 @@ final class CalculateOvertimeController extends Controller
         if ($employeeCalculationRepository->isExisting($employee, $year, $month)) {
             $overtimeCalculation = $employeeCalculationRepository->getExistData();
         } else {
-            $overtimeCalculation = new EmployeeOvertimeCalculation();
+            $overtimeCalculation = new OvertimeHistory();
         }
 
         $overtimeCalculation->setEmployee($employee);

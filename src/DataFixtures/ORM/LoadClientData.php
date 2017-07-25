@@ -22,7 +22,7 @@ final class LoadClientData extends AbstractFixture implements OrderedFixtureInte
      */
     public function load(ObjectManager $manager)
     {
-        $path = sprintf('%s/Resources/data/%s', $this->container->getParameter('kernel.root_dir'), 'clients.yml');
+        $path = sprintf('%s/data/%s', $this->container->getParameter('kernel.root_dir'), 'clients.yml');
         $datas = Yaml::parse(file_get_contents($path));
         foreach ($datas as $data) {
             $client = new Client();

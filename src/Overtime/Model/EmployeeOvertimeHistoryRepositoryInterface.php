@@ -8,7 +8,7 @@ use Persona\Hris\Repository\RepositoryInterface;
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-interface EmployeeOvertimeCalculationRepositoryInterface extends RepositoryInterface
+interface EmployeeOvertimeHistoryRepositoryInterface extends RepositoryInterface
 {
     /**
      * @param EmployeeInterface $employee
@@ -29,7 +29,7 @@ interface EmployeeOvertimeCalculationRepositoryInterface extends RepositoryInter
     public function getCalculationByEmployee(EmployeeInterface $employee, int $year, int $month): float;
 
     /**
-     * @return EmployeeOvertimeCalculationInterface
+     * @return EmployeeOvertimeHistoryInterface
      */
-    public function getExistData(): EmployeeOvertimeCalculationInterface;
+    public function getExistData(): EmployeeOvertimeHistoryInterface;
 }

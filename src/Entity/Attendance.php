@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="e_employee_attendances")
+ * @ORM\Table(name="at_attendances")
  *
  * @ApiResource(
  *     attributes={
@@ -29,7 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class EmployeeAttendance implements EmployeeAttendanceInterface, ActionLoggerAwareInterface
+class Attendance implements EmployeeAttendanceInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;

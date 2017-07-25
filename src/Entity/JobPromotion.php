@@ -6,19 +6,17 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
-use Persona\Hris\Allocation\Model\JobAllocationInterface;
+use Persona\Hris\Allocation\Model\PromotionInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Employee\Model\EmployeeInterface;
-use Persona\Hris\Organization\Model\CompanyInterface;
-use Persona\Hris\Organization\Model\DepartmentInterface;
 use Persona\Hris\Organization\Model\JobTitleInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="e_employee_joballocations")
+ * @ORM\Table(name="ja_promotions")
  *
  * @ApiResource(
  *     attributes={
@@ -30,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class EmployeeAllocation implements JobAllocationInterface, ActionLoggerAwareInterface
+class JobPromotion implements PromotionInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -59,32 +57,22 @@ class EmployeeAllocation implements JobAllocationInterface, ActionLoggerAwareInt
     /**
      * @Groups({"read", "write"})
      * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\JobTitle", fetch="EAGER")
-     * @ORM\JoinColumn(name="jobtitle_id", referencedColumnName="id")
+     * @ORM\JoinColumn(name="old_jobtitle_id", referencedColumnName="id")
      * @Assert\NotBlank()
      *
      * @var JobTitleInterface
      */
-    private $jobTitle;
+    private $oldJobTitle;
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Company", fetch="EAGER")
-     * @ORM\JoinColumn(name="company_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\JobTitle", fetch="EAGER")
+     * @ORM\JoinColumn(name="new_jobtitle_id", referencedColumnName="id")
      * @Assert\NotBlank()
      *
-     * @var CompanyInterface
+     * @var JobTitleInterface
      */
-    private $company;
-
-    /**
-     * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Department", fetch="EAGER")
-     * @ORM\JoinColumn(name="department_id", referencedColumnName="id")
-     * @Assert\NotBlank()
-     *
-     * @var DepartmentInterface
-     */
-    private $department;
+    private $newJobTitle;
 
     /**
      * @Groups({"read", "write"})
@@ -97,28 +85,11 @@ class EmployeeAllocation implements JobAllocationInterface, ActionLoggerAwareInt
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="date")
-     * @Assert\NotBlank()
-     *
-     * @var \DateTime
-     */
-    private $endDate;
-
-    /**
-     * @Groups({"read", "write"})
      * @ORM\Column(type="string")
      *
      * @var string
      */
     private $letterNumber;
-
-    /**
-     * @Groups({"read", "write"})
-     * @ORM\Column(type="boolean")
-     *
-     * @var bool
-     */
-    private $active;
 
     /**
      * @return string
@@ -147,49 +118,33 @@ class EmployeeAllocation implements JobAllocationInterface, ActionLoggerAwareInt
     /**
      * @return JobTitleInterface
      */
-    public function getJobTitle(): JobTitleInterface
+    public function getOldJobTitle(): JobTitleInterface
     {
-        return $this->jobTitle;
+        return $this->oldJobTitle;
     }
 
     /**
-     * @param JobTitleInterface $jobTitle
+     * @param JobTitleInterface $oldJobTitle
      */
-    public function setJobTitle(JobTitleInterface $jobTitle = null): void
+    public function setOldJobTitle(JobTitleInterface $oldJobTitle = null): void
     {
-        $this->jobTitle = $jobTitle;
+        $this->oldJobTitle = $oldJobTitle;
     }
 
     /**
-     * @return CompanyInterface
+     * @return JobTitleInterface
      */
-    public function getCompany(): CompanyInterface
+    public function getNewJobTitle(): JobTitleInterface
     {
-        return $this->company;
+        return $this->newJobTitle;
     }
 
     /**
-     * @param CompanyInterface $company
+     * @param JobTitleInterface $newJobTitle
      */
-    public function setCompany(CompanyInterface $company = null): void
+    public function setNewJobTitle(JobTitleInterface $newJobTitle = null): void
     {
-        $this->company = $company;
-    }
-
-    /**
-     * @return DepartmentInterface
-     */
-    public function getDepartment(): DepartmentInterface
-    {
-        return $this->department;
-    }
-
-    /**
-     * @param DepartmentInterface $department
-     */
-    public function setDepartment(DepartmentInterface $department = null): void
-    {
-        $this->department = $department;
+        $this->newJobTitle = $newJobTitle;
     }
 
     /**
@@ -209,22 +164,6 @@ class EmployeeAllocation implements JobAllocationInterface, ActionLoggerAwareInt
     }
 
     /**
-     * @return \DateTime
-     */
-    public function getEndDate(): \DateTime
-    {
-        return $this->endDate;
-    }
-
-    /**
-     * @param \DateTime $endDate
-     */
-    public function setEndDate(\DateTime $endDate)
-    {
-        $this->endDate = $endDate;
-    }
-
-    /**
      * @return string
      */
     public function getLetterNumber(): string
@@ -238,21 +177,5 @@ class EmployeeAllocation implements JobAllocationInterface, ActionLoggerAwareInt
     public function setLetterNumber(string $letterNumber)
     {
         $this->letterNumber = $letterNumber;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isActive(): bool
-    {
-        return $this->active;
-    }
-
-    /**
-     * @param bool $active
-     */
-    public function setActive(bool $active)
-    {
-        $this->active = $active;
     }
 }

@@ -104,17 +104,15 @@ services:
             - 'Persona\Hris\Entity\Employee'
 
     persona.repository.orm.employee_overtime_calculation_repository:
-        class: 'Persona\Hris\Repository\ORM\EmployeeOvertimeCalculationRepository'
+        class: 'Persona\Hris\Repository\ORM\EmployeeOvertimeHistoryRepository'
         calls:
             - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
         arguments:
             - '@persona.manager.manager_factory'
-            - 'Persona\Hris\Entity\EmployeeOvertimeCalculation'
+            - 'Persona\Hris\Entity\OvertimeHistory'
 
     persona.repository.orm.payroll_repository:
         class: 'Persona\Hris\Repository\ORM\PayrollRepository'
-        calls:
-            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\Payroll'
@@ -129,24 +127,18 @@ services:
 
     persona.repository.orm.payroll_period_repository:
         class: 'Persona\Hris\Repository\ORM\PayrollPeriodRepository'
-        calls:
-            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\PayrollPeriod'
 
     persona.repository.orm.payroll_detail_repository:
         class: 'Persona\Hris\Repository\ORM\PayrollDetailRepository'
-        calls:
-            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\PayrollDetail'
 
     persona.repository.orm.tax_history_repository:
         class: 'Persona\Hris\Repository\ORM\TaxHistoryRepository'
-        calls:
-            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\TaxHistory'

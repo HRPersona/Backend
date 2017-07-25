@@ -10,14 +10,14 @@ use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Employee\Model\EmployeeInterface;
 use Persona\Hris\Performance\Model\AppraisalPeriodInterface;
-use Persona\Hris\Performance\Model\EmployeeSkillAppraisalInterface;
-use Persona\Hris\Share\Model\SkillInterface;
+use Persona\Hris\Performance\Model\EmployeeIndicatorAppraisalInterface;
+use Persona\Hris\Performance\Model\IndicatorInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="e_employee_skill_appraisals")
+ * @ORM\Table(name="ap_indicator_appraisals")
  *
  * @ApiResource(
  *     attributes={
@@ -29,7 +29,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class EmployeeSkillAppraisal implements EmployeeSkillAppraisalInterface, ActionLoggerAwareInterface
+class PerformanceIndicatorAppraisal implements EmployeeIndicatorAppraisalInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -76,13 +76,13 @@ class EmployeeSkillAppraisal implements EmployeeSkillAppraisalInterface, ActionL
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Skill", fetch="EAGER")
-     * @ORM\JoinColumn(name="skill_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\PerformanceIndicator", fetch="EAGER")
+     * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id")
      * @Assert\NotBlank()
      *
-     * @var SkillInterface
+     * @var IndicatorInterface
      */
-    private $skill;
+    private $indicator;
 
     /**
      * @Groups({"read", "write"})
@@ -215,19 +215,19 @@ class EmployeeSkillAppraisal implements EmployeeSkillAppraisalInterface, ActionL
     }
 
     /**
-     * @return SkillInterface
+     * @return IndicatorInterface
      */
-    public function getSkill(): ? SkillInterface
+    public function getIndicator(): ? IndicatorInterface
     {
-        return $this->skill;
+        return $this->indicator;
     }
 
     /**
-     * @param SkillInterface $skill
+     * @param IndicatorInterface $indicator
      */
-    public function setSkill(SkillInterface $skill = null): void
+    public function setIndicator(IndicatorInterface $indicator = null): void
     {
-        $this->skill = $skill;
+        $this->indicator = $indicator;
     }
 
     /**

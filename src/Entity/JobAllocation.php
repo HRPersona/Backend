@@ -6,17 +6,19 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
+use Persona\Hris\Allocation\Model\JobAllocationInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Employee\Model\EmployeeInterface;
-use Persona\Hris\Employee\Model\EmployeeTrainingInterface;
-use Persona\Hris\Share\Model\UniversityInterface;
+use Persona\Hris\Organization\Model\CompanyInterface;
+use Persona\Hris\Organization\Model\DepartmentInterface;
+use Persona\Hris\Organization\Model\JobTitleInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="em_employee_trains")
+ * @ORM\Table(name="ja_joballocations")
  *
  * @ApiResource(
  *     attributes={
@@ -28,7 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class EmployeeTraining implements EmployeeTrainingInterface, ActionLoggerAwareInterface
+class JobAllocation implements JobAllocationInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -56,6 +58,36 @@ class EmployeeTraining implements EmployeeTrainingInterface, ActionLoggerAwareIn
 
     /**
      * @Groups({"read", "write"})
+     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\JobTitle", fetch="EAGER")
+     * @ORM\JoinColumn(name="jobtitle_id", referencedColumnName="id")
+     * @Assert\NotBlank()
+     *
+     * @var JobTitleInterface
+     */
+    private $jobTitle;
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Company", fetch="EAGER")
+     * @ORM\JoinColumn(name="company_id", referencedColumnName="id")
+     * @Assert\NotBlank()
+     *
+     * @var CompanyInterface
+     */
+    private $company;
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Department", fetch="EAGER")
+     * @ORM\JoinColumn(name="department_id", referencedColumnName="id")
+     * @Assert\NotBlank()
+     *
+     * @var DepartmentInterface
+     */
+    private $department;
+
+    /**
+     * @Groups({"read", "write"})
      * @ORM\Column(type="date")
      * @Assert\NotBlank()
      *
@@ -74,30 +106,19 @@ class EmployeeTraining implements EmployeeTrainingInterface, ActionLoggerAwareIn
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\University", fetch="EAGER")
-     * @ORM\JoinColumn(name="university_id", referencedColumnName="id")
-     * @Assert\NotBlank()
-     *
-     * @var UniversityInterface
-     */
-    private $university;
-
-    /**
-     * @Groups({"read", "write"})
-     * @ORM\Column(type="string")
-     * @Assert\NotBlank()
-     *
-     * @var string
-     */
-    private $certificateNumber;
-
-    /**
-     * @Groups({"read", "write"})
      * @ORM\Column(type="string")
      *
      * @var string
      */
-    private $certificateFile;
+    private $letterNumber;
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="boolean")
+     *
+     * @var bool
+     */
+    private $active;
 
     /**
      * @return string
@@ -121,6 +142,54 @@ class EmployeeTraining implements EmployeeTrainingInterface, ActionLoggerAwareIn
     public function setEmployee(EmployeeInterface $employee = null): void
     {
         $this->employee = $employee;
+    }
+
+    /**
+     * @return JobTitleInterface
+     */
+    public function getJobTitle(): JobTitleInterface
+    {
+        return $this->jobTitle;
+    }
+
+    /**
+     * @param JobTitleInterface $jobTitle
+     */
+    public function setJobTitle(JobTitleInterface $jobTitle = null): void
+    {
+        $this->jobTitle = $jobTitle;
+    }
+
+    /**
+     * @return CompanyInterface
+     */
+    public function getCompany(): CompanyInterface
+    {
+        return $this->company;
+    }
+
+    /**
+     * @param CompanyInterface $company
+     */
+    public function setCompany(CompanyInterface $company = null): void
+    {
+        $this->company = $company;
+    }
+
+    /**
+     * @return DepartmentInterface
+     */
+    public function getDepartment(): DepartmentInterface
+    {
+        return $this->department;
+    }
+
+    /**
+     * @param DepartmentInterface $department
+     */
+    public function setDepartment(DepartmentInterface $department = null): void
+    {
+        $this->department = $department;
     }
 
     /**
@@ -156,50 +225,34 @@ class EmployeeTraining implements EmployeeTrainingInterface, ActionLoggerAwareIn
     }
 
     /**
-     * @return UniversityInterface
-     */
-    public function getUniversity(): ? UniversityInterface
-    {
-        return $this->university;
-    }
-
-    /**
-     * @param UniversityInterface $university
-     */
-    public function setUniversity(UniversityInterface $university = null): void
-    {
-        $this->university = $university;
-    }
-
-    /**
      * @return string
      */
-    public function getCertificateNumber(): string
+    public function getLetterNumber(): string
     {
-        return $this->certificateNumber;
+        return $this->letterNumber;
     }
 
     /**
-     * @param string $certificateNumber
+     * @param string $letterNumber
      */
-    public function setCertificateNumber(string $certificateNumber)
+    public function setLetterNumber(string $letterNumber)
     {
-        $this->certificateNumber = $certificateNumber;
+        $this->letterNumber = $letterNumber;
     }
 
     /**
-     * @return string
+     * @return bool
      */
-    public function getCertificateFile(): ? string
+    public function isActive(): bool
     {
-        return $this->certificateFile;
+        return $this->active;
     }
 
     /**
-     * @param string $certificateFile
+     * @param bool $active
      */
-    public function setCertificateFile(string $certificateFile)
+    public function setActive(bool $active)
     {
-        $this->certificateFile = $certificateFile;
+        $this->active = $active;
     }
 }

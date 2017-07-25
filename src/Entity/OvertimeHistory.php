@@ -6,17 +6,15 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
-use Persona\Hris\Attendance\Model\EmployeeShiftmentInterface;
-use Persona\Hris\Attendance\Model\ShiftmentInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Employee\Model\EmployeeInterface;
+use Persona\Hris\Overtime\Model\EmployeeOvertimeHistoryInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="e_employee_shiftments")
+ * @ORM\Table(name="ov_overtime_histories")
  *
  * @ApiResource(
  *     attributes={
@@ -28,7 +26,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class EmployeeShiftment implements EmployeeShiftmentInterface, ActionLoggerAwareInterface
+class OvertimeHistory implements EmployeeOvertimeHistoryInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -45,42 +43,37 @@ class EmployeeShiftment implements EmployeeShiftmentInterface, ActionLoggerAware
     private $id;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
      * @ORM\JoinColumn(name="employee_id", referencedColumnName="id")
-     * @Assert\NotBlank()
      *
      * @var EmployeeInterface
      */
     private $employee;
 
     /**
-     * @Groups({"read", "write"})
-     * @ORM\Column(type="date")
-     * @Assert\NotBlank()
+     * @Groups({"read"})
+     * @ORM\Column(type="integer")
      *
-     * @var \DateTime
+     * @var int
      */
-    private $startDate;
+    private $overtimeYear;
 
     /**
-     * @Groups({"read", "write"})
-     * @ORM\Column(type="date")
-     * @Assert\NotBlank()
+     * @Groups({"read"})
+     * @ORM\Column(type="integer")
      *
-     * @var \DateTime
+     * @var int
      */
-    private $endDate;
+    private $overtimeMonth;
 
     /**
-     * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Shiftment", fetch="EAGER")
-     * @ORM\JoinColumn(name="shiftment_id", referencedColumnName="id")
-     * @Assert\NotBlank()
+     * @Groups({"read"})
+     * @ORM\Column(type="float", scale=27, precision=2)
      *
-     * @var ShiftmentInterface
+     * @var float
      */
-    private $shiftment;
+    private $calculatedValue;
 
     /**
      * @return string
@@ -107,50 +100,50 @@ class EmployeeShiftment implements EmployeeShiftmentInterface, ActionLoggerAware
     }
 
     /**
-     * @return \DateTime
+     * @return int
      */
-    public function getStartDate(): \DateTime
+    public function getOvertimeYear(): int
     {
-        return $this->startDate;
+        return $this->overtimeYear;
     }
 
     /**
-     * @param \DateTime $startDate
+     * @param int $year
      */
-    public function setStartDate(\DateTime $startDate)
+    public function setOvertimeYear(int $year): void
     {
-        $this->startDate = $startDate;
+        $this->overtimeYear = $year;
     }
 
     /**
-     * @return \DateTime
+     * @return int
      */
-    public function getEndDate(): \DateTime
+    public function getOvertimeMonth(): int
     {
-        return $this->endDate;
+        return $this->overtimeMonth;
     }
 
     /**
-     * @param \DateTime $endDate
+     * @param int $month
      */
-    public function setEndDate(\DateTime $endDate)
+    public function setOvertimeMonth(int $month): void
     {
-        $this->endDate = $endDate;
+        $this->overtimeMonth = $month;
     }
 
     /**
-     * @return ShiftmentInterface
+     * @return float
      */
-    public function getShiftment(): ShiftmentInterface
+    public function getCalculatedValue(): float
     {
-        return $this->shiftment;
+        return $this->calculatedValue;
     }
 
     /**
-     * @param ShiftmentInterface $shiftment
+     * @param float $calculatedValue
      */
-    public function setShiftment(ShiftmentInterface $shiftment = null): void
+    public function setCalculatedValue(float $calculatedValue): void
     {
-        $this->shiftment = $shiftment;
+        $this->calculatedValue = $calculatedValue;
     }
 }

@@ -24,10 +24,10 @@ final class LoadRoleData extends AbstractFixture implements OrderedFixtureInterf
      */
     public function load(ObjectManager $manager)
     {
-        $userPath = sprintf('%s/Resources/data/%s', $this->container->getParameter('kernel.root_dir'), 'users.yml');
+        $userPath = sprintf('%s/data/%s', $this->container->getParameter('kernel.root_dir'), 'users.yml');
         $users = Yaml::parse(file_get_contents($userPath));
         foreach ($users as $user) {
-            $modulePath = sprintf('%s/Resources/data/%s', $this->container->getParameter('kernel.root_dir'), 'modules.yml');
+            $modulePath = sprintf('%s/data/%s', $this->container->getParameter('kernel.root_dir'), 'modules.yml');
             $modules = Yaml::parse(file_get_contents($modulePath));
             foreach ($modules as $module) {
                 $role = new Role();

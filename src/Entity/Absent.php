@@ -6,16 +6,17 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
+use Persona\Hris\Attendance\Model\AbsentReasonInterface;
+use Persona\Hris\Attendance\Model\EmployeeAbsentInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Employee\Model\EmployeeInterface;
-use Persona\Hris\Overtime\Model\EmployeeOvertimeInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="a_employee_overtimes")
+ * @ORM\Table(name="at_absents")
  *
  * @ApiResource(
  *     attributes={
@@ -27,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class EmployeeOvertime implements EmployeeOvertimeInterface, ActionLoggerAwareInterface
+class Absent implements EmployeeAbsentInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -55,39 +56,22 @@ class EmployeeOvertime implements EmployeeOvertimeInterface, ActionLoggerAwareIn
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
-     * @ORM\JoinColumn(name="proposed_by_id", referencedColumnName="id")
-     * @Assert\NotBlank()
-     *
-     * @var EmployeeInterface
-     */
-    private $proposedBy;
-
-    /**
-     * @Groups({"read", "write"})
      * @ORM\Column(type="date")
      * @Assert\NotBlank()
      *
      * @var \DateTime
      */
-    private $overtimeDate;
+    private $absentDate;
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="float", scale=27, precision=2)
+     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\AbsentReason", fetch="EAGER")
+     * @ORM\JoinColumn(name="absent_reason_id", referencedColumnName="id")
      * @Assert\NotBlank()
      *
-     * @var float
+     * @var AbsentReasonInterface
      */
-    private $overtimeValue;
-
-    /**
-     * @Groups({"read"})
-     * @ORM\Column(type="boolean")
-     *
-     * @var bool
-     */
-    private $offTime;
+    private $absentReason;
 
     /**
      * @Groups({"read", "write"})
@@ -97,11 +81,6 @@ class EmployeeOvertime implements EmployeeOvertimeInterface, ActionLoggerAwareIn
      * @var string
      */
     private $remark;
-
-    public function __construct()
-    {
-        $this->offTime = false;
-    }
 
     /**
      * @return string
@@ -128,73 +107,41 @@ class EmployeeOvertime implements EmployeeOvertimeInterface, ActionLoggerAwareIn
     }
 
     /**
-     * @return EmployeeInterface
-     */
-    public function getProposedBy(): EmployeeInterface
-    {
-        return $this->proposedBy;
-    }
-
-    /**
-     * @param EmployeeInterface $proposedBy
-     */
-    public function setProposedBy(EmployeeInterface $proposedBy = null): void
-    {
-        $this->proposedBy = $proposedBy;
-    }
-
-    /**
      * @return \DateTime
      */
-    public function getOvertimeDate(): \DateTime
+    public function getAbsentDate(): \DateTime
     {
-        return $this->overtimeDate;
+        return $this->absentDate;
     }
 
     /**
-     * @param \DateTime $overtimeDate
+     * @param \DateTime $absentDate
      */
-    public function setOvertimeDate(\DateTime $overtimeDate)
+    public function setAbsentDate(\DateTime $absentDate): void
     {
-        $this->overtimeDate = $overtimeDate;
+        $this->absentDate = $absentDate;
     }
 
     /**
-     * @return float
+     * @return AbsentReasonInterface
      */
-    public function getOvertimeValue(): float
+    public function getAbsentReason(): ? AbsentReasonInterface
     {
-        return $this->overtimeValue;
+        return $this->absentReason;
     }
 
     /**
-     * @param float $overtimeValue
+     * @param AbsentReasonInterface $absentReason
      */
-    public function setOvertimeValue(float $overtimeValue)
+    public function setAbsentReason(AbsentReasonInterface $absentReason = null): void
     {
-        $this->overtimeValue = $overtimeValue;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isOffTime(): bool
-    {
-        return $this->offTime;
-    }
-
-    /**
-     * @param bool $offTime
-     */
-    public function setOffTime(bool $offTime)
-    {
-        $this->offTime = $offTime;
+        $this->absentReason = $absentReason;
     }
 
     /**
      * @return string
      */
-    public function getRemark(): string
+    public function getRemark(): ? string
     {
         return $this->remark;
     }
@@ -202,7 +149,7 @@ class EmployeeOvertime implements EmployeeOvertimeInterface, ActionLoggerAwareIn
     /**
      * @param string $remark
      */
-    public function setRemark(string $remark)
+    public function setRemark(string $remark = null): void
     {
         $this->remark = $remark;
     }

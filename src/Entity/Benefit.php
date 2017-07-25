@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="o_salary_benefits", indexes={@ORM\Index(name="salary_benefit_search_idx", columns={"code"})})
+ * @ORM\Table(name="sa_benefits", indexes={@ORM\Index(name="benefit_search_idx", columns={"code"})})
  *
  * @ApiResource(
  *     attributes={

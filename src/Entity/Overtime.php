@@ -6,17 +6,16 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
-use Persona\Hris\Allocation\Model\PromotionInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Employee\Model\EmployeeInterface;
-use Persona\Hris\Organization\Model\JobTitleInterface;
+use Persona\Hris\Overtime\Model\EmployeeOvertimeInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="e_employee_promotions")
+ * @ORM\Table(name="ov_overtimes")
  *
  * @ApiResource(
  *     attributes={
@@ -28,7 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class EmployeePromotion implements PromotionInterface, ActionLoggerAwareInterface
+class Overtime implements EmployeeOvertimeInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -56,23 +55,13 @@ class EmployeePromotion implements PromotionInterface, ActionLoggerAwareInterfac
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\JobTitle", fetch="EAGER")
-     * @ORM\JoinColumn(name="old_jobtitle_id", referencedColumnName="id")
+     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
+     * @ORM\JoinColumn(name="proposed_by_id", referencedColumnName="id")
      * @Assert\NotBlank()
      *
-     * @var JobTitleInterface
+     * @var EmployeeInterface
      */
-    private $oldJobTitle;
-
-    /**
-     * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\JobTitle", fetch="EAGER")
-     * @ORM\JoinColumn(name="new_jobtitle_id", referencedColumnName="id")
-     * @Assert\NotBlank()
-     *
-     * @var JobTitleInterface
-     */
-    private $newJobTitle;
+    private $proposedBy;
 
     /**
      * @Groups({"read", "write"})
@@ -81,15 +70,38 @@ class EmployeePromotion implements PromotionInterface, ActionLoggerAwareInterfac
      *
      * @var \DateTime
      */
-    private $startDate;
+    private $overtimeDate;
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="float", scale=27, precision=2)
+     * @Assert\NotBlank()
+     *
+     * @var float
+     */
+    private $overtimeValue;
+
+    /**
+     * @Groups({"read"})
+     * @ORM\Column(type="boolean")
+     *
+     * @var bool
+     */
+    private $offTime;
 
     /**
      * @Groups({"read", "write"})
      * @ORM\Column(type="string")
+     * @Assert\NotBlank()
      *
      * @var string
      */
-    private $letterNumber;
+    private $remark;
+
+    public function __construct()
+    {
+        $this->offTime = false;
+    }
 
     /**
      * @return string
@@ -116,66 +128,82 @@ class EmployeePromotion implements PromotionInterface, ActionLoggerAwareInterfac
     }
 
     /**
-     * @return JobTitleInterface
+     * @return EmployeeInterface
      */
-    public function getOldJobTitle(): JobTitleInterface
+    public function getProposedBy(): EmployeeInterface
     {
-        return $this->oldJobTitle;
+        return $this->proposedBy;
     }
 
     /**
-     * @param JobTitleInterface $oldJobTitle
+     * @param EmployeeInterface $proposedBy
      */
-    public function setOldJobTitle(JobTitleInterface $oldJobTitle = null): void
+    public function setProposedBy(EmployeeInterface $proposedBy = null): void
     {
-        $this->oldJobTitle = $oldJobTitle;
-    }
-
-    /**
-     * @return JobTitleInterface
-     */
-    public function getNewJobTitle(): JobTitleInterface
-    {
-        return $this->newJobTitle;
-    }
-
-    /**
-     * @param JobTitleInterface $newJobTitle
-     */
-    public function setNewJobTitle(JobTitleInterface $newJobTitle = null): void
-    {
-        $this->newJobTitle = $newJobTitle;
+        $this->proposedBy = $proposedBy;
     }
 
     /**
      * @return \DateTime
      */
-    public function getStartDate(): \DateTime
+    public function getOvertimeDate(): \DateTime
     {
-        return $this->startDate;
+        return $this->overtimeDate;
     }
 
     /**
-     * @param \DateTime $startDate
+     * @param \DateTime $overtimeDate
      */
-    public function setStartDate(\DateTime $startDate)
+    public function setOvertimeDate(\DateTime $overtimeDate)
     {
-        $this->startDate = $startDate;
+        $this->overtimeDate = $overtimeDate;
+    }
+
+    /**
+     * @return float
+     */
+    public function getOvertimeValue(): float
+    {
+        return $this->overtimeValue;
+    }
+
+    /**
+     * @param float $overtimeValue
+     */
+    public function setOvertimeValue(float $overtimeValue)
+    {
+        $this->overtimeValue = $overtimeValue;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOffTime(): bool
+    {
+        return $this->offTime;
+    }
+
+    /**
+     * @param bool $offTime
+     */
+    public function setOffTime(bool $offTime)
+    {
+        $this->offTime = $offTime;
     }
 
     /**
      * @return string
      */
-    public function getLetterNumber(): string
+    public function getRemark(): string
     {
-        return $this->letterNumber;
+        return $this->remark;
     }
 
     /**
-     * @param string $letterNumber
+     * @param string $remark
      */
-    public function setLetterNumber(string $letterNumber)
+    public function setRemark(string $remark)
     {
-        $this->letterNumber = $letterNumber;
+        $this->remark = $remark;
     }
 }

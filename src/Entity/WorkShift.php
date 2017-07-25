@@ -6,17 +6,17 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
+use Persona\Hris\Attendance\Model\EmployeeShiftmentInterface;
+use Persona\Hris\Attendance\Model\ShiftmentInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Employee\Model\EmployeeInterface;
-use Persona\Hris\Salary\Model\AdditionalBenefitInterface;
-use Persona\Hris\Salary\Model\BenefitInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="e_employee_additional_benefits")
+ * @ORM\Table(name="at_work_shifts")
  *
  * @ApiResource(
  *     attributes={
@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class EmployeeAdditionalBenefit implements AdditionalBenefitInterface, ActionLoggerAwareInterface
+class WorkShift implements EmployeeShiftmentInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -56,22 +56,31 @@ class EmployeeAdditionalBenefit implements AdditionalBenefitInterface, ActionLog
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Benefit", fetch="EAGER")
-     * @ORM\JoinColumn(name="benefit_id", referencedColumnName="id")
+     * @ORM\Column(type="date")
      * @Assert\NotBlank()
      *
-     * @var BenefitInterface
+     * @var \DateTime
      */
-    private $benefit;
+    private $startDate;
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="float", scale=27, precision=2)
+     * @ORM\Column(type="date")
      * @Assert\NotBlank()
      *
-     * @var float
+     * @var \DateTime
      */
-    private $benefitValue;
+    private $endDate;
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Shiftment", fetch="EAGER")
+     * @ORM\JoinColumn(name="shiftment_id", referencedColumnName="id")
+     * @Assert\NotBlank()
+     *
+     * @var ShiftmentInterface
+     */
+    private $shiftment;
 
     /**
      * @return string
@@ -98,34 +107,50 @@ class EmployeeAdditionalBenefit implements AdditionalBenefitInterface, ActionLog
     }
 
     /**
-     * @return BenefitInterface
+     * @return \DateTime
      */
-    public function getBenefit(): BenefitInterface
+    public function getStartDate(): \DateTime
     {
-        return $this->benefit;
+        return $this->startDate;
     }
 
     /**
-     * @param BenefitInterface $benefit
+     * @param \DateTime $startDate
      */
-    public function setBenefit(BenefitInterface $benefit = null): void
+    public function setStartDate(\DateTime $startDate)
     {
-        $this->benefit = $benefit;
+        $this->startDate = $startDate;
     }
 
     /**
-     * @return float
+     * @return \DateTime
      */
-    public function getBenefitValue(): float
+    public function getEndDate(): \DateTime
     {
-        return $this->benefitValue;
+        return $this->endDate;
     }
 
     /**
-     * @param float $benefitValue
+     * @param \DateTime $endDate
      */
-    public function setBenefitValue(float $benefitValue)
+    public function setEndDate(\DateTime $endDate)
     {
-        $this->benefitValue = $benefitValue;
+        $this->endDate = $endDate;
+    }
+
+    /**
+     * @return ShiftmentInterface
+     */
+    public function getShiftment(): ShiftmentInterface
+    {
+        return $this->shiftment;
+    }
+
+    /**
+     * @param ShiftmentInterface $shiftment
+     */
+    public function setShiftment(ShiftmentInterface $shiftment = null): void
+    {
+        $this->shiftment = $shiftment;
     }
 }

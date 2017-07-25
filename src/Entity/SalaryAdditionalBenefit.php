@@ -9,12 +9,14 @@ use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Employee\Model\EmployeeInterface;
-use Persona\Hris\Overtime\Model\EmployeeOvertimeCalculationInterface;
+use Persona\Hris\Salary\Model\AdditionalBenefitInterface;
+use Persona\Hris\Salary\Model\BenefitInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="a_employee_overtime_calculations")
+ * @ORM\Table(name="sa_salary_additional_benefits")
  *
  * @ApiResource(
  *     attributes={
@@ -26,7 +28,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class EmployeeOvertimeCalculation implements EmployeeOvertimeCalculationInterface, ActionLoggerAwareInterface
+class SalaryAdditionalBenefit implements AdditionalBenefitInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -43,37 +45,33 @@ class EmployeeOvertimeCalculation implements EmployeeOvertimeCalculationInterfac
     private $id;
 
     /**
-     * @Groups({"read"})
+     * @Groups({"read", "write"})
      * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
      * @ORM\JoinColumn(name="employee_id", referencedColumnName="id")
+     * @Assert\NotBlank()
      *
      * @var EmployeeInterface
      */
     private $employee;
 
     /**
-     * @Groups({"read"})
-     * @ORM\Column(type="integer")
+     * @Groups({"read", "write"})
+     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Benefit", fetch="EAGER")
+     * @ORM\JoinColumn(name="benefit_id", referencedColumnName="id")
+     * @Assert\NotBlank()
      *
-     * @var int
+     * @var BenefitInterface
      */
-    private $overtimeYear;
+    private $benefit;
 
     /**
-     * @Groups({"read"})
-     * @ORM\Column(type="integer")
-     *
-     * @var int
-     */
-    private $overtimeMonth;
-
-    /**
-     * @Groups({"read"})
+     * @Groups({"read", "write"})
      * @ORM\Column(type="float", scale=27, precision=2)
+     * @Assert\NotBlank()
      *
      * @var float
      */
-    private $calculatedValue;
+    private $benefitValue;
 
     /**
      * @return string
@@ -100,50 +98,34 @@ class EmployeeOvertimeCalculation implements EmployeeOvertimeCalculationInterfac
     }
 
     /**
-     * @return int
+     * @return BenefitInterface
      */
-    public function getOvertimeYear(): int
+    public function getBenefit(): BenefitInterface
     {
-        return $this->overtimeYear;
+        return $this->benefit;
     }
 
     /**
-     * @param int $year
+     * @param BenefitInterface $benefit
      */
-    public function setOvertimeYear(int $year): void
+    public function setBenefit(BenefitInterface $benefit = null): void
     {
-        $this->overtimeYear = $year;
-    }
-
-    /**
-     * @return int
-     */
-    public function getOvertimeMonth(): int
-    {
-        return $this->overtimeMonth;
-    }
-
-    /**
-     * @param int $month
-     */
-    public function setOvertimeMonth(int $month): void
-    {
-        $this->overtimeMonth = $month;
+        $this->benefit = $benefit;
     }
 
     /**
      * @return float
      */
-    public function getCalculatedValue(): float
+    public function getBenefitValue(): float
     {
-        return $this->calculatedValue;
+        return $this->benefitValue;
     }
 
     /**
-     * @param float $calculatedValue
+     * @param float $benefitValue
      */
-    public function setCalculatedValue(float $calculatedValue): void
+    public function setBenefitValue(float $benefitValue)
     {
-        $this->calculatedValue = $calculatedValue;
+        $this->benefitValue = $benefitValue;
     }
 }

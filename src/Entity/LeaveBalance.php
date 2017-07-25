@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="a_leave_balances")
+ * @ORM\Table(name="lv_leave_balances")
  *
  * @ApiResource(
  *     attributes={

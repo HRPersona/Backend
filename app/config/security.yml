@@ -1,24 +1,40 @@
-# To get started with security, check out the documentation:
-# http://symfony.com/doc/current/book/security.html
 security:
+    encoders:
+        FOS\UserBundle\Model\UserInterface: bcrypt
 
-    # http://symfony.com/doc/current/book/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory:
-            memory: ~
+        fos_userbundle:
+            id: fos_user.user_provider.username
 
     firewalls:
-        # disables authentication for assets and the profiler, adapt it according to your needs
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
+        login:
+            pattern:  ^/api/login
+            stateless: true
+            anonymous: true
+            provider: fos_userbundle
+            form_login:
+                check_path: login_check
+                username_parameter: username
+                password_parameter: password
+                success_handler: lexik_jwt_authentication.handler.authentication_success
+                failure_handler: lexik_jwt_authentication.handler.authentication_failure
+                require_previous_session: false
 
         main:
-            anonymous: ~
-            # activate different ways to authenticate
+            pattern:   ^/api
+            provider: fos_userbundle
+            stateless: true
+            anonymous: true
+            guard:
+                authenticators:
+                    - lexik_jwt_authentication.jwt_token_authenticator
 
-            # http_basic: ~
-            # http://symfony.com/doc/current/book/security.html#a-configuring-how-your-users-will-authenticate
+        dev:
+            pattern:  ^/(_(profiler|wdt)|css|images|js)/
+            security: false
 
-            # form_login: ~
-            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
+    access_control:
+        - { path: ^/api/doc*, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api/, role: IS_AUTHENTICATED_FULLY }

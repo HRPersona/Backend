@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="a_leaves")
+ * @ORM\Table(name="lv_leaves")
  *
  * @ApiResource(
  *     attributes={

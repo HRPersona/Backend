@@ -6,16 +6,16 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
-use Persona\Hris\Allocation\Model\ContractInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Employee\Model\EmployeeInterface;
+use Persona\Hris\Salary\Model\SalaryHistoryInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="e_employee_contracts")
+ * @ORM\Table(name="sa_salary_histoies")
  *
  * @ApiResource(
  *     attributes={
@@ -27,7 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class EmployeeContract implements ContractInterface, ActionLoggerAwareInterface
+class SalaryHistory implements SalaryHistoryInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -60,32 +60,29 @@ class EmployeeContract implements ContractInterface, ActionLoggerAwareInterface
      *
      * @var \DateTime
      */
-    private $startDate;
+    private $historyDate;
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="float", scale=27, precision=2)
      * @Assert\NotBlank()
      *
-     * @var \DateTime
+     * @var float
      */
-    private $endDate;
+    private $basicSalary;
 
     /**
-     * @Groups({"read", "write"})
-     * @ORM\Column(type="string")
+     * @Groups({"read"})
+     * @ORM\Column(type="boolean")
      *
-     * @var string
+     * @var bool
      */
-    private $letterNumber;
+    private $active;
 
-    /**
-     * @Groups({"read", "write"})
-     * @ORM\Column(type="string")
-     *
-     * @var string
-     */
-    private $contractType;
+    public function __construct()
+    {
+        $this->active = true;
+    }
 
     /**
      * @return string
@@ -98,7 +95,7 @@ class EmployeeContract implements ContractInterface, ActionLoggerAwareInterface
     /**
      * @return EmployeeInterface
      */
-    public function getEmployee(): EmployeeInterface
+    public function getEmployee(): ? EmployeeInterface
     {
         return $this->employee;
     }
@@ -114,64 +111,48 @@ class EmployeeContract implements ContractInterface, ActionLoggerAwareInterface
     /**
      * @return \DateTime
      */
-    public function getStartDate(): \DateTime
+    public function getHistoryDate(): \DateTime
     {
-        return $this->startDate;
+        return $this->historyDate;
     }
 
     /**
-     * @param \DateTime $startDate
+     * @param \DateTime $historyDate
      */
-    public function setStartDate(\DateTime $startDate)
+    public function setHistoryDate(\DateTime $historyDate)
     {
-        $this->startDate = $startDate;
+        $this->historyDate = $historyDate;
     }
 
     /**
-     * @return \DateTime
+     * @return float
      */
-    public function getEndDate(): \DateTime
+    public function getBasicSalary(): float
     {
-        return $this->endDate;
+        return $this->basicSalary;
     }
 
     /**
-     * @param \DateTime $endDate
+     * @param float $basicSalary
      */
-    public function setEndDate(\DateTime $endDate)
+    public function setBasicSalary(float $basicSalary)
     {
-        $this->endDate = $endDate;
+        $this->basicSalary = $basicSalary;
     }
 
     /**
-     * @return string
+     * @return bool
      */
-    public function getLetterNumber(): string
+    public function isActive(): bool
     {
-        return $this->letterNumber;
+        return $this->active;
     }
 
     /**
-     * @param string $letterNumber
+     * @param bool $active
      */
-    public function setLetterNumber(string $letterNumber)
+    public function setActive(bool $active): void
     {
-        $this->letterNumber = $letterNumber;
-    }
-
-    /**
-     * @return string
-     */
-    public function getContractType(): string
-    {
-        return $this->contractType;
-    }
-
-    /**
-     * @param string $contractType
-     */
-    public function setContractType(string $contractType)
-    {
-        $this->contractType = $contractType;
+        $this->active = $active;
     }
 }
