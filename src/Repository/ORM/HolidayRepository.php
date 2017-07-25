@@ -35,7 +35,7 @@ final class HolidayRepository extends AbstractCachableRepository implements Holi
     public function isTimeOff(\DateTime $date): bool
     {
         $cache = $this->getCacheDriver();
-        $cacheId = sprintf('%s_%s', $this->class, $date);
+        $cacheId = sprintf('%s_%s', $this->class, $date->format('YmdHis'));
         if ($cache->contains($cacheId)) {
             $data = $cache->fetch($cacheId);
             $this->managerFactory->merge([$data]);

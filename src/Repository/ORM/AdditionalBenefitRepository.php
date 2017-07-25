@@ -4,14 +4,14 @@ namespace Persona\Hris\Repository\ORM;
 
 use Persona\Hris\Core\Manager\ManagerFactory;
 use Persona\Hris\Employee\Model\EmployeeInterface;
-use Persona\Hris\Repository\AbstractCachableRepository;
+use Persona\Hris\Repository\AbstractRepository;
 use Persona\Hris\Salary\Model\AdditionalBenefitInterface;
 use Persona\Hris\Salary\Model\AdditionalBenefitRepositoryInterface;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-final class AdditionalBenefitRepository extends AbstractCachableRepository implements AdditionalBenefitRepositoryInterface
+final class AdditionalBenefitRepository extends AbstractRepository implements AdditionalBenefitRepositoryInterface
 {
     /**
      * @var string
@@ -35,17 +35,6 @@ final class AdditionalBenefitRepository extends AbstractCachableRepository imple
      */
     public function findByEmployee(EmployeeInterface $employee): array
     {
-        $cache = $this->getCacheDriver();
-        $cacheId = sprintf('%s_%s', $this->class, $employee->getId());
-        if ($cache->contains($cacheId)) {
-            $data = $cache->fetch($cacheId);
-            $this->managerFactory->merge([$data]);
-        } else {
-            /** @var AdditionalBenefitInterface $repository */
-            $data = $this->managerFactory->getWriteManager()->getRepository($this->class)->findBy(['employee' => $employee, 'deletedAt' => null]);
-            $cache->save($cacheId, $data, $this->getCacheLifetime());
-        }
-
-        return $data;
+        return $this->managerFactory->getWriteManager()->getRepository($this->class)->findBy(['employee' => $employee, 'deletedAt' => null]);
     }
 }

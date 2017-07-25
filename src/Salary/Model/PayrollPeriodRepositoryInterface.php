@@ -2,10 +2,12 @@
 
 namespace Persona\Hris\Salary\Model;
 
+use Persona\Hris\Repository\RepositoryInterface;
+
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-interface PayrollPeriodRepositoryInterface
+interface PayrollPeriodRepositoryInterface extends RepositoryInterface
 {
     /**
      * @param PayrollPeriodInterface $payrollPeriod

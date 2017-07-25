@@ -47,9 +47,7 @@ final class CalculateSalaryController extends Controller
         $year = $request->get('year', date('Y'));
         $month = $request->get('month', date('n'));
 
-        $salaryCalculator = $this->container->get('persona.salary.salary_calculator');
         $employeeRepository = $this->container->get('persona.repository.orm.employee_repository');
-        $employeeOvertime = $this->container->get('persona.repository.orm.employee_overtime_calculation_repository');
         $payrollRepository = $this->container->get('persona.repository.orm.payroll_repository');
         $manager = $this->container->get('persona.manager.manager_factory')->getWriteManager();
 
@@ -58,14 +56,23 @@ final class CalculateSalaryController extends Controller
                 continue;
             }
 
+            $salaryCalculator = $this->container->get('persona.salary.salary_calculator');
+
             $salary = $salaryCalculator->calculate($employee);
             $overtime = 0;
+
+            $employeeOvertime = $this->container->get('persona.repository.orm.employee_overtime_calculation_repository');
 
             if ($employee->isHaveOvertimeBenefit()) {
                 $overtime = $employeeOvertime->getCalculationByEmployee($employee, $year, $month);
             }
 
-            $payroll = new Payroll();
+            if ($exist = $payrollRepository->findByEmployeeAndPeriod($employee, $year, $month)) {
+                $payroll = $exist;
+            } else {
+                $payroll = new Payroll();
+            }
+
             $payroll->setEmployee($employee);
             $payroll->setPayrollYear($year);
             $payroll->setPayrollMonth($month);
@@ -73,8 +80,15 @@ final class CalculateSalaryController extends Controller
 
             $manager->persist($payroll);
 
+            $payrollDetailRepository = $this->container->get('persona.repository.orm.payroll_detail_repository');
+
             foreach ($salaryCalculator->getPlusBenefits($employee) as $k => $benefit) {
-                $payrollDetail = new PayrollDetail();
+                if ($existDetail = $payrollDetailRepository->findByPayroll($payroll)) {
+                    $payrollDetail = $existDetail;
+                } else {
+                    $payrollDetail = new PayrollDetail();
+                }
+
                 $payrollDetail->setPayroll($payroll);
                 $payrollDetail->setBenefit($benefit['benefit']);
                 $payrollDetail->setBenefitValue($benefit['value']);
@@ -87,7 +101,12 @@ final class CalculateSalaryController extends Controller
             }
 
             foreach ($salaryCalculator->getMinusBenefits($employee) as $i => $benefit) {
-                $payrollDetail = new PayrollDetail();
+                if ($existDetail = $payrollDetailRepository->findByPayroll($payroll)) {
+                    $payrollDetail = $existDetail;
+                } else {
+                    $payrollDetail = new PayrollDetail();
+                }
+
                 $payrollDetail->setPayroll($payroll);
                 $payrollDetail->setBenefit($benefit['benefit']);
                 $payrollDetail->setBenefitValue($benefit['value']);

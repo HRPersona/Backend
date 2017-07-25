@@ -2,10 +2,12 @@
 
 namespace Persona\Hris\Overtime\Model;
 
+use Persona\Hris\Repository\CachableRepositoryInterface;
+
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-interface HolidayRepositoryInterface
+interface HolidayRepositoryInterface extends CachableRepositoryInterface
 {
     /**
      * @param \DateTime $date

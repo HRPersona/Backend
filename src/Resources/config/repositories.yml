@@ -134,3 +134,11 @@ services:
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\PayrollPeriod'
+
+    persona.repository.orm.payroll_detail_repository:
+        class: 'Persona\Hris\Repository\ORM\PayrollDetailRepository'
+        calls:
+            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\PayrollDetail'

@@ -4,14 +4,14 @@ namespace Persona\Hris\Repository\ORM;
 
 use Doctrine\ORM\EntityRepository;
 use Persona\Hris\Core\Manager\ManagerFactory;
-use Persona\Hris\Repository\AbstractCachableRepository;
+use Persona\Hris\Repository\AbstractRepository;
 use Persona\Hris\Salary\Model\PayrollPeriodInterface;
 use Persona\Hris\Salary\Model\PayrollPeriodRepositoryInterface;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-final class PayrollPeriodRepository extends AbstractCachableRepository implements PayrollPeriodRepositoryInterface
+final class PayrollPeriodRepository extends AbstractRepository implements PayrollPeriodRepositoryInterface
 {
     /**
      * @var string

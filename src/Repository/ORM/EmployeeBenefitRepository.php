@@ -35,17 +35,6 @@ final class EmployeeBenefitRepository extends AbstractCachableRepository impleme
      */
     public function findByEmployee(EmployeeInterface $employee): array
     {
-        $cache = $this->getCacheDriver();
-        $cacheId = sprintf('%s_%s', $this->class, $employee->getId());
-        if ($cache->contains($cacheId)) {
-            $data = $cache->fetch($cacheId);
-            $this->managerFactory->merge([$data]);
-        } else {
-            /** @var BenefitInterface $repository */
-            $data = $this->managerFactory->getWriteManager()->getRepository($this->class)->findBy(['employee' => $employee, 'deletedAt' => null]);
-            $cache->save($cacheId, $data, $this->getCacheLifetime());
-        }
-
-        return $data;
+        return $this->managerFactory->getWriteManager()->getRepository($this->class)->findBy(['employee' => $employee, 'deletedAt' => null]);
     }
 }

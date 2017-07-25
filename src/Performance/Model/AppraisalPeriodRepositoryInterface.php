@@ -2,10 +2,12 @@
 
 namespace Persona\Hris\Performance\Model;
 
+use Persona\Hris\Repository\CachableRepositoryInterface;
+
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-interface AppraisalPeriodRepositoryInterface
+interface AppraisalPeriodRepositoryInterface extends CachableRepositoryInterface
 {
     /**
      * @param AppraisalPeriodInterface $appraisalPeriod

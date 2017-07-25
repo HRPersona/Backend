@@ -3,11 +3,12 @@
 namespace Persona\Hris\Salary\Model;
 
 use Persona\Hris\Employee\Model\EmployeeInterface;
+use Persona\Hris\Repository\RepositoryInterface;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-interface PayrollRepositoryInterface
+interface PayrollRepositoryInterface extends RepositoryInterface
 {
     /**
      * @param EmployeeInterface $employee
@@ -30,4 +31,13 @@ interface PayrollRepositoryInterface
      * @return null|PayrollInterface
      */
     public function find(string $id): ? PayrollInterface;
+
+    /**
+     * @param EmployeeInterface $employee
+     * @param int               $year
+     * @param int               $month
+     *
+     * @return null|PayrollInterface
+     */
+    public function findByEmployeeAndPeriod(EmployeeInterface $employee, int $year, int $month): ? PayrollInterface;
 }

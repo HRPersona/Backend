@@ -3,11 +3,12 @@
 namespace Persona\Hris\Overtime\Model;
 
 use Persona\Hris\Employee\Model\EmployeeInterface;
+use Persona\Hris\Repository\RepositoryInterface;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-interface EmployeeOvertimeCalculationRepositoryInterface
+interface EmployeeOvertimeCalculationRepositoryInterface extends RepositoryInterface
 {
     /**
      * @param EmployeeInterface $employee
