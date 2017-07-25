@@ -8,14 +8,14 @@ use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
-use Persona\Hris\Employee\Model\EmployeeInterface;
-use Persona\Hris\Salary\Model\PayrollInterface;
+use Persona\Hris\Core\Util\StringUtil;
+use Persona\Hris\Salary\Model\PayrollPeriodInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="e_employee_payrolls")
+ * @ORM\Table(name="s_payroll_periods")
  *
  * @ApiResource(
  *     attributes={
@@ -27,7 +27,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class Payroll implements PayrollInterface, ActionLoggerAwareInterface
+class PayrollPeriod implements PayrollPeriodInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -45,13 +45,12 @@ class Payroll implements PayrollInterface, ActionLoggerAwareInterface
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
-     * @ORM\JoinColumn(name="employee_id", referencedColumnName="id")
+     * @ORM\Column(type="string")
      * @Assert\NotBlank()
      *
-     * @var EmployeeInterface
+     * @var string
      */
-    private $employee;
+    private $name;
 
     /**
      * @Groups({"read", "write"})
@@ -73,25 +72,11 @@ class Payroll implements PayrollInterface, ActionLoggerAwareInterface
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="float", scale=27, precision=2)
-     * @Assert\NotBlank()
-     *
-     * @var float
-     */
-    private $takeHomePay;
-
-    /**
-     * @Groups({"read", "write"})
      * @ORM\Column(type="boolean")
      *
      * @var bool
      */
-    private $closed;
-
-    public function __construct()
-    {
-        $this->closed = false;
-    }
+    private $active;
 
     /**
      * @return string
@@ -102,19 +87,19 @@ class Payroll implements PayrollInterface, ActionLoggerAwareInterface
     }
 
     /**
-     * @return EmployeeInterface
+     * @return string
      */
-    public function getEmployee(): ? EmployeeInterface
+    public function getName(): string
     {
-        return $this->employee;
+        return $this->name;
     }
 
     /**
-     * @param EmployeeInterface $employee
+     * @param string $name
      */
-    public function setEmployee(EmployeeInterface $employee = null): void
+    public function setName(string $name)
     {
-        $this->employee = $employee;
+        $this->name = StringUtil::uppercase($name);
     }
 
     /**
@@ -150,34 +135,18 @@ class Payroll implements PayrollInterface, ActionLoggerAwareInterface
     }
 
     /**
-     * @return float
-     */
-    public function getTakeHomePay(): float
-    {
-        return $this->takeHomePay;
-    }
-
-    /**
-     * @param float $takeHomePay
-     */
-    public function setTakeHomePay(float $takeHomePay)
-    {
-        $this->takeHomePay = $takeHomePay;
-    }
-
-    /**
      * @return bool
      */
-    public function isClosed(): bool
+    public function isActive(): bool
     {
-        return $this->closed;
+        return $this->active;
     }
 
     /**
-     * @param bool $closed
+     * @param bool $active
      */
-    public function setClosed(bool $closed): void
+    public function setActive(bool $active): void
     {
-        $this->closed = $closed;
+        $this->active = $active;
     }
 }

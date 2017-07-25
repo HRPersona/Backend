@@ -11,7 +11,7 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-final class ResponseCacheSubscriber implements EventSubscriberInterface
+final class ResponseModificationSubscriber implements EventSubscriberInterface
 {
     /**
      * @var KernelInterface
@@ -67,7 +67,7 @@ final class ResponseCacheSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return [
-            KernelEvents::RESPONSE => ['onKernelResponse', 17],
+            KernelEvents::RESPONSE => ['onKernelResponse', 7],
         ];
     }
 }

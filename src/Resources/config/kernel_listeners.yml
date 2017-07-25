@@ -1,6 +1,6 @@
 services:
     persona.subscriber.response_subscriber:
-        class: 'Persona\Hris\Core\Subscriber\ResponseCacheSubscriber'
+        class: 'Persona\Hris\Core\Subscriber\ResponseModificationSubscriber'
         arguments:
             - '@kernel'
             - '@security.token_storage'
@@ -57,5 +57,12 @@ services:
             - '@persona.manager.manager_factory'
             - '@persona.repository.orm.user_repository'
             - '@session'
+        tags:
+            - { name: 'kernel.event_subscriber' }
+
+    persona.salary.prevent_reopen_payroll:
+        class: 'Persona\Hris\Salary\Subscriber\PreventReopenPayrollSubscriber'
+        arguments:
+            - '@persona.repository.orm.payroll_repository'
         tags:
             - { name: 'kernel.event_subscriber' }

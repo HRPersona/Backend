@@ -103,8 +103,6 @@ final class ItemDataProvider extends AbstractDataProvider implements ItemDataPro
         }
 
         $query = $queryBuilder->getQuery();
-        $query->useQueryCache(true);
-        $query->useResultCache(true, $this->cacheLifetime, sprintf('%s_%s', $resourceClass, serialize($query->getParameters()->toArray())));
 
         return $query->getOneOrNullResult();
     }

@@ -17,4 +17,17 @@ interface PayrollRepositoryInterface
      * @return bool
      */
     public function isClosed(EmployeeInterface $employee, int $year, int $month): bool;
+
+    /**
+     * @param int $year
+     * @param int $month
+     */
+    public function closingPeriod(int $year, int $month): void;
+
+    /**
+     * @param string $id
+     *
+     * @return null|PayrollInterface
+     */
+    public function find(string $id): ? PayrollInterface;
 }

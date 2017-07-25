@@ -7,7 +7,6 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Extension\QueryResultCollectionExtensio
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Util\QueryNameGenerator;
 use ApiPlatform\Core\DataProvider\CollectionDataProviderInterface;
 use ApiPlatform\Core\Exception\RuntimeException;
-use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Persona\Hris\Core\Manager\ManagerFactory;
 
@@ -69,25 +68,9 @@ final class CollectionDataProvider extends AbstractDataProvider implements Colle
         }
 
         $query = $queryBuilder->getQuery();
-        $cacheId = sprintf('%s_%s', $resourceClass, serialize($query->getParameters()->toArray()));
 
-        $result = $this->applyCache($query, $cacheId, $this->cacheLifetime)->getResult();
+        $result = $query->getResult();
 
         return $result;
-    }
-
-    /**
-     * @param Query  $query
-     * @param string $cacheId
-     * @param int    $lifetime
-     *
-     * @return Query
-     */
-    private function applyCache(Query $query, string $cacheId, $lifetime = 3)
-    {
-        $query->useQueryCache(true);
-        $query->useResultCache(true, $lifetime, $cacheId);
-
-        return $query;
     }
 }

@@ -7,12 +7,11 @@ use Persona\Hris\Core\Security\Model\ModuleInterface;
 use Persona\Hris\Core\Security\Model\RoleInterface;
 use Persona\Hris\Core\Security\Model\RoleRepositoryInterface;
 use Persona\Hris\Core\Security\Model\UserInterface;
-use Persona\Hris\Repository\AbstractCachableRepository;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-final class RoleRepository extends AbstractCachableRepository implements RoleRepositoryInterface
+final class RoleRepository implements RoleRepositoryInterface
 {
     /**
      * @var string
@@ -20,12 +19,17 @@ final class RoleRepository extends AbstractCachableRepository implements RoleRep
     private $class;
 
     /**
+     * @var ManagerFactory
+     */
+    private $managerFactory;
+
+    /**
      * @param ManagerFactory $managerFactory
      * @param string         $class
      */
     public function __construct(ManagerFactory $managerFactory, string $class)
     {
-        parent::__construct($managerFactory);
+        $this->managerFactory = $managerFactory;
         $this->class = $class;
     }
 
@@ -37,18 +41,7 @@ final class RoleRepository extends AbstractCachableRepository implements RoleRep
      */
     public function findByUserAndModule(UserInterface $user, ModuleInterface $module): ? RoleInterface
     {
-        $cache = $this->getCacheDriver();
-        $cacheId = sprintf('%s_%s_%s', $this->class, $user->getId(), $module->getId());
-        if ($cache->contains($cacheId)) {
-            $data = $cache->fetch($cacheId);
-            $this->managerFactory->merge([$data]);
-        } else {
-            /** @var RoleInterface $data */
-            $data = $this->managerFactory->getReadManager()->getRepository($this->class)->findOneBy(['module' => $module, 'user' => $user, 'deletedAt' => null]);
-            $cache->save($cacheId, $data, $this->getCacheLifetime());
-        }
-
-        return $data;
+        return $this->managerFactory->getReadManager()->getRepository($this->class)->findOneBy(['module' => $module, 'user' => $user, 'deletedAt' => null]);
     }
 
     /**
@@ -58,17 +51,6 @@ final class RoleRepository extends AbstractCachableRepository implements RoleRep
      */
     public function findByModule(ModuleInterface $module): ? array
     {
-        $cache = $this->getCacheDriver();
-        $cacheId = sprintf('%s_%s', $this->class, $module->getId());
-        if ($cache->contains($cacheId)) {
-            $data = $cache->fetch($cacheId);
-            $this->managerFactory->merge([$data]);
-        } else {
-            /** @var array $data */
-            $data = $this->managerFactory->getWriteManager()->getRepository($this->class)->findBy(['module' => $module, 'deletedAt' => null]);
-            $cache->save($cacheId, $data, $this->getCacheLifetime());
-        }
-
-        return $data;
+        return $this->managerFactory->getWriteManager()->getRepository($this->class)->findBy(['module' => $module, 'deletedAt' => null]);
     }
 }
