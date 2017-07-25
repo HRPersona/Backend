@@ -11,6 +11,8 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
@@ -119,6 +121,117 @@ final class CalculateSalaryController extends Controller
             }
 
             if (0 === $key % 17) {
+                $manager->flush();
+            }
+        }
+
+        $manager->flush();
+
+        return new JsonResponse(['status' => JsonResponse::HTTP_CREATED, 'message' => 'Employee salary has been calculated']);
+    }
+
+    /**
+     * @ApiDoc(
+     *     section="Utilities",
+     *     description="Salary Calculator per Employee",
+     *     requirements={
+     *      {
+     *          "name"="year",
+     *          "dataType"="integer",
+     *          "description"="Year"
+     *      },
+     *      {
+     *          "name"="month",
+     *          "dataType"="integer",
+     *          "description"="Month"
+     *      }
+     *  })
+     *
+     * @Route(name="salary_calculation_per_employee", path="/employee/{id}/salary/calculate.json")
+     *
+     * @Method({"POST"})
+     *
+     * @param Request $request
+     * @param string $id
+     *
+     * @return JsonResponse
+     */
+    public function calculateEmployeeAction(Request $request, string $id)
+    {
+        $year = $request->get('year', date('Y'));
+        $month = $request->get('month', date('n'));
+
+        $employeeRepository = $this->container->get('persona.repository.orm.employee_repository');
+        $payrollRepository = $this->container->get('persona.repository.orm.payroll_repository');
+        $manager = $this->container->get('persona.manager.manager_factory')->getWriteManager();
+
+        $employee = $employeeRepository->find($id);
+        if (!$employee) {
+            throw new NotFoundHttpException(sprintf('Employee with id %s is not found.', $id));
+        }
+
+        if ($payrollRepository->isClosed($employee, $year, $month)) {
+            throw new BadRequestHttpException(sprintf('Payroll for %s is closed.', $employee->getFullName()));
+        }
+
+        $salaryCalculator = $this->container->get('persona.salary.salary_calculator');
+
+        $salary = $salaryCalculator->calculate($employee);
+        $overtime = 0;
+
+        $employeeOvertime = $this->container->get('persona.repository.orm.employee_overtime_calculation_repository');
+
+        if ($employee->isHaveOvertimeBenefit()) {
+            $overtime = $employeeOvertime->getCalculationByEmployee($employee, $year, $month);
+        }
+
+        if ($exist = $payrollRepository->findByEmployeeAndPeriod($employee, $year, $month)) {
+            $payroll = $exist;
+        } else {
+            $payroll = new Payroll();
+        }
+
+        $payroll->setEmployee($employee);
+        $payroll->setPayrollYear($year);
+        $payroll->setPayrollMonth($month);
+        $payroll->setTakeHomePay($salary + $overtime);
+
+        $manager->persist($payroll);
+
+        $payrollDetailRepository = $this->container->get('persona.repository.orm.payroll_detail_repository');
+
+        foreach ($salaryCalculator->getPlusBenefits($employee) as $k => $benefit) {
+            if ($existDetail = $payrollDetailRepository->findByPayroll($payroll)) {
+                $payrollDetail = $existDetail;
+            } else {
+                $payrollDetail = new PayrollDetail();
+            }
+
+            $payrollDetail->setPayroll($payroll);
+            $payrollDetail->setBenefit($benefit['benefit']);
+            $payrollDetail->setBenefitValue($benefit['value']);
+            $payrollDetail->setBenefitType(BenefitInterface::TYPE_PLUS);
+
+            $manager->persist($payrollDetail);
+            if (0 === $k % 17) {
+                $manager->flush();
+            }
+        }
+
+        foreach ($salaryCalculator->getMinusBenefits($employee) as $i => $benefit) {
+            if ($existDetail = $payrollDetailRepository->findByPayroll($payroll)) {
+                $payrollDetail = $existDetail;
+            } else {
+                $payrollDetail = new PayrollDetail();
+            }
+
+            $payrollDetail->setPayroll($payroll);
+            $payrollDetail->setBenefit($benefit['benefit']);
+            $payrollDetail->setBenefitValue($benefit['value']);
+            $payrollDetail->setBenefitType(BenefitInterface::TYPE_MINUS);
+
+            $manager->persist($payrollDetail);
+            if (0 === $i % 17) {
                 $manager->flush();
             }
         }

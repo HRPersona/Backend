@@ -13,4 +13,11 @@ interface EmployeeRepositoryInterface extends CachableRepositoryInterface
      * @return array
      */
     public function findActiveEmployee(): array;
+
+    /**
+     * @param string $id
+     *
+     * @return null|EmployeeInterface
+     */
+    public function find(string $id): ? EmployeeInterface;
 }

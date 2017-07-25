@@ -38,7 +38,27 @@ final class EmployeeRepository extends AbstractCachableRepository implements Emp
             $data = $cache->fetch($cacheId);
             $this->managerFactory->merge([$data]);
         } else {
-            $data = $this->managerFactory->getWriteManager()->getRepository($this->class)->findBy(['resign' => true, 'deletedAt' => null]);
+            $data = $this->managerFactory->getWriteManager()->getRepository($this->class)->findBy(['resign' => false, 'deletedAt' => null]);
+            $cache->save($cacheId, $data, $this->getCacheLifetime());
+        }
+
+        return $data;
+    }
+
+    /**
+     * @param string $id
+     *
+     * @return null|EmployeeInterface
+     */
+    public function find(string $id): ? EmployeeInterface
+    {
+        $cache = $this->getCacheDriver();
+        $cacheId = sprintf('%s_%s', $this->class, $id);
+        if ($cache->contains($cacheId)) {
+            $data = $cache->fetch($cacheId);
+            $this->managerFactory->merge([$data]);
+        } else {
+            $data = $this->managerFactory->getWriteManager()->getRepository($this->class)->find($id);
             $cache->save($cacheId, $data, $this->getCacheLifetime());
         }
 
