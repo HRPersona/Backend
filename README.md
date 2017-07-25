@@ -40,7 +40,7 @@ yang fokus pada regulasi perundangan yang berlaku di Indonesia.
 * ap = appraisal
 * ja = job allocation
 * lv = leave
-* og = organitation
+* og = organization
 * tx = tax
 * c = core
 * s = shared
