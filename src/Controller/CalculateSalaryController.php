@@ -152,7 +152,7 @@ final class CalculateSalaryController extends Controller
      * @Method({"POST"})
      *
      * @param Request $request
-     * @param string $id
+     * @param string  $id
      *
      * @return JsonResponse
      */

@@ -3,7 +3,6 @@
 namespace Persona\Hris\Controller;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
-use Persona\Hris\Employee\Model\EmployeeInterface;
 use Persona\Hris\Entity\EmployeeOvertimeCalculation;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -99,7 +98,7 @@ final class CalculateOvertimeController extends Controller
      * @Method({"POST"})
      *
      * @param Request $request
-     * @param string $id
+     * @param string  $id
      *
      * @return JsonResponse
      */

@@ -103,7 +103,7 @@ final class CalculateTaxController extends Controller
      * @Method({"POST"})
      *
      * @param Request $request
-     * @param string $id
+     * @param string  $id
      *
      * @return JsonResponse
      */
@@ -123,7 +123,7 @@ final class CalculateTaxController extends Controller
         }
 
         if (!$payrollRepository->isClosed($employee, $year, $month)) {
-            throw new BadRequestHttpException(sprintf('Payroll for %s is not closed.', $employee->getFullName()));;
+            throw new BadRequestHttpException(sprintf('Payroll for %s is not closed.', $employee->getFullName()));
         }
 
         $taxHistoryRepository = $this->container->get('persona.repository.orm.tax_history_repository');
