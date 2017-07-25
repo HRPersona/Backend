@@ -2,17 +2,17 @@
 
 namespace Persona\Hris\Salary\Subscriber;
 
+use Doctrine\Common\EventSubscriber;
+use Doctrine\ORM\Event\LifecycleEventArgs;
+use Doctrine\ORM\Events;
 use Persona\Hris\Salary\Model\PayrollInterface;
 use Persona\Hris\Salary\Model\PayrollRepositoryInterface;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\Exception\NotAcceptableHttpException;
-use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-final class PreventReopenPayrollSubscriber implements EventSubscriberInterface
+final class PreventReopenPayrollSubscriber implements EventSubscriber
 {
     /**
      * @var PayrollRepositoryInterface
@@ -28,15 +28,15 @@ final class PreventReopenPayrollSubscriber implements EventSubscriberInterface
     }
 
     /**
-     * @param GetResponseEvent $event
+     * @param LifecycleEventArgs $eventArgs
      */
-    public function onKernelRequest(GetResponseEvent $event)
+    public function preUpdate(LifecycleEventArgs $eventArgs)
     {
-        $requestData = $event->getRequest()->attributes->get('data');
-        if ($requestData instanceof PayrollInterface) {
-            $persistence = $this->payrollRepository->find($requestData->getId());
-            if ($persistence->isClosed() && !$requestData->isClosed()) {
-                throw new NotAcceptableHttpException(sprintf('Can not reopen closed payroll.'));
+        $entity = $eventArgs->getEntity();
+        if ($entity instanceof PayrollInterface) {
+            $persistence = $this->payrollRepository->find($entity->getId());
+            if ($persistence->isClosed() && !$entity->isClosed()) {
+                throw new BadRequestHttpException(sprintf('Can not reopen closed payroll.'));
             }
         }
     }
@@ -44,10 +44,8 @@ final class PreventReopenPayrollSubscriber implements EventSubscriberInterface
     /**
      * @return array
      */
-    public static function getSubscribedEvents(): array
+    public function getSubscribedEvents(): array
     {
-        return [
-            KernelEvents::REQUEST => ['onKernelRequest', 0],
-        ];
+        return [Events::preUpdate];
     }
 }

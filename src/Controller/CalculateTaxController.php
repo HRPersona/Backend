@@ -55,7 +55,13 @@ final class CalculateTaxController extends Controller
                 continue;
             }
 
-            $taxHistory = new TaxHistory();
+            $taxHistoryRepository = $this->container->get('persona.repository.orm.tax_history_repository');
+            if ($exist = $taxHistoryRepository->findByEmployeeAndPeriod($employee, $year, $month)) {
+                $taxHistory = $exist;
+            } else {
+                $taxHistory = new TaxHistory();
+            }
+
             $taxHistory->setEmployee($employee);
             $taxHistory->setTaxYear($year);
             $taxHistory->setTaxMonth($month);

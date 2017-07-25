@@ -59,10 +59,3 @@ services:
             - '@session'
         tags:
             - { name: 'kernel.event_subscriber' }
-
-    persona.salary.prevent_reopen_payroll:
-        class: 'Persona\Hris\Salary\Subscriber\PreventReopenPayrollSubscriber'
-        arguments:
-            - '@persona.repository.orm.payroll_repository'
-        tags:
-            - { name: 'kernel.event_subscriber' }

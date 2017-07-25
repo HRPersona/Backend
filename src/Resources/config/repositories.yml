@@ -142,3 +142,11 @@ services:
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\PayrollDetail'
+
+    persona.repository.orm.tax_history_repository:
+        class: 'Persona\Hris\Repository\ORM\TaxHistoryRepository'
+        calls:
+            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\TaxHistory'

@@ -5,5 +5,5 @@ TODO:
 - Taxing (perpajakan) - Done
 - Inactivating others appraisal period when one other is active - Done
 - Closing salary period - Done
-- Check existing tax history
+- Check existing tax history - Done
 - Make sure salary calculating only active employee and not closed period - Done
