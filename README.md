@@ -1,4 +1,53 @@
-TODO:
+# Persona Human Resources Information System (Backend/API)
+
+Persona HRIS adalah sistem informasi yang bertujuan untuk membantu pekerjaan HRD (Human Resources Department) dan Panggajian
+yang fokus pada regulasi perundangan yang berlaku di Indonesia.
+
+## Fitur Utama
+
+```
+* Management Pegawai
+* Management Kontrak Pegawai
+* Management Absensi
+* Management Lembur
+* Management Cuti
+* Penggajian
+* Pajak PPH 21 sesuai peraturan terbaru (2016)
+* Penilaian Kinerja Karyawan
+* Perjalanan Dinas (TODO)
+* Inventori Karyawan (TODO)
+* User Management
+* Akses Management
+```
+
+## Instalasi
+
+* Buat Database kosong dengan nama `persona_hris`
+* Clone repo
+* Pindah ke folder `Backend` atau folder yang Anda buat saat cloning
+* Jalankan `composer update` atau `composer install` dan ikuti petunjuk instalasi
+* Jalankan `php bin/console doctrine:schema:update --force`
+* Jalankan `php bin/console doctrine:fixtures:load` pilih `y`
+* Jalankan `php bin/console server:run` dan buka browser `http://localhost:8000/api/doc`
+
+## Table Prefix Dictionary:
+
+```
+* at = attendance
+* ov = overtime
+* em = employee
+* sa = salary
+* ap = appraisal
+* ja = job allocation
+* lv = leave
+* og = organitation
+* tx = tax
+* c = core
+* s = shared
+```
+
+## TODO:
+
 - Limit day per leave
 - Create subscriber for Overtime base on real case - Done
 - Add Annual Leave Adjustment Cron Job
