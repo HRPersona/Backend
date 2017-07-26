@@ -113,3 +113,10 @@ services:
             - '@persona.repository.orm.payroll_repository'
         tags:
             - { name: 'doctrine.event_subscriber' }
+
+    persona.course.employee_course:
+        class: 'Persona\Hris\Course\Subscriber\EmployeeCourseSubscriber'
+        arguments:
+            - '@persona.repository.orm.employee_course_repository'
+        tags:
+            - { name: 'doctrine.event_subscriber' }

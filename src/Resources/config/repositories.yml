@@ -142,3 +142,9 @@ services:
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\TaxHistory'
+
+    persona.repository.orm.employee_course_repository:
+        class: 'Persona\Hris\Repository\ORM\EmployeeCourseRepository'
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\EmployeeCourse'

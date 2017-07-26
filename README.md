@@ -20,6 +20,7 @@ yang fokus pada regulasi perundangan yang berlaku di Indonesia.
 * Management Absensi
 * Management Lembur
 * Management Cuti
+* Management Kursus/Pelatihan Internal
 * Penggajian
 * Pajak PPH 21 sesuai peraturan terbaru (2016)
 * Penilaian Kinerja Karyawan
@@ -46,6 +47,7 @@ yang fokus pada regulasi perundangan yang berlaku di Indonesia.
 * at = attendance
 * ov = overtime
 * em = employee
+* cr = course
 * sa = salary
 * ap = appraisal
 * ja = job allocation
