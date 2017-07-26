@@ -1,14 +1,14 @@
 {
-    "name": "api-platform/api-platform",
+    "name": "hrpersona/persona-backend",
     "license": "MIT",
     "type": "project",
-    "description": "The API Platform framework",
-    "homepage": "https://api-platform.com",
+    "description": "Persona HRIS API",
+    "homepage": "https://persona.id",
     "authors": [
         {
-            "name": "Kévin Dunglas",
-            "email": "dunglas@gmail.com",
-            "homepage": "https://dunglas.fr"
+            "name": "Muhamad Surya Iksanudin",
+            "email": "surya.kejawen@gmail.com",
+            "homepage": "https://github.com/ad3n"
         }
     ],
     "autoload": {
@@ -19,7 +19,7 @@
         "psr-4": { "Tests\\": "tests/" }
     },
     "require": {
-        "php": ">=7.0",
+        "php": ">=7.1",
         "symfony/symfony": "3.2.*",
         "api-platform/core": "^2.0",
         "doctrine/orm": "^2.5",
@@ -84,7 +84,7 @@
             "file": "app/config/parameters.yml"
         },
         "branch-alias": {
-            "dev-master": "2.0-dev"
+            "dev-master": "1.0-dev"
         }
     }
 }

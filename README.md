@@ -3,6 +3,15 @@
 Persona HRIS adalah sistem informasi yang bertujuan untuk membantu pekerjaan HRD (Human Resources Department) dan Panggajian
 yang fokus pada regulasi perundangan yang berlaku di Indonesia.
 
+## Minimal Requirement
+
+```
+* PHPv7.1.X
+* MariaDB 10.2.X atau MySQL 5.7.X
+* Redis Server (untuk Session dan Cache Storage)
+* Web Server (sangat opsional, hanya untuk production)
+```
+
 ## Fitur Utama
 
 ```

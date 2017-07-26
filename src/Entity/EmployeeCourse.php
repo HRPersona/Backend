@@ -8,15 +8,15 @@ use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
+use Persona\Hris\Employee\Model\EmployeeCourseInterface;
 use Persona\Hris\Employee\Model\EmployeeInterface;
-use Persona\Hris\Employee\Model\EmployeeTrainingInterface;
 use Persona\Hris\Share\Model\UniversityInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="em_employee_trains")
+ * @ORM\Table(name="em_employee_courses")
  *
  * @ApiResource(
  *     attributes={
@@ -28,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class EmployeeTraining implements EmployeeTrainingInterface, ActionLoggerAwareInterface
+class EmployeeCourse implements EmployeeCourseInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -182,7 +182,7 @@ class EmployeeTraining implements EmployeeTrainingInterface, ActionLoggerAwareIn
     /**
      * @param string $certificateNumber
      */
-    public function setCertificateNumber(string $certificateNumber)
+    public function setCertificateNumber(string $certificateNumber): void
     {
         $this->certificateNumber = $certificateNumber;
     }
@@ -198,7 +198,7 @@ class EmployeeTraining implements EmployeeTrainingInterface, ActionLoggerAwareIn
     /**
      * @param string $certificateFile
      */
-    public function setCertificateFile(string $certificateFile)
+    public function setCertificateFile(string $certificateFile): void
     {
         $this->certificateFile = $certificateFile;
     }

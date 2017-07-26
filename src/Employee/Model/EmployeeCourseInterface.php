@@ -7,7 +7,7 @@ use Persona\Hris\Share\Model\UniversityInterface;
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-interface EmployeeTrainingInterface
+interface EmployeeCourseInterface
 {
     /**
      * @return string
@@ -50,7 +50,17 @@ interface EmployeeTrainingInterface
     public function getCertificateNumber(): string;
 
     /**
+     * @param string $certificateNumber
+     */
+    public function setCertificateNumber(string $certificateNumber): void;
+
+    /**
      * @return string
      */
     public function getCertificateFile(): ? string;
+
+    /**
+     * @param string $certificateFile
+     */
+    public function setCertificateFile(string $certificateFile): void;
 }
