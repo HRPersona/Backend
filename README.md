@@ -35,6 +35,7 @@ yang fokus pada regulasi perundangan yang berlaku di Indonesia.
 * Clone repo
 * Pindah ke folder `Backend` atau folder yang Anda buat saat cloning
 * Jalankan `composer update` atau `composer install` dan ikuti petunjuk instalasi
+* Ubah file `app/config/parameters_dev.yml` sesuai kebutuhan jika diperlukan
 * Jalankan `php bin/console doctrine:schema:update --force`
 * Jalankan `php bin/console doctrine:fixtures:load` pilih `y`
 * Jalankan `php bin/console server:run` dan buka browser `http://localhost:8000/api/doc`
@@ -58,8 +59,8 @@ yang fokus pada regulasi perundangan yang berlaku di Indonesia.
 ## TODO:
 
 - Limit day per leave
+- Leave Adjustment
 - Create subscriber for Overtime base on real case - Done
-- Add Annual Leave Adjustment Cron Job
 - Taxing (perpajakan) - Done
 - Inactivating others appraisal period when one other is active - Done
 - Closing salary period - Done

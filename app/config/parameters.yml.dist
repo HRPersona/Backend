@@ -1,21 +1,25 @@
-# This file is a "template" of what your parameters.yml file should look like
-# Set parameters here that may be different on each deployment target of the app, e.g. development, staging, production.
-# http://symfony.com/doc/current/best_practices/configuration.html#infrastructure-related-configuration
+# Parameters Template
 parameters:
-    database_host:     database
-    database_port:     ~
-    database_name:     api_platform
-    database_user:     api_platform
-    database_password: api_platform
-    # You should uncomment this if you want use pdo_sqlite
-    # database_path: "%kernel.root_dir%/data.db3"
-
-    mailer_transport:  smtp
-    mailer_host:       127.0.0.1
-    mailer_user:       ~
-    mailer_password:   ~
-
-    # A secret key that's used to generate certain security-related tokens
-    secret:            ThisTokenIsNotSoSecretChangeIt
-
-    cors_allow_origin: http://localhost
+    write_database_host: 'localhost'
+    write_database_port: 3306
+    write_database_name: 'persona_hris'
+    write_database_user: 'root'
+    write_database_password: aden
+    read_database_host: 'localhost'
+    read_database_port: 3306
+    read_database_name: 'persona_hris'
+    read_database_user: 'root'
+    read_database_password: aden
+    redis_server: 'localhost'
+    mailer_transport: 'smtp'
+    mailer_host: '127.0.0.1'
+    mailer_user: 'surya.kejawen@gmail.com'
+    mailer_password: null
+    jwt_private_key_path: '%kernel.root_dir%/../app/jwt/private.pem'
+    jwt_public_key_path: '%kernel.root_dir%/../app/jwt/public.pem'
+    jwt_key_pass_phrase: 'persona_hris'
+    session_prefix: 'persona_hris'
+    session_ttl: 10800
+    cors_allow_origin: 'http://localhost'
+    api_endpoint: 'http://localhost:8000'
+    secret: 'MuhammadRasulullahSAWPersonaHRIS'

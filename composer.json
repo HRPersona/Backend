@@ -16,7 +16,7 @@
         "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
     },
     "autoload-dev": {
-        "psr-4": { "Tests\\": "tests/" }
+        "psr-4": { "Tests\\Persona\\Hris\\": "tests/" }
     },
     "require": {
         "php": ">=7.1",
@@ -81,7 +81,7 @@
         "symfony-tests-dir": "tests",
         "symfony-assets-install": "relative",
         "incenteev-parameters": {
-            "file": "app/config/parameters.yml"
+            "file": "app/config/parameters_dev.yml"
         },
         "branch-alias": {
             "dev-master": "1.0-dev"
