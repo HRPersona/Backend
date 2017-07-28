@@ -103,7 +103,7 @@ services:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\Employee'
 
-    persona.repository.orm.employee_overtime_calculation_repository:
+    persona.repository.orm.employee_overtime_history_repository:
         class: 'Persona\Hris\Repository\ORM\EmployeeOvertimeHistoryRepository'
         calls:
             - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]

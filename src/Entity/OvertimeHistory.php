@@ -76,6 +76,19 @@ class OvertimeHistory implements EmployeeOvertimeHistoryInterface, ActionLoggerA
     private $calculatedValue;
 
     /**
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="boolean")
+     *
+     * @var bool
+     */
+    private $closed;
+
+    public function __construct()
+    {
+        $this->closed = true;
+    }
+
+    /**
      * @return string
      */
     public function getId(): string
@@ -145,5 +158,21 @@ class OvertimeHistory implements EmployeeOvertimeHistoryInterface, ActionLoggerA
     public function setCalculatedValue(float $calculatedValue): void
     {
         $this->calculatedValue = $calculatedValue;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isClosed(): bool
+    {
+        return $this->closed;
+    }
+
+    /**
+     * @param bool $closed
+     */
+    public function setClosed(bool $closed): void
+    {
+        $this->closed = $closed;
     }
 }

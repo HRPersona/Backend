@@ -55,9 +55,26 @@ final class EmployeeOvertimeHistoryRepository extends AbstractRepository impleme
      * @param int               $year
      * @param int               $month
      *
+     * @return bool
+     */
+    public function isClosed(EmployeeInterface $employee, int $year, int $month): bool
+    {
+        $data = $this->managerFactory->getWriteManager()->getRepository($this->class)->findOneBy(['overtimeYear' => $year, 'overtimeMonth' => $month, 'closed' => true, 'employee' => $employee, 'deletedAt' => null]);
+        if ($data) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param EmployeeInterface $employee
+     * @param int               $year
+     * @param int               $month
+     *
      * @return float
      */
-    public function getCalculationByEmployee(EmployeeInterface $employee, int $year, int $month): float
+    public function getHistoryByEmployee(EmployeeInterface $employee, int $year, int $month): float
     {
         return $this->managerFactory->getWriteManager()->getRepository($this->class)->findOneBy(['overtimeYear' => $year, 'overtimeMonth' => $month, 'employee' => $employee, 'deletedAt' => null]);
     }

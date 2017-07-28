@@ -21,12 +21,21 @@ interface EmployeeOvertimeHistoryRepositoryInterface extends RepositoryInterface
 
     /**
      * @param EmployeeInterface $employee
+     * @param int $year
+     * @param int $month
+     *
+     * @return bool
+     */
+    public function isClosed(EmployeeInterface $employee, int $year, int $month): bool;
+
+    /**
+     * @param EmployeeInterface $employee
      * @param int               $year
      * @param int               $month
      *
      * @return float
      */
-    public function getCalculationByEmployee(EmployeeInterface $employee, int $year, int $month): float;
+    public function getHistoryByEmployee(EmployeeInterface $employee, int $year, int $month): float;
 
     /**
      * @return EmployeeOvertimeHistoryInterface

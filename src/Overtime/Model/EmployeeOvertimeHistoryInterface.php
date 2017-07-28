@@ -53,4 +53,14 @@ interface EmployeeOvertimeHistoryInterface
      * @param float $calculatedValue
      */
     public function setCalculatedValue(float $calculatedValue): void;
+
+    /**
+     * @return bool
+     */
+    public function isClosed(): bool;
+
+    /**
+     * @param bool $closed
+     */
+    public function setClosed(bool $closed): void;
 }

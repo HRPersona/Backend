@@ -59,14 +59,12 @@ final class CalculateSalaryController extends Controller
             }
 
             $salaryCalculator = $this->container->get('persona.salary.salary_calculator');
-
-            $salary = $salaryCalculator->calculate($employee);
+            $salaryCalculator->calculate($employee);
             $overtime = 0;
 
-            $employeeOvertime = $this->container->get('persona.repository.orm.employee_overtime_calculation_repository');
-
+            $employeeOvertime = $this->container->get('persona.repository.orm.employee_overtime_history_repository');
             if ($employee->isHaveOvertimeBenefit()) {
-                $overtime = $employeeOvertime->getCalculationByEmployee($employee, $year, $month);
+                $overtime = $employeeOvertime->getHistoryByEmployee($employee, $year, $month);
             }
 
             if ($exist = $payrollRepository->findByEmployeeAndPeriod($employee, $year, $month)) {
@@ -80,7 +78,7 @@ final class CalculateSalaryController extends Controller
             $payroll->setPayrollMonth($month);
             $payroll->setBasicSalary($employee->getBasicSalary());
             $payroll->setOvertimeValue($overtime);
-            $payroll->setTakeHomePay($salary + $overtime);
+            $payroll->setTakeHomePay($salaryCalculator->getGrossSalary() + $overtime);
 
             $manager->persist($payroll);
 
@@ -181,10 +179,10 @@ final class CalculateSalaryController extends Controller
         $salary = $salaryCalculator->calculate($employee);
         $overtime = 0;
 
-        $employeeOvertime = $this->container->get('persona.repository.orm.employee_overtime_calculation_repository');
+        $employeeOvertime = $this->container->get('persona.repository.orm.employee_overtime_history_repository');
 
         if ($employee->isHaveOvertimeBenefit()) {
-            $overtime = $employeeOvertime->getCalculationByEmployee($employee, $year, $month);
+            $overtime = $employeeOvertime->getHistoryByEmployee($employee, $year, $month);
         }
 
         if ($exist = $payrollRepository->findByEmployeeAndPeriod($employee, $year, $month)) {

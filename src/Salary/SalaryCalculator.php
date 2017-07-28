@@ -24,6 +24,21 @@ final class SalaryCalculator
     private $benefit;
 
     /**
+     * @var float
+     */
+    private $benefitValue;
+
+    /**
+     * @var float
+     */
+    private $additionaBenefitlValue;
+
+    /**
+     * @var float
+     */
+    private $basicSalary;
+
+    /**
      * @var array
      */
     private $plusBenefits = [];
@@ -45,24 +60,20 @@ final class SalaryCalculator
 
     /**
      * @param EmployeeInterface $employee
-     *
-     * @return float
      */
-    public function calculate(EmployeeInterface $employee = null): float
+    public function calculate(EmployeeInterface $employee = null): void
     {
-        $addition = 0;
-        $reduction = 0;
-        $basicSalary = $employee->getBasicSalary();
+        $this->basicSalary = $employee->getBasicSalary();
         $this->plusBenefits[$employee->getId()] = [];
         $this->minusBenefits[$employee->getId()] = [];
 
         foreach ($this->additionalBenefit->findByEmployee($employee) as $additionalBenefit) {
             if (BenefitInterface::TYPE_PLUS === $additionalBenefit->getBenefit()->getBenefitType()) {
-                $addition += $additionalBenefit->getBenefitValue();
+                $this->additionaBenefitlValue += $additionalBenefit->getBenefitValue();
 
                 $this->plusBenefits[$employee->getId()][] = ['benefit' => $additionalBenefit->getBenefit(), 'value' => $additionalBenefit->getBenefitValue()];
             } else {
-                $reduction += $additionalBenefit->getBenefitValue();
+                $this->additionaBenefitlValue -= $additionalBenefit->getBenefitValue();
 
                 $this->minusBenefits[$employee->getId()][] = ['benefit' => $additionalBenefit->getBenefit(), 'value' => $additionalBenefit->getBenefitValue()];
             }
@@ -70,17 +81,31 @@ final class SalaryCalculator
 
         foreach ($this->benefit->findByEmployee($employee) as $employeeBenefit) {
             if (BenefitInterface::TYPE_PLUS === $employeeBenefit->getBenefit()->getBenefitType()) {
-                $addition += $this->getBenefit($employeeBenefit, $basicSalary);
+                $this->benefitValue += $this->getBenefit($employeeBenefit, $this->basicSalary);
 
                 $this->plusBenefits[$employee->getId()][] = ['benefit' => $employeeBenefit->getBenefit(), 'value' => $employeeBenefit->getBenefitValue()];
             } else {
-                $reduction += $this->getBenefit($employeeBenefit, $basicSalary);
+                $this->benefitValue -= $this->getBenefit($employeeBenefit, $this->basicSalary);
 
                 $this->minusBenefits[$employee->getId()][] = ['benefit' => $employeeBenefit->getBenefit(), 'value' => $employeeBenefit->getBenefitValue()];
             }
         }
+    }
 
-        return $basicSalary + $addition - $reduction;
+    /**
+     * @return float
+     */
+    public function getGrossSalary(): float
+    {
+        return $this->basicSalary + $this->benefitValue + $this->additionaBenefitlValue;
+    }
+
+    /**
+     * @return float
+     */
+    public function getFixedSalary(): float
+    {
+        return $this->basicSalary + $this->benefitValue;
     }
 
     /**

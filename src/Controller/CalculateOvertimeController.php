@@ -50,22 +50,26 @@ final class CalculateOvertimeController extends Controller
 
         $overtimeCalculator = $this->container->get('persona.overtime.overtime_calculator');
         $employeeRepository = $this->container->get('persona.repository.orm.employee_repository');
-        $employeeCalculationRepository = $this->container->get('persona.repository.orm.employee_overtime_calculation_repository');
+        $employeeHistoryRepository = $this->container->get('persona.repository.orm.employee_overtime_history_repository');
         $manager = $this->container->get('persona.manager.manager_factory')->getWriteManager();
 
         foreach ($employeeRepository->findActiveEmployee() as $key => $employee) {
-            if ($employeeCalculationRepository->isExisting($employee, $year, $month)) {
-                $overtimeCalculation = $employeeCalculationRepository->getExistData();
-            } else {
-                $overtimeCalculation = new OvertimeHistory();
+            if ($employeeHistoryRepository->isClosed($employee, $year, $month)) {
+                continue;
             }
 
-            $overtimeCalculation->setEmployee($employee);
-            $overtimeCalculation->setOvertimeYear($year);
-            $overtimeCalculation->setOvertimeMonth($month);
-            $overtimeCalculation->setCalculatedValue($overtimeCalculator->calculate($date, $employee));
+            if ($employeeHistoryRepository->isExisting($employee, $year, $month)) {
+                $overtimeHistory = $employeeHistoryRepository->getExistData();
+            } else {
+                $overtimeHistory = new OvertimeHistory();
+            }
 
-            $manager->persist($overtimeCalculation);
+            $overtimeHistory->setEmployee($employee);
+            $overtimeHistory->setOvertimeYear($year);
+            $overtimeHistory->setOvertimeMonth($month);
+            $overtimeHistory->setCalculatedValue($overtimeCalculator->calculate($date, $employee));
+
+            $manager->persist($overtimeHistory);
             if (0 === $key % 17) {
                 $manager->flush();
             }
@@ -111,7 +115,7 @@ final class CalculateOvertimeController extends Controller
 
         $overtimeCalculator = $this->container->get('persona.overtime.overtime_calculator');
         $employeeRepository = $this->container->get('persona.repository.orm.employee_repository');
-        $employeeCalculationRepository = $this->container->get('persona.repository.orm.employee_overtime_calculation_repository');
+        $employeeHistoryRepository = $this->container->get('persona.repository.orm.employee_overtime_history_repository');
         $manager = $this->container->get('persona.manager.manager_factory')->getWriteManager();
 
         $employee = $employeeRepository->find($id);
@@ -119,18 +123,18 @@ final class CalculateOvertimeController extends Controller
             throw new NotFoundHttpException(sprintf('Employee with id %s is not found.', $id));
         }
 
-        if ($employeeCalculationRepository->isExisting($employee, $year, $month)) {
-            $overtimeCalculation = $employeeCalculationRepository->getExistData();
+        if ($employeeHistoryRepository->isExisting($employee, $year, $month)) {
+            $overtimeHistory = $employeeHistoryRepository->getExistData();
         } else {
-            $overtimeCalculation = new OvertimeHistory();
+            $overtimeHistory = new OvertimeHistory();
         }
 
-        $overtimeCalculation->setEmployee($employee);
-        $overtimeCalculation->setOvertimeYear($year);
-        $overtimeCalculation->setOvertimeMonth($month);
-        $overtimeCalculation->setCalculatedValue($overtimeCalculator->calculate($date, $employee));
+        $overtimeHistory->setEmployee($employee);
+        $overtimeHistory->setOvertimeYear($year);
+        $overtimeHistory->setOvertimeMonth($month);
+        $overtimeHistory->setCalculatedValue($overtimeCalculator->calculate($date, $employee));
 
-        $manager->persist($overtimeCalculation);
+        $manager->persist($overtimeHistory);
 
         $manager->flush();
 
