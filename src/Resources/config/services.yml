@@ -133,8 +133,7 @@ services:
     persona.tax.tax_calculator:
         class: 'Persona\Hris\Tax\TaxCalculator'
         arguments:
-            - '@persona.repository.orm.employee_benefit_repository'
-            - '@persona.repository.orm.employee_additional_benefit_repository'
+            - '@persona.repository.orm.payroll_detail_repository'
             
     ad3n.username.generator_factory:
         class: 'Ihsan\UsernameGenerator\UsernameFactory'

@@ -37,6 +37,16 @@ interface PayrollInterface
     /**
      * @return float
      */
+    public function getBasicSalary(): float;
+
+    /**
+     * @return float
+     */
+    public function getOvertimeValue(): float;
+
+    /**
+     * @return float
+     */
     public function getTakeHomePay(): float;
 
     /**

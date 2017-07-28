@@ -3,7 +3,9 @@
 namespace Persona\Hris\Repository\ORM;
 
 use Persona\Hris\Core\Manager\ManagerFactory;
+use Persona\Hris\Employee\Model\EmployeeInterface;
 use Persona\Hris\Repository\AbstractRepository;
+use Persona\Hris\Salary\Model\BenefitInterface;
 use Persona\Hris\Salary\Model\PayrollDetailInterface;
 use Persona\Hris\Salary\Model\PayrollDetailRepositoryInterface;
 use Persona\Hris\Salary\Model\PayrollInterface;
@@ -30,11 +32,22 @@ final class PayrollDetailRepository extends AbstractRepository implements Payrol
 
     /**
      * @param PayrollInterface $payroll
+     * @param BenefitInterface $benefit
      *
      * @return null|PayrollDetailInterface
      */
-    public function findByPayroll(PayrollInterface $payroll): ? PayrollDetailInterface
+    public function findByPayrollAndBenefit(PayrollInterface $payroll, BenefitInterface $benefit): ? PayrollDetailInterface
     {
-        return $this->managerFactory->getWriteManager()->getRepository($this->class)->findOneBy(['payroll' => $payroll, 'deletedAt' => null]);
+        return $this->managerFactory->getWriteManager()->getRepository($this->class)->findOneBy(['payroll' => $payroll, 'benefit' => $benefit, 'deletedAt' => null]);
+    }
+
+    /**
+     * @param PayrollInterface $payroll
+     *
+     * @return PayrollDetailInterface[]
+     */
+    public function findByPayroll(PayrollInterface $payroll): array
+    {
+        return $this->managerFactory->getWriteManager()->getRepository($this->class)->findBy(['payroll' => $payroll, 'deletedAt' => null]);
     }
 }

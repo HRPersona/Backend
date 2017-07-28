@@ -2,7 +2,7 @@
 
 namespace Persona\Hris\Tax\Formula;
 
-use Persona\Hris\Employee\Model\EmployeeInterface;
+use Persona\Hris\Salary\Model\PayrollInterface;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
@@ -10,9 +10,9 @@ use Persona\Hris\Employee\Model\EmployeeInterface;
 interface TaxFormulaInterface
 {
     /**
-     * @param EmployeeInterface $employee
+     * @param PayrollInterface $payroll
      *
      * @return float
      */
-    public function getCalculatedValue(EmployeeInterface $employee): float;
+    public function getCalculatedValue(PayrollInterface $payroll): float;
 }

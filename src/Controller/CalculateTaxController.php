@@ -57,6 +57,8 @@ final class CalculateTaxController extends Controller
                 continue;
             }
 
+            $payroll = $payrollRepository->findByEmployeeAndPeriod($employee, $year, $month);
+
             $taxHistoryRepository = $this->container->get('persona.repository.orm.tax_history_repository');
             if ($exist = $taxHistoryRepository->findByEmployeeAndPeriod($employee, $year, $month)) {
                 $taxHistory = $exist;
@@ -67,7 +69,7 @@ final class CalculateTaxController extends Controller
             $taxHistory->setEmployee($employee);
             $taxHistory->setTaxYear($year);
             $taxHistory->setTaxMonth($month);
-            $taxHistory->setTaxValue($taxCalculator->calculateTax($employee));
+            $taxHistory->setTaxValue($taxCalculator->calculateTax($payroll));
 
             $manager->persist($taxHistory);
 
@@ -126,6 +128,8 @@ final class CalculateTaxController extends Controller
             throw new BadRequestHttpException(sprintf('Payroll for %s is not closed.', $employee->getFullName()));
         }
 
+        $payroll = $payrollRepository->findByEmployeeAndPeriod($employee, $year, $month);
+
         $taxHistoryRepository = $this->container->get('persona.repository.orm.tax_history_repository');
         if ($exist = $taxHistoryRepository->findByEmployeeAndPeriod($employee, $year, $month)) {
             $taxHistory = $exist;
@@ -136,7 +140,7 @@ final class CalculateTaxController extends Controller
         $taxHistory->setEmployee($employee);
         $taxHistory->setTaxYear($year);
         $taxHistory->setTaxMonth($month);
-        $taxHistory->setTaxValue($taxCalculator->calculateTax($employee));
+        $taxHistory->setTaxValue($taxCalculator->calculateTax($payroll));
 
         $manager->persist($taxHistory);
 

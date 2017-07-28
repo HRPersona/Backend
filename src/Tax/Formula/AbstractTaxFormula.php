@@ -2,9 +2,9 @@
 
 namespace Persona\Hris\Tax\Formula;
 
-use Persona\Hris\Employee\Model\EmployeeInterface;
-use Persona\Hris\Salary\Model\AdditionalBenefitRepositoryInterface;
-use Persona\Hris\Salary\Model\EmployeeBenefitRepositoryInterface;
+use Persona\Hris\Salary\Model\BenefitInterface;
+use Persona\Hris\Salary\Model\PayrollDetailRepositoryInterface;
+use Persona\Hris\Salary\Model\PayrollInterface;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
@@ -12,45 +12,31 @@ use Persona\Hris\Salary\Model\EmployeeBenefitRepositoryInterface;
 abstract class AbstractTaxFormula implements TaxFormulaInterface
 {
     /**
-     * @var EmployeeBenefitRepositoryInterface
+     * @var PayrollDetailRepositoryInterface
      */
-    private $employeeBenefitRepository;
+    private $payrollDetailRepository;
 
     /**
-     * @var AdditionalBenefitRepositoryInterface
+     * @param PayrollDetailRepositoryInterface $payrollDetailRepository
      */
-    private $employeeAdditionalBenefitRepository;
-
-    /**
-     * @param EmployeeBenefitRepositoryInterface   $employeeBenefitRepository
-     * @param AdditionalBenefitRepositoryInterface $additionalBenefitRepository
-     */
-    public function __construct(EmployeeBenefitRepositoryInterface $employeeBenefitRepository, AdditionalBenefitRepositoryInterface $additionalBenefitRepository)
+    public function __construct(PayrollDetailRepositoryInterface $payrollDetailRepository)
     {
-        $this->employeeBenefitRepository = $employeeBenefitRepository;
-        $this->employeeAdditionalBenefitRepository = $additionalBenefitRepository;
+        $this->payrollDetailRepository = $payrollDetailRepository;
     }
 
     /**
-     * @param EmployeeInterface $employee
+     * @param PayrollInterface $payroll
      *
      * @return float
      */
-    protected function getTaxReduction(EmployeeInterface $employee): float
+    protected function getTaxReduction(PayrollInterface $payroll): float
     {
         $taxReductionBenefit = 0;
 
-        $benefits = $this->employeeBenefitRepository->findByEmployee($employee);
-        foreach ($benefits as $benefit) {
-            if ($benefit->getBenefit()->isTaxReduction()) {
-                $taxReductionBenefit += $benefit->getBenefitValue();
-            }
-        }
-
-        $additionals = $this->employeeAdditionalBenefitRepository->findByEmployee($employee);
-        foreach ($additionals as $benefit) {
-            if ($benefit->getBenefit()->isTaxReduction()) {
-                $taxReductionBenefit += $benefit->getBenefitValue();
+        foreach ($this->payrollDetailRepository->findByPayroll($payroll) as $payrollDetail) {
+            $benefit = $payrollDetail->getBenefit();
+            if ($benefit && $benefit->isTaxReduction() && BenefitInterface::TYPE_PLUS === $benefit->getBenefitType()) {
+                $taxReductionBenefit += $payrollDetail->getBenefitValue();
             }
         }
 
@@ -58,14 +44,14 @@ abstract class AbstractTaxFormula implements TaxFormulaInterface
     }
 
     /**
-     * @param EmployeeInterface $employee
+     * @param PayrollInterface $payroll
      *
      * @return float
      */
-    protected function getTaxableValue(EmployeeInterface $employee): float
+    protected function getTaxableValue(PayrollInterface $payroll): float
     {
-        $basicSalary = $employee->getBasicSalary();
-        $benefitReduction = $this->getTaxReduction($employee);
+        $basicSalary = $payroll->getEmployee()->getBasicSalary();
+        $benefitReduction = $this->getTaxReduction($payroll);
         $jobTitleCost = 0.05 * $basicSalary;
 
         return $basicSalary - $benefitReduction - $jobTitleCost;

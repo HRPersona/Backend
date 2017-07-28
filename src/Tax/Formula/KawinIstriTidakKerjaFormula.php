@@ -3,6 +3,7 @@
 namespace Persona\Hris\Tax\Formula;
 
 use Persona\Hris\Employee\Model\EmployeeInterface;
+use Persona\Hris\Salary\Model\PayrollInterface;
 use Persona\Hris\Tax\TaxPercentage;
 
 /**
@@ -16,17 +17,17 @@ class KawinIstriTidakKerjaFormula extends AbstractTaxFormula
     const K3 = 72000000;
 
     /**
-     * @param EmployeeInterface $employee
+     * @param PayrollInterface $payroll
      *
      * @return float
      */
-    public function getCalculatedValue(EmployeeInterface $employee): float
+    public function getCalculatedValue(PayrollInterface $payroll): float
     {
-        $taxable = 12 * $this->getTaxableValue($employee); //Penghasilan netto setahun
+        $taxable = 12 * $this->getTaxableValue($payroll); //Penghasilan netto setahun
         $taxPercentage = TaxPercentage::getPercentageValue($taxable); //Persentase pajak berdasarkan netto
 
         $taxReduce = self::K0; //PTKP
-        switch ($employee->getTaxGroup()) {
+        switch ($payroll->getEmployee()->getTaxGroup()) {
             case EmployeeInterface::TAX_K_1:
                 $taxReduce = self::K1;
                 break;

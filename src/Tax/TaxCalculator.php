@@ -5,6 +5,8 @@ namespace Persona\Hris\Tax;
 use Persona\Hris\Employee\Model\EmployeeInterface;
 use Persona\Hris\Salary\Model\AdditionalBenefitRepositoryInterface;
 use Persona\Hris\Salary\Model\EmployeeBenefitRepositoryInterface;
+use Persona\Hris\Salary\Model\PayrollDetailRepositoryInterface;
+use Persona\Hris\Salary\Model\PayrollInterface;
 use Persona\Hris\Tax\Formula\KawinIstriKerjaFormula;
 use Persona\Hris\Tax\Formula\KawinIstriTidakKerjaFormula;
 use Persona\Hris\Tax\Formula\TidakKawinFormula;
@@ -30,24 +32,23 @@ final class TaxCalculator
     private $kawinIstriKerja;
 
     /**
-     * @param EmployeeBenefitRepositoryInterface   $benefitRepository
-     * @param AdditionalBenefitRepositoryInterface $additionalBenefitRepositor
+     * @param PayrollDetailRepositoryInterface $payrollDetailRepository
      */
-    public function __construct(EmployeeBenefitRepositoryInterface $benefitRepository, AdditionalBenefitRepositoryInterface $additionalBenefitRepositor)
+    public function __construct(PayrollDetailRepositoryInterface $payrollDetailRepository)
     {
-        $this->tidakKawin = new TidakKawinFormula($benefitRepository, $additionalBenefitRepositor);
-        $this->kawinIstriTidakKerja = new KawinIstriTidakKerjaFormula($benefitRepository, $additionalBenefitRepositor);
-        $this->kawinIstriKerja = new KawinIstriKerjaFormula($benefitRepository, $additionalBenefitRepositor);
+        $this->tidakKawin = new TidakKawinFormula($payrollDetailRepository);
+        $this->kawinIstriTidakKerja = new KawinIstriTidakKerjaFormula($payrollDetailRepository);
+        $this->kawinIstriKerja = new KawinIstriKerjaFormula($payrollDetailRepository);
     }
 
     /**
-     * @param EmployeeInterface $employee
+     * @param PayrollInterface $payroll
      *
      * @return float
      */
-    public function calculateTax(EmployeeInterface $employee): float
+    public function calculateTax(PayrollInterface $payroll): float
     {
-        $taxGroup = $employee->getTaxGroup();
+        $taxGroup = $payroll->getEmployee()->getTaxGroup();
 
         if (in_array($taxGroup, [
             EmployeeInterface::TAX_K_0,
@@ -55,7 +56,7 @@ final class TaxCalculator
             EmployeeInterface::TAX_K_2,
             EmployeeInterface::TAX_K_3,
         ])) {
-            return $this->kawinIstriTidakKerja->getCalculatedValue($employee);
+            return $this->kawinIstriTidakKerja->getCalculatedValue($payroll);
         }
 
         if (in_array($taxGroup, [
@@ -64,9 +65,9 @@ final class TaxCalculator
             EmployeeInterface::TAX_KI_2,
             EmployeeInterface::TAX_KI_3,
         ])) {
-            return $this->kawinIstriTidakKerja->getCalculatedValue($employee);
+            return $this->kawinIstriTidakKerja->getCalculatedValue($payroll);
         }
 
-        return $this->tidakKawin->getCalculatedValue($employee);
+        return $this->tidakKawin->getCalculatedValue($payroll);
     }
 }

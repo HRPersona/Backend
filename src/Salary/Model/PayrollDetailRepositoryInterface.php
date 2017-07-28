@@ -9,8 +9,16 @@ interface PayrollDetailRepositoryInterface
 {
     /**
      * @param PayrollInterface $payroll
+     * @param BenefitInterface $benefit
      *
      * @return null|PayrollDetailInterface
      */
-    public function findByPayroll(PayrollInterface $payroll): ? PayrollDetailInterface;
+    public function findByPayrollAndBenefit(PayrollInterface $payroll, BenefitInterface $benefit): ? PayrollDetailInterface;
+
+    /**
+     * @param PayrollInterface $payroll
+     *
+     * @return PayrollDetailInterface[]
+     */
+    public function findByPayroll(PayrollInterface $payroll): array;
 }

@@ -78,6 +78,24 @@ class Payroll implements PayrollInterface, ActionLoggerAwareInterface
      *
      * @var float
      */
+    private $basicSalary;
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="float", scale=27, precision=2)
+     * @Assert\NotBlank()
+     *
+     * @var float
+     */
+    private $overtimeValue;
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="float", scale=27, precision=2)
+     * @Assert\NotBlank()
+     *
+     * @var float
+     */
     private $takeHomePay;
 
     /**
@@ -90,6 +108,7 @@ class Payroll implements PayrollInterface, ActionLoggerAwareInterface
 
     public function __construct()
     {
+        $this->overtimeValue = (float) 0;
         $this->closed = false;
     }
 
@@ -147,6 +166,38 @@ class Payroll implements PayrollInterface, ActionLoggerAwareInterface
     public function setPayrollMonth(string $payrollMonth)
     {
         $this->payrollMonth = $payrollMonth;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBasicSalary(): float
+    {
+        return $this->basicSalary;
+    }
+
+    /**
+     * @param float $basicSalary
+     */
+    public function setBasicSalary(float $basicSalary)
+    {
+        $this->basicSalary = $basicSalary;
+    }
+
+    /**
+     * @return float
+     */
+    public function getOvertimeValue(): float
+    {
+        return $this->overtimeValue;
+    }
+
+    /**
+     * @param float $overtimeValue
+     */
+    public function setOvertimeValue(float $overtimeValue)
+    {
+        $this->overtimeValue = $overtimeValue;
     }
 
     /**
