@@ -1,6 +1,6 @@
 # Persona Human Resources Information System (Backend/API)
 
-Persona HRIS adalah sistem informasi yang bertujuan untuk membantu pekerjaan HRD (Human Resources Department) dan Panggajian
+Persona HRIS adalah sistem informasi yang bertujuan untuk membantu pekerjaan HRD (Human Resources Department) dan Penggajian
 yang fokus pada regulasi perundangan yang berlaku di Indonesia.
 
 ## Minimal Requirement
