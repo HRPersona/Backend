@@ -4,16 +4,14 @@
     "type": "project",
     "description": "Persona HRIS API",
     "homepage": "https://persona.id",
-    "authors": [
-        {
-            "name": "Muhamad Surya Iksanudin",
-            "email": "surya.kejawen@gmail.com",
-            "homepage": "https://github.com/ad3n"
-        }
-    ],
+    "authors": [{
+        "name": "Muhamad Surya Iksanudin",
+        "email": "surya.kejawen@gmail.com",
+        "homepage": "https://github.com/ad3n"
+    }],
     "autoload": {
         "psr-4": { "Persona\\Hris\\": "src/" },
-        "classmap": [ "app/AppKernel.php", "app/AppCache.php" ]
+        "classmap": ["app/AppKernel.php", "app/AppCache.php"]
     },
     "autoload-dev": {
         "psr-4": { "Tests\\Persona\\Hris\\": "tests/" }
@@ -80,9 +78,13 @@
         "symfony-web-dir": "web",
         "symfony-tests-dir": "tests",
         "symfony-assets-install": "relative",
-        "incenteev-parameters": {
-            "file": "app/config/parameters_dev.yml"
-        },
+        "incenteev-parameters": [{
+                "file": "app/config/parameters_dev.yml"
+            },
+            {
+                "file": "app/config/parameters_prod.yml"
+            }
+        ],
         "branch-alias": {
             "dev-master": "1.0-dev"
         }
