@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/HRPersona/Backend.svg?branch=master)](https://travis-ci.org/HRPersona/Backend)
+
 # Persona Human Resources Information System (Backend/API)
 
 Persona HRIS adalah sistem informasi yang bertujuan untuk membantu pekerjaan HRD (Human Resources Department) dan Penggajian
