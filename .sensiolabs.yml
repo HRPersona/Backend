@@ -5,7 +5,8 @@ rules:
         enabled: false
 
 pre_composer_script: |
-  yes '' | pecl install redis
+  no '' | pecl install redis
+  pecl info redis
 
 php_ini: |
   extension=redis.so
