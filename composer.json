@@ -10,11 +10,18 @@
         "homepage": "https://github.com/ad3n"
     }],
     "autoload": {
-        "psr-4": { "Persona\\Hris\\": "src/" },
-        "classmap": ["app/AppKernel.php", "app/AppCache.php"]
+        "psr-4": {
+            "Persona\\Hris\\": "src/"
+        },
+        "classmap": [
+            "app/AppKernel.php",
+            "app/AppCache.php"
+        ]
     },
     "autoload-dev": {
-        "psr-4": { "Tests\\Persona\\Hris\\": "tests/" }
+        "psr-4": {
+            "Tests\\Persona\\Hris\\": "tests/"
+        }
     },
     "require": {
         "php": ">=7.1",
