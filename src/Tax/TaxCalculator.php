@@ -3,8 +3,6 @@
 namespace Persona\Hris\Tax;
 
 use Persona\Hris\Employee\Model\EmployeeInterface;
-use Persona\Hris\Salary\Model\AdditionalBenefitRepositoryInterface;
-use Persona\Hris\Salary\Model\EmployeeBenefitRepositoryInterface;
 use Persona\Hris\Salary\Model\PayrollDetailRepositoryInterface;
 use Persona\Hris\Salary\Model\PayrollInterface;
 use Persona\Hris\Tax\Formula\KawinIstriKerjaFormula;

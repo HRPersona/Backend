@@ -3,7 +3,6 @@
 namespace Persona\Hris\Repository\ORM;
 
 use Persona\Hris\Core\Manager\ManagerFactory;
-use Persona\Hris\Employee\Model\EmployeeInterface;
 use Persona\Hris\Repository\AbstractRepository;
 use Persona\Hris\Salary\Model\BenefitInterface;
 use Persona\Hris\Salary\Model\PayrollDetailInterface;

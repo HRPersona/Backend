@@ -21,8 +21,8 @@ interface EmployeeOvertimeHistoryRepositoryInterface extends RepositoryInterface
 
     /**
      * @param EmployeeInterface $employee
-     * @param int $year
-     * @param int $month
+     * @param int               $year
+     * @param int               $month
      *
      * @return bool
      */
