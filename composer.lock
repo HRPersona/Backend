@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "945bae5918c8cbf8d12c1b538e45a739",
+    "content-hash": "d407fc19bc5f51df27f0db974b690f03",
     "packages": [
         {
             "name": "ad3n/username",
@@ -1088,12 +1088,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "93c58bb4a87d3496ebdf2f7aed32db97d58c2001"
+                "reference": "3aff53eedf9b1c2cdf2d69b160cd0b5ee195dffa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/93c58bb4a87d3496ebdf2f7aed32db97d58c2001",
-                "reference": "93c58bb4a87d3496ebdf2f7aed32db97d58c2001",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/3aff53eedf9b1c2cdf2d69b160cd0b5ee195dffa",
+                "reference": "3aff53eedf9b1c2cdf2d69b160cd0b5ee195dffa",
                 "shasum": ""
             },
             "require": {
@@ -1157,7 +1157,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2017-07-24T13:27:20+00:00"
+            "time": "2017-07-28 16:47:18"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -2615,16 +2615,16 @@
         },
         {
             "name": "sensiolabs/security-checker",
-            "version": "v4.0.5",
+            "version": "v4.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/security-checker.git",
-                "reference": "6a3b0c3b42e41c777b1ad75032d8177863fdc5e1"
+                "reference": "cf61ce9d9706ba35e60a894fe6f3584c6d0e5c9f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/6a3b0c3b42e41c777b1ad75032d8177863fdc5e1",
-                "reference": "6a3b0c3b42e41c777b1ad75032d8177863fdc5e1",
+                "url": "https://api.github.com/repos/sensiolabs/security-checker/zipball/cf61ce9d9706ba35e60a894fe6f3584c6d0e5c9f",
+                "reference": "cf61ce9d9706ba35e60a894fe6f3584c6d0e5c9f",
                 "shasum": ""
             },
             "require": {
@@ -2637,7 +2637,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.0-dev"
+                    "dev-master": "4.1-dev"
                 }
             },
             "autoload": {
@@ -2656,7 +2656,7 @@
                 }
             ],
             "description": "A security checker for your composer.lock",
-            "time": "2017-07-24T11:42:56+00:00"
+            "time": "2017-07-28T18:31:05+00:00"
         },
         {
             "name": "snc/redis-bundle",

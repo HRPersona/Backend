@@ -1,4 +1,5 @@
 [![Build Status](https://travis-ci.org/HRPersona/Backend.svg?branch=master)](https://travis-ci.org/HRPersona/Backend)
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/2b379867-ea6b-4e03-b91c-391d6cb3ce21/mini.png)](https://insight.sensiolabs.com/projects/2b379867-ea6b-4e03-b91c-391d6cb3ce21)
 
 # Persona Human Resources Information System (Backend/API)
 

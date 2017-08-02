@@ -1,0 +1,10 @@
+php_version: 7.1
+
+rules:
+  symfony.web_config_should_not_be_present:
+    enabled: false
+  symfony.application_not_bootable:
+    enabled: false
+
+php_ini: |
+  extension=redis.so
