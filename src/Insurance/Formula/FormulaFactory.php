@@ -8,15 +8,15 @@ namespace Persona\Hris\Insurance\Formula;
 final class FormulaFactory
 {
     /**
-     * @var Formula[]
+     * @var FormulaInterface[]
      */
     private $formulas = [];
 
     /**
      * @param string  $formulaId
-     * @param Formula $formula
+     * @param FormulaInterface $formula
      */
-    public function addFormula(string $formulaId, Formula $formula): void
+    public function addFormula(string $formulaId, FormulaInterface $formula): void
     {
         $this->formulas[$formulaId] = $formula;
     }
@@ -24,9 +24,9 @@ final class FormulaFactory
     /**
      * @param string $formulaId
      *
-     * @return Formula
+     * @return FormulaInterface
      */
-    public function getFormula(string $formulaId): Formula
+    public function getFormula(string $formulaId): FormulaInterface
     {
         if (array_key_exists($formulaId, $this->formulas)) {
             throw new \InvalidArgumentException(sprintf('Formula with id %s is not found.', $formulaId));

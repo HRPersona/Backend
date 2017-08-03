@@ -11,7 +11,7 @@ use Persona\Hris\Salary\Model\EmployeeBenefitRepositoryInterface;
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-final class Formula
+class Formula implements FormulaInterface
 {
     /**
      * @var EmployeeBenefitRepositoryInterface

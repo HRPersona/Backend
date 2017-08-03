@@ -6,6 +6,7 @@ use Persona\Hris\DependencyInjection\Compiler\ClearDeserializeRequestTagPass;
 use Persona\Hris\DependencyInjection\Compiler\DoctrineQueryExtensionPass;
 use Persona\Hris\DependencyInjection\Compiler\ExcludeAuthorizationPass;
 use Persona\Hris\DependencyInjection\Compiler\ExcludeLoggingPass;
+use Persona\Hris\DependencyInjection\Compiler\FormulaPass;
 use Persona\Hris\DependencyInjection\Compiler\PathResolverPass;
 use Persona\Hris\DependencyInjection\PersonaHrisExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -26,6 +27,7 @@ class PersonaHrisBundle extends Bundle
         $container->addCompilerPass(new PathResolverPass());
         $container->addCompilerPass(new ExcludeAuthorizationPass());
         $container->addCompilerPass(new ExcludeLoggingPass());
+        $container->addCompilerPass(new FormulaPass());
     }
 
     public function getContainerExtension()

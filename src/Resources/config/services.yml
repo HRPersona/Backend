@@ -134,7 +134,40 @@ services:
         class: 'Persona\Hris\Tax\TaxCalculator'
         arguments:
             - '@persona.repository.orm.payroll_detail_repository'
-            
+
+    persona.insurance.formula_factory:
+        class: 'Persona\Hris\Insurance\Formula\FormulaFactory'
+
+    persona.insurance.formula.jht.employee_cost:
+        class: 'Persona\Hris\Insurance\Formula\Jht\EmployeeCost'
+
+    persona.insurance.formula.jht.company_cost:
+        class: 'Persona\Hris\Insurance\Formula\Jht\CompanyCost'
+
+    persona.insurance.formula.jp.employee_cost:
+        class: 'Persona\Hris\Insurance\Formula\Jp\EmployeeCost'
+
+    persona.insurance.formula.jp.company_cost:
+        class: 'Persona\Hris\Insurance\Formula\Jp\CompanyCost'
+
+    persona.insurance.formula.jht_formula:
+        class: 'Persona\Hris\Insurance\Formula\Formula'
+        arguments:
+            - '@persona.repository.orm.employee_benefit_repository'
+            - '@persona.insurance.formula.jht.employee_cost'
+            - '@persona.insurance.formula.jht.company_cost'
+        tags:
+            - { name: persona.insurance_formula }
+
+    persona.insurance.formula.jp_formula:
+        class: 'Persona\Hris\Insurance\Formula\Formula'
+        arguments:
+            - '@persona.repository.orm.employee_benefit_repository'
+            - '@persona.insurance.formula.jp.employee_cost'
+            - '@persona.insurance.formula.jp.company_cost'
+        tags:
+            - { name: persona.insurance_formula }
+
     ad3n.username.generator_factory:
         class: 'Ihsan\UsernameGenerator\UsernameFactory'
         arguments:
