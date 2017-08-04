@@ -29,7 +29,6 @@ services:
         arguments:
             - '@persona.manager.manager_factory'
             - []
-            - '%persona.cache.query_result_lifetime%'
         public: false
         tags:
             -  { name: 'api_platform.collection_data_provider', priority: 3 }
@@ -41,7 +40,6 @@ services:
             - '@api_platform.metadata.property.name_collection_factory'
             - '@api_platform.doctrine.orm.metadata.property.metadata_factory'
             - []
-            - '%persona.cache.query_result_lifetime%'
         public: false
         tags:
             -  { name: 'api_platform.item_data_provider', priority: 3 }

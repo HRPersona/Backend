@@ -24,20 +24,13 @@ final class ResponseModificationSubscriber implements EventSubscriberInterface
     private $tokenStorage;
 
     /**
-     * @var int
-     */
-    private $cacheLifetime;
-
-    /**
      * @param KernelInterface       $kernel
      * @param TokenStorageInterface $tokenStorage
-     * @param int                   $cacheLifetime
      */
-    public function __construct(KernelInterface $kernel, TokenStorageInterface $tokenStorage, int $cacheLifetime = 0)
+    public function __construct(KernelInterface $kernel, TokenStorageInterface $tokenStorage)
     {
         $this->kernel = $kernel;
         $this->tokenStorage = $tokenStorage;
-        $this->cacheLifetime = $cacheLifetime;
     }
 
     /**
@@ -45,20 +38,7 @@ final class ResponseModificationSubscriber implements EventSubscriberInterface
      */
     public function onKernelResponse(FilterResponseEvent $event)
     {
-        $request = $event->getRequest();
-        $response = $event->getResponse();
-
-        if ($request->isMethod('GET')) {
-            $key = __CLASS__;
-            if ($token = $this->tokenStorage->getToken()) {
-                $key = $token->getUsername();
-            }
-
-            $response->setSharedMaxAge($this->cacheLifetime);
-            $response->setEtag(sha1(sprintf('%s:%s', $key, $response->getContent())));
-        }
-
-        $response->headers->set('X-Backend', gethostbyname(php_uname('n')));
+        $event->getResponse()->headers->set('X-Backend', gethostbyname(php_uname('n')));
     }
 
     /**

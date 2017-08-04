@@ -43,8 +43,6 @@ final class PersonaHrisExtension extends Extension
 
         $container->setParameter(sprintf('%s.default_password', Configuration::ALIAS), $config['default_password']);
         $container->setParameter(sprintf('%s.upload_dir', Configuration::ALIAS), $config['upload_dir']);
-        $container->setParameter(sprintf('%s.cache.query_result_lifetime', Configuration::ALIAS), $config['cache_lifetime']['result_lifetime']);
-        $container->setParameter(sprintf('%s.cache.response_lifetime', Configuration::ALIAS), $config['cache_lifetime']['response_lifetime']);
     }
 
     public function getAlias()

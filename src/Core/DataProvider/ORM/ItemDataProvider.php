@@ -41,29 +41,21 @@ final class ItemDataProvider extends AbstractDataProvider implements ItemDataPro
     private $itemExtensions;
 
     /**
-     * @var int
-     */
-    private $cacheLifetime;
-
-    /**
      * @param ManagerFactory                         $managerFactory
      * @param PropertyNameCollectionFactoryInterface $propertyNameCollectionFactory
      * @param PropertyMetadataFactoryInterface       $propertyMetadataFactory
      * @param QueryItemExtensionInterface[]          $itemExtensions
-     * @param int                                    $cacheLifetime
      */
     public function __construct(
         ManagerFactory $managerFactory,
         PropertyNameCollectionFactoryInterface $propertyNameCollectionFactory,
         PropertyMetadataFactoryInterface $propertyMetadataFactory,
-        array $itemExtensions = [],
-        $cacheLifetime = 0
+        array $itemExtensions = []
     ) {
         $this->managerFactory = $managerFactory;
         $this->propertyNameCollectionFactory = $propertyNameCollectionFactory;
         $this->propertyMetadataFactory = $propertyMetadataFactory;
         $this->itemExtensions = $itemExtensions;
-        $this->cacheLifetime = $cacheLifetime;
     }
 
     /**

@@ -26,20 +26,13 @@ final class CollectionDataProvider extends AbstractDataProvider implements Colle
     private $collectionExtensions;
 
     /**
-     * @var int
-     */
-    private $cacheLifetime;
-
-    /**
      * @param ManagerFactory                      $managerFactory
      * @param QueryCollectionExtensionInterface[] $collectionExtensions
-     * @param int                                 $cacheLifetime
      */
-    public function __construct(ManagerFactory $managerFactory, array $collectionExtensions = [], $cacheLifetime = 0)
+    public function __construct(ManagerFactory $managerFactory, array $collectionExtensions = [])
     {
         $this->managerFactory = $managerFactory;
         $this->collectionExtensions = $collectionExtensions;
-        $this->cacheLifetime = $cacheLifetime;
     }
 
     /**

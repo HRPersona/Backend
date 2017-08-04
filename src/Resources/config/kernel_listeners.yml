@@ -4,7 +4,6 @@ services:
         arguments:
             - '@kernel'
             - '@security.token_storage'
-            - '%persona.cache.response_lifetime%'
         tags:
             - { name: 'kernel.event_subscriber' }
 

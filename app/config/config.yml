@@ -238,6 +238,3 @@ lexik_jwt_authentication:
 persona:
     default_password: '654321'
     upload_dir: '/tmp/uploads'
-    cache_lifetime:
-        result_lifetime: 1
-        response_lifetime: 1
