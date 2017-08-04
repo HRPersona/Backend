@@ -4,14 +4,14 @@ namespace Persona\Hris\Repository\ORM;
 
 use Persona\Hris\Core\Manager\ManagerFactory;
 use Persona\Hris\Employee\Model\EmployeeInterface;
-use Persona\Hris\Repository\AbstractCachableRepository;
+use Persona\Hris\Repository\AbstractRepository;
 use Persona\Hris\Salary\Model\BenefitInterface;
 use Persona\Hris\Salary\Model\EmployeeBenefitRepositoryInterface;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-final class EmployeeBenefitRepository extends AbstractCachableRepository implements EmployeeBenefitRepositoryInterface
+final class EmployeeBenefitRepository extends AbstractRepository implements EmployeeBenefitRepositoryInterface
 {
     /**
      * @var string

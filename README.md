@@ -66,7 +66,7 @@ yang fokus pada regulasi perundangan yang berlaku di Indonesia.
 
 - Limit day per leave
 - Leave Adjustment
-- Remove All Query and Result Cache, Use Response Cache Only Instaed
+- Remove All Query and Result Cache, Use Response Cache Only Instaed - Done
 - Create subscriber for Overtime base on real case - Done
 - Taxing (perpajakan) - Done
 - Inactivating others appraisal period when one other is active - Done

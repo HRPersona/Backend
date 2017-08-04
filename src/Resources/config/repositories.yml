@@ -1,24 +1,18 @@
 services:
     persona.repository.orm.client_repository:
         class: 'Persona\Hris\Repository\ORM\ClientRepository'
-        calls:
-            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\Client'
             
     persona.repository.orm.module_repository:
         class: 'Persona\Hris\Repository\ORM\ModuleRepository'
-        calls:
-            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\Module'
             
     persona.repository.orm.role_hierarchy_repository:
         class: 'Persona\Hris\Repository\ORM\RoleHierarchyRepository'
-        calls:
-            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
         arguments:
             - '@persona.repository.orm.role_repository'
             - '@security.token_storage'
@@ -33,80 +27,60 @@ services:
             
     persona.repository.orm.user_repository:
         class: 'Persona\Hris\Repository\ORM\UserRepository'
-        calls:
-            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\User'
 
     persona.repository.orm.employee_absent_repository:
         class: 'Persona\Hris\Repository\ORM\EmployeeAbsentRepository'
-        calls:
-            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\EmployeeAbsent'
 
     persona.repository.orm.employee_attendance_repository:
         class: 'Persona\Hris\Repository\ORM\EmployeeAttendanceRepository'
-        calls:
-            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\EmployeeAttendance'
 
     persona.repository.orm.holiday_repository:
         class: 'Persona\Hris\Repository\ORM\HolidayRepository'
-        calls:
-            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\Holiday'
 
     persona.repository.orm.employee_overtime_repository:
         class: 'Persona\Hris\Repository\ORM\EmployeeOvertimeRepository'
-        calls:
-            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\EmployeeOvertime'
 
     persona.repository.orm.employee_shiftment_repository:
         class: 'Persona\Hris\Repository\ORM\EmployeeShiftmentRepository'
-        calls:
-            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\EmployeeShiftment'
 
     persona.repository.orm.employee_additional_benefit_repository:
         class: 'Persona\Hris\Repository\ORM\AdditionalBenefitRepository'
-        calls:
-            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\EmployeeAdditionalBenefit'
 
     persona.repository.orm.employee_benefit_repository:
         class: 'Persona\Hris\Repository\ORM\EmployeeBenefitRepository'
-        calls:
-            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\EmployeeBenefit'
 
     persona.repository.orm.employee_repository:
         class: 'Persona\Hris\Repository\ORM\EmployeeRepository'
-        calls:
-            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\Employee'
 
     persona.repository.orm.employee_overtime_history_repository:
         class: 'Persona\Hris\Repository\ORM\EmployeeOvertimeHistoryRepository'
-        calls:
-            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\OvertimeHistory'
@@ -119,8 +93,6 @@ services:
 
     persona.repository.orm.appraisal_period_repository:
         class: 'Persona\Hris\Repository\ORM\AppraisalPeriodRepository'
-        calls:
-            - ['setCacheLifetime', ['%persona.cache.query_result_lifetime%']]
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\AppraisalPeriod'

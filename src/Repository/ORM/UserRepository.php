@@ -9,12 +9,12 @@ use Ihsan\UsernameGenerator\Repository\UsernameRepositoryInterface;
 use Persona\Hris\Core\Manager\ManagerFactory;
 use Persona\Hris\Core\Security\Model\UserInterface;
 use Persona\Hris\Core\Security\Model\UserRepositoryInterface;
-use Persona\Hris\Repository\AbstractCachableRepository;
+use Persona\Hris\Repository\AbstractRepository;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-final class UserRepository extends AbstractCachableRepository implements UserRepositoryInterface, UsernameRepositoryInterface
+final class UserRepository extends AbstractRepository implements UserRepositoryInterface, UsernameRepositoryInterface
 {
     /**
      * @var string

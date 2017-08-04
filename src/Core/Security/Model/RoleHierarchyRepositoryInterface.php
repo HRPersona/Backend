@@ -2,13 +2,13 @@
 
 namespace Persona\Hris\Core\Security\Model;
 
-use Persona\Hris\Repository\CachableRepositoryInterface;
+use Persona\Hris\Repository\RepositoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-interface RoleHierarchyRepositoryInterface extends CachableRepositoryInterface
+interface RoleHierarchyRepositoryInterface extends RepositoryInterface
 {
     /**
      * @return array

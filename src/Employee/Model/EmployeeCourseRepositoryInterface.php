@@ -3,12 +3,12 @@
 namespace Persona\Hris\Employee\Model;
 
 use Persona\Hris\Course\Model\CourseInterface;
-use Persona\Hris\Repository\CachableRepositoryInterface;
+use Persona\Hris\Repository\RepositoryInterface;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-interface EmployeeCourseRepositoryInterface extends CachableRepositoryInterface
+interface EmployeeCourseRepositoryInterface extends RepositoryInterface
 {
     /**
      * @param EmployeeInterface $employee

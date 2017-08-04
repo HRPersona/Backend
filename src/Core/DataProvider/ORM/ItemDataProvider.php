@@ -102,9 +102,7 @@ final class ItemDataProvider extends AbstractDataProvider implements ItemDataPro
             }
         }
 
-        $query = $queryBuilder->getQuery();
-
-        return $query->getOneOrNullResult();
+        return $queryBuilder->getQuery()->getOneOrNullResult();
     }
 
     /**

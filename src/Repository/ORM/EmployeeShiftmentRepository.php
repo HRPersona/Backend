@@ -6,12 +6,12 @@ use Persona\Hris\Attendance\Model\EmployeeShiftmentInterface;
 use Persona\Hris\Attendance\Model\EmployeeShiftmentRepositoryInterface;
 use Persona\Hris\Core\Manager\ManagerFactory;
 use Persona\Hris\Employee\Model\EmployeeInterface;
-use Persona\Hris\Repository\AbstractCachableRepository;
+use Persona\Hris\Repository\AbstractRepository;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-final class EmployeeShiftmentRepository extends AbstractCachableRepository implements EmployeeShiftmentRepositoryInterface
+final class EmployeeShiftmentRepository extends AbstractRepository implements EmployeeShiftmentRepositoryInterface
 {
     /**
      * @var string
@@ -36,17 +36,8 @@ final class EmployeeShiftmentRepository extends AbstractCachableRepository imple
      */
     public function isTimeOff(EmployeeInterface $employee, \DateTime $shiftmentDate): bool
     {
-        $cache = $this->getCacheDriver();
-        $cacheId = sprintf('%s_%s_%s', $this->class, $employee->getId(), $shiftmentDate->format('Ymd'));
-        if ($cache->contains($cacheId)) {
-            $data = $cache->fetch($cacheId);
-            $this->managerFactory->merge([$data]);
-        } else {
-            /** @var EmployeeShiftmentInterface $data */
-            $data = $this->managerFactory->getWriteManager()->getRepository($this->class)->findOneBy(['employee' => $employee, 'absentDate' => $shiftmentDate, 'deletedAt' => null]);
-            $cache->save($cacheId, $data, $this->getCacheLifetime());
-        }
-
+        /** @var EmployeeShiftmentInterface $data */
+        $data = $this->managerFactory->getWriteManager()->getRepository($this->class)->findOneBy(['employee' => $employee, 'absentDate' => $shiftmentDate, 'deletedAt' => null]);
         if (!$data) {
             return true;
         }

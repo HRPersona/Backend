@@ -5,12 +5,12 @@ namespace Persona\Hris\Repository\ORM;
 use Persona\Hris\Core\Client\ClientInterface;
 use Persona\Hris\Core\Client\ClientRepositoryInterface;
 use Persona\Hris\Core\Manager\ManagerFactory;
-use Persona\Hris\Repository\AbstractCachableRepository;
+use Persona\Hris\Repository\AbstractRepository;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-final class ClientRepository extends AbstractCachableRepository implements ClientRepositoryInterface
+final class ClientRepository extends AbstractRepository implements ClientRepositoryInterface
 {
     /**
      * @var string
@@ -34,16 +34,6 @@ final class ClientRepository extends AbstractCachableRepository implements Clien
      */
     public function findByApiKey(string $apiKey)
     {
-        $cache = $this->getCacheDriver();
-        $cacheId = sprintf('%s_%s', $this->class, $apiKey);
-        if ($cache->contains($cacheId)) {
-            $data = $cache->fetch($cacheId);
-            $this->managerFactory->merge([$data]);
-        } else {
-            $data = $this->managerFactory->getReadManager()->getRepository($this->class)->findOneBy(['apiKey' => $apiKey, 'deletedAt' => null]);
-            $cache->save($cacheId, $data, $this->getCacheLifetime());
-        }
-
-        return $data;
+        return $this->managerFactory->getReadManager()->getRepository($this->class)->findOneBy(['apiKey' => $apiKey, 'deletedAt' => null]);
     }
 }

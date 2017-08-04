@@ -3,12 +3,12 @@
 namespace Persona\Hris\Attendance\Model;
 
 use Persona\Hris\Employee\Model\EmployeeInterface;
-use Persona\Hris\Repository\CachableRepositoryInterface;
+use Persona\Hris\Repository\RepositoryInterface;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-interface EmployeeAbsentRepositoryInterface extends CachableRepositoryInterface
+interface EmployeeAbsentRepositoryInterface extends RepositoryInterface
 {
     /**
      * When record is not found then create new object.

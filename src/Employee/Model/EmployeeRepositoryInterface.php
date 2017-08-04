@@ -2,12 +2,12 @@
 
 namespace Persona\Hris\Employee\Model;
 
-use Persona\Hris\Repository\CachableRepositoryInterface;
+use Persona\Hris\Repository\RepositoryInterface;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-interface EmployeeRepositoryInterface extends CachableRepositoryInterface
+interface EmployeeRepositoryInterface extends RepositoryInterface
 {
     /**
      * @return array

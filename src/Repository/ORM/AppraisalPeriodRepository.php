@@ -6,12 +6,12 @@ use Doctrine\ORM\EntityRepository;
 use Persona\Hris\Core\Manager\ManagerFactory;
 use Persona\Hris\Performance\Model\AppraisalPeriodInterface;
 use Persona\Hris\Performance\Model\AppraisalPeriodRepositoryInterface;
-use Persona\Hris\Repository\AbstractCachableRepository;
+use Persona\Hris\Repository\AbstractRepository;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-final class AppraisalPeriodRepository extends AbstractCachableRepository implements AppraisalPeriodRepositoryInterface
+final class AppraisalPeriodRepository extends AbstractRepository implements AppraisalPeriodRepositoryInterface
 {
     /**
      * @var string

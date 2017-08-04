@@ -6,12 +6,12 @@ use Persona\Hris\Attendance\Model\EmployeeAttendanceInterface;
 use Persona\Hris\Attendance\Model\EmployeeAttendanceRepositoryInterface;
 use Persona\Hris\Core\Manager\ManagerFactory;
 use Persona\Hris\Employee\Model\EmployeeInterface;
-use Persona\Hris\Repository\AbstractCachableRepository;
+use Persona\Hris\Repository\AbstractRepository;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-final class EmployeeAttendanceRepository extends AbstractCachableRepository implements EmployeeAttendanceRepositoryInterface
+final class EmployeeAttendanceRepository extends AbstractRepository implements EmployeeAttendanceRepositoryInterface
 {
     /**
      * @var string
@@ -38,17 +38,8 @@ final class EmployeeAttendanceRepository extends AbstractCachableRepository impl
      */
     public function findByEmployeeAndDate(EmployeeInterface $employee, \DateTime $attendanceDate): EmployeeAttendanceInterface
     {
-        $cache = $this->getCacheDriver();
-        $cacheId = sprintf('%s_%s_%s', $this->class, $employee->getId(), $attendanceDate->format('Ymd'));
-        if ($cache->contains($cacheId)) {
-            $data = $cache->fetch($cacheId);
-            $this->managerFactory->merge([$data]);
-        } else {
-            /** @var EmployeeAttendanceInterface $data */
-            $data = $this->managerFactory->getWriteManager()->getRepository($this->class)->findOneBy(['employee' => $employee, 'absentDate' => $attendanceDate, 'deletedAt' => null]);
-            $cache->save($cacheId, $data, $this->getCacheLifetime());
-        }
-
+        /** @var EmployeeAttendanceInterface $data */
+        $data = $this->managerFactory->getWriteManager()->getRepository($this->class)->findOneBy(['employee' => $employee, 'absentDate' => $attendanceDate, 'deletedAt' => null]);
         if (!$data) {
             $data = new $this->class();
             $data->setEmployee($employee);

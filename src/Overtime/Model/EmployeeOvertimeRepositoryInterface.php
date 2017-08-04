@@ -3,12 +3,12 @@
 namespace Persona\Hris\Overtime\Model;
 
 use Persona\Hris\Employee\Model\EmployeeInterface;
-use Persona\Hris\Repository\CachableRepositoryInterface;
+use Persona\Hris\Repository\RepositoryInterface;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-interface EmployeeOvertimeRepositoryInterface extends CachableRepositoryInterface
+interface EmployeeOvertimeRepositoryInterface extends RepositoryInterface
 {
     /**
      * @param \DateTime         $date

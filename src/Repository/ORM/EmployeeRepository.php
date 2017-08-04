@@ -5,12 +5,12 @@ namespace Persona\Hris\Repository\ORM;
 use Persona\Hris\Core\Manager\ManagerFactory;
 use Persona\Hris\Employee\Model\EmployeeInterface;
 use Persona\Hris\Employee\Model\EmployeeRepositoryInterface;
-use Persona\Hris\Repository\AbstractCachableRepository;
+use Persona\Hris\Repository\AbstractRepository;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-final class EmployeeRepository extends AbstractCachableRepository implements EmployeeRepositoryInterface
+final class EmployeeRepository extends AbstractRepository implements EmployeeRepositoryInterface
 {
     /**
      * @var string
@@ -32,17 +32,7 @@ final class EmployeeRepository extends AbstractCachableRepository implements Emp
      */
     public function findActiveEmployee(): array
     {
-        $cache = $this->getCacheDriver();
-        $cacheId = sprintf('%s_%s', $this->class, 'active');
-        if ($cache->contains($cacheId)) {
-            $data = $cache->fetch($cacheId);
-            $this->managerFactory->merge([$data]);
-        } else {
-            $data = $this->managerFactory->getWriteManager()->getRepository($this->class)->findBy(['resign' => false, 'deletedAt' => null]);
-            $cache->save($cacheId, $data, $this->getCacheLifetime());
-        }
-
-        return $data;
+        return $this->managerFactory->getWriteManager()->getRepository($this->class)->findBy(['resign' => false, 'deletedAt' => null]);
     }
 
     /**
@@ -52,16 +42,6 @@ final class EmployeeRepository extends AbstractCachableRepository implements Emp
      */
     public function find(string $id): ? EmployeeInterface
     {
-        $cache = $this->getCacheDriver();
-        $cacheId = sprintf('%s_%s', $this->class, $id);
-        if ($cache->contains($cacheId)) {
-            $data = $cache->fetch($cacheId);
-            $this->managerFactory->merge([$data]);
-        } else {
-            $data = $this->managerFactory->getWriteManager()->getRepository($this->class)->find($id);
-            $cache->save($cacheId, $data, $this->getCacheLifetime());
-        }
-
-        return $data;
+        return $this->managerFactory->getWriteManager()->getRepository($this->class)->find($id);
     }
 }

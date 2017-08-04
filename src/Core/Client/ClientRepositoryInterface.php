@@ -2,12 +2,12 @@
 
 namespace Persona\Hris\Core\Client;
 
-use Persona\Hris\Repository\CachableRepositoryInterface;
+use Persona\Hris\Repository\RepositoryInterface;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-interface ClientRepositoryInterface extends CachableRepositoryInterface
+interface ClientRepositoryInterface extends RepositoryInterface
 {
     public function findByApiKey(string $apiKey);
 }

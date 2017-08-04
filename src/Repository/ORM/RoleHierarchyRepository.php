@@ -8,14 +8,14 @@ use Persona\Hris\Core\Security\Model\RoleHierarchyRepositoryInterface;
 use Persona\Hris\Core\Security\Model\RoleInterface;
 use Persona\Hris\Core\Security\Model\RoleRepositoryInterface;
 use Persona\Hris\Core\Security\Model\UserInterface;
-use Persona\Hris\Repository\AbstractCachableRepository;
+use Persona\Hris\Repository\AbstractRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-final class RoleHierarchyRepository extends AbstractCachableRepository implements RoleHierarchyRepositoryInterface
+final class RoleHierarchyRepository extends AbstractRepository implements RoleHierarchyRepositoryInterface
 {
     const VIEW = 'GET';
     const WRITE = 'POST';
@@ -60,17 +60,8 @@ final class RoleHierarchyRepository extends AbstractCachableRepository implement
      */
     public function mapRoles(): array
     {
-        $cache = $this->getCacheDriver();
-        $cacheId = sprintf('%s_%s', $this->class, 'all');
-        if ($cache->contains($cacheId)) {
-            $data = $cache->fetch($cacheId);
-            $this->managerFactory->merge($data);
-        } else {
-            $data = $this->managerFactory->getReadManager()->getRepository($this->class)->findBy(['deletedAt' => null]);
-            $cache->save($cacheId, $data, $this->getCacheLifetime());
-        }
-
         $roles = [];
+        $data = $this->managerFactory->getReadManager()->getRepository($this->class)->findBy(['deletedAt' => null]);
         foreach ($data as $user) {
             if (!$user instanceof UserInterface) {
                 break;
@@ -81,15 +72,7 @@ final class RoleHierarchyRepository extends AbstractCachableRepository implement
                 $roles[sprintf('ROLE_%s', $userRole[0])] = [];
             }
 
-            $cacheId = sprintf('%s_%s', get_class($user), $user->getUsername());
-            if ($cache->contains($cacheId)) {
-                $r = $cache->fetch($cacheId);
-                $this->managerFactory->merge($r);
-            } else {
-                $r = $this->managerFactory->getReadManager()->getRepository('Persona\HrisBundle:Role')->findBy(['user' => $user, 'deletedAt' => null]);
-                $cache->save($cacheId, $r, 3);
-            }
-
+            $r = $this->managerFactory->getReadManager()->getRepository('Persona\HrisBundle:Role')->findBy(['user' => $user, 'deletedAt' => null]);
             /** @var RoleInterface $item */
             foreach ($r as $item) {
                 if ($item->getAddable()) {

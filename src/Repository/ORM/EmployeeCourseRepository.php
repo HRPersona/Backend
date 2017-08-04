@@ -7,12 +7,12 @@ use Persona\Hris\Course\Model\CourseInterface;
 use Persona\Hris\Employee\Model\EmployeeCourseInterface;
 use Persona\Hris\Employee\Model\EmployeeCourseRepositoryInterface;
 use Persona\Hris\Employee\Model\EmployeeInterface;
-use Persona\Hris\Repository\AbstractCachableRepository;
+use Persona\Hris\Repository\AbstractRepository;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-final class EmployeeCourseRepository extends AbstractCachableRepository implements EmployeeCourseRepositoryInterface
+final class EmployeeCourseRepository extends AbstractRepository implements EmployeeCourseRepositoryInterface
 {
     /**
      * @var string
@@ -53,20 +53,10 @@ final class EmployeeCourseRepository extends AbstractCachableRepository implemen
      */
     public function findByEmployeeCourse(EmployeeInterface $employee, CourseInterface $course): ? EmployeeCourseInterface
     {
-        $cache = $this->getCacheDriver();
-        $cacheId = sprintf('%s_%s_%s', $this->class, $employee->getId(), $course->getId());
-        if ($cache->contains($cacheId)) {
-            $data = $cache->fetch($cacheId);
-            $this->managerFactory->merge([$data]);
-        } else {
-            $data = $this->managerFactory->getReadManager()->getRepository($this->class)->findOneBy([
-                'employee' => $employee,
-                'course' => $course,
-                'deletedAt' => null,
-            ]);
-            $cache->save($cacheId, $data, $this->getCacheLifetime());
-        }
-
-        return $data;
+        return $this->managerFactory->getReadManager()->getRepository($this->class)->findOneBy([
+            'employee' => $employee,
+            'course' => $course,
+            'deletedAt' => null,
+        ]);
     }
 }

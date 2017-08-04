@@ -67,10 +67,6 @@ final class CollectionDataProvider extends AbstractDataProvider implements Colle
             }
         }
 
-        $query = $queryBuilder->getQuery();
-
-        $result = $query->getResult();
-
-        return $result;
+        return $queryBuilder->getQuery()->getResult();
     }
 }
