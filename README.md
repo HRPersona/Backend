@@ -56,6 +56,7 @@ yang fokus pada regulasi perundangan yang berlaku di Indonesia.
 * ja = job allocation
 * lv = leave
 * og = organization
+* in = insurance
 * tx = tax
 * c = core
 * s = shared
@@ -65,6 +66,7 @@ yang fokus pada regulasi perundangan yang berlaku di Indonesia.
 
 - Limit day per leave
 - Leave Adjustment
+- Remove All Query and Result Cache, Use Response Cache Only Instaed
 - Create subscriber for Overtime base on real case - Done
 - Taxing (perpajakan) - Done
 - Inactivating others appraisal period when one other is active - Done

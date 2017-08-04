@@ -25,14 +25,14 @@ interface InsuranceHistoryInterface
     public function setEmployee(EmployeeInterface $employee = null): void;
 
     /**
-     * @return string
+     * @return int
      */
-    public function getInsuranceYear(): string;
+    public function getInsuranceYear(): int;
 
     /**
-     * @return string
+     * @return int
      */
-    public function getInsuranceMonth(): string;
+    public function getInsuranceMonth(): int;
 
     /**
      * @return float

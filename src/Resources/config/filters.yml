@@ -74,6 +74,11 @@ services:
         parent:    'api_platform.doctrine.orm.search_filter'
         arguments: [ { email: 'partial' } ]
         tags:      [ { name: 'api_platform.filter', id: 'email.search' } ]
+
+    persona.filter.formula_id_search:
+        parent:    'api_platform.doctrine.orm.search_filter'
+        arguments: [ { formulaId: 'partial' } ]
+        tags:      [ { name: 'api_platform.filter', id: 'formula.search' } ]
             
     persona.filter.year_search:
         parent:    'api_platform.doctrine.orm.search_filter'
