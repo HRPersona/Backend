@@ -124,7 +124,7 @@ class Insurance implements InsuranceInterface, ActionLoggerAwareInterface
     /**
      * @return BenefitInterface
      */
-    public function getMinusBenefit():? BenefitInterface
+    public function getMinusBenefit(): ? BenefitInterface
     {
         return $this->minusBenefit;
     }

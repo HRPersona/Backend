@@ -3,12 +3,14 @@
 namespace Persona\Hris\Core\Security\Subscriber;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
+use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTExpiredEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Persona\Hris\Core\Manager\ManagerFactory;
 use Persona\Hris\Core\Security\Model\UserInterface;
 use Persona\Hris\Core\Security\Model\UserRepositoryInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
@@ -26,6 +28,11 @@ final class UserSessionSubscriber implements EventSubscriberInterface
     private $session;
 
     /**
+     * @var RequestStack
+     */
+    private $requestStack;
+
+    /**
      * @var UserRepositoryInterface
      */
     private $userRepository;
@@ -41,21 +48,26 @@ final class UserSessionSubscriber implements EventSubscriberInterface
     private $kernel;
 
     /**
+     * UserSessionSubscriber constructor.
+     *
      * @param KernelInterface         $kernel
      * @param ManagerFactory          $managerFactory
      * @param UserRepositoryInterface $userRepository
      * @param SessionInterface        $session
+     * @param RequestStack            $requestStack
      */
     public function __construct(
         KernelInterface $kernel,
         ManagerFactory $managerFactory,
         UserRepositoryInterface $userRepository,
-        SessionInterface $session
+        SessionInterface $session,
+        RequestStack $requestStack
     ) {
         $this->kernel = $kernel;
         $this->managerFactory = $managerFactory;
         $this->userRepository = $userRepository;
         $this->session = $session;
+        $this->requestStack = $requestStack;
     }
 
     /**
@@ -119,6 +131,25 @@ final class UserSessionSubscriber implements EventSubscriberInterface
     }
 
     /**
+     * @param JWTCreatedEvent $event
+     */
+    public function createToken(JWTCreatedEvent $event)
+    {
+        $expiration = new \DateTime();
+        if ($this->requestStack->getCurrentRequest()->get('_remember_me')) {
+            $interval = new \DateInterval('P1M7DT7H9M17S');
+        } else {
+            $interval = new \DateInterval('PT7H9M17S');
+        }
+        $expiration->add($interval);
+
+        $payload = $event->getData();
+        $payload['exp'] = $expiration->getTimestamp();
+
+        $event->setData($payload);
+    }
+
+    /**
      * @return array
      */
     public static function getSubscribedEvents()
@@ -126,6 +157,7 @@ final class UserSessionSubscriber implements EventSubscriberInterface
         return [
             Events::AUTHENTICATION_SUCCESS => ['startSession', 1],
             Events::JWT_EXPIRED => ['resetSession', 1],
+            Events::JWT_CREATED => ['createToken', 1],
             SecurityEvents::INTERACTIVE_LOGIN => ['checkSession', 1],
         ];
     }

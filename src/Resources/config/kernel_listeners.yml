@@ -56,5 +56,6 @@ services:
             - '@persona.manager.manager_factory'
             - '@persona.repository.orm.user_repository'
             - '@session'
+            - '@request_stack'
         tags:
             - { name: 'kernel.event_subscriber' }

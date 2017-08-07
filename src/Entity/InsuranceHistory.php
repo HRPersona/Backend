@@ -14,7 +14,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="in_nsurance_histories")
+ * @ORM\Table(name="in_insurance_histories")
  *
  * @ApiResource(
  *     attributes={

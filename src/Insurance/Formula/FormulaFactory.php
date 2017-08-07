@@ -13,7 +13,7 @@ final class FormulaFactory
     private $formulas = [];
 
     /**
-     * @param string  $formulaId
+     * @param string           $formulaId
      * @param FormulaInterface $formula
      */
     public function addFormula(string $formulaId, FormulaInterface $formula): void

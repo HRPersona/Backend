@@ -11,7 +11,7 @@ use Persona\Hris\Insurance\Model\InsuranceInterface;
 interface FormulaInterface
 {
     /**
-     * @param EmployeeInterface $employee
+     * @param EmployeeInterface  $employee
      * @param InsuranceInterface $insurance
      */
     public function calculate(EmployeeInterface $employee, InsuranceInterface $insurance): void;
