@@ -58,7 +58,8 @@ final class EmployeeAbsentSubscriber implements EventSubscriber
      */
     private function absentModication(EmployeeLeaveInterface $employeeLeave): void
     {
-        for ($i = 0; $i < $employeeLeave->getLeaveDay(); ++$i) {
+        $leaveDay = $employeeLeave->getLeaveDay();
+        for ($i = 0; $i < $leaveDay; ++$i) {
             $leaveDate = $employeeLeave->getLeaveDate()->add(new \DateInterval(sprintf('P%sD', $i)));
 
             $employeeAbsent = $this->absentRepository->findByEmployeeAndDate($employeeLeave->getEmployee(), $leaveDate);

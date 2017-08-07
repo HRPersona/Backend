@@ -3,9 +3,9 @@
 namespace Persona\Hris\Core\Logger;
 
 use Doctrine\Common\EventSubscriber;
-use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
+use Doctrine\ORM\UnitOfWork;
 use Persona\Hris\Core\Client\ClientInterface;
 use Persona\Hris\Core\Client\ClientRepositoryInterface;
 use Persona\Hris\Core\Manager\ManagerFactory;
@@ -164,7 +164,7 @@ final class ActivityLogSubscriber implements EventSubscriber
             return false;
         }
 
-        if (!$token = $this->tokenStorage->getToken()) {
+        if (!$this->tokenStorage->getToken()) {
             return false;
         }
 
@@ -183,10 +183,11 @@ final class ActivityLogSubscriber implements EventSubscriber
         $manager = $eventArgs->getEntityManager();
         $entity = $eventArgs->getEntity();
         $metadata = $manager->getClassMetadata(get_class($entity));
+        $unitOfWork = $manager->getUnitOfWork();
 
         $this->dataChanges = array_merge($this->dataChanges, [
             'table' => $metadata->getTableName(),
-            'changes' => $this->calculateChangeSet($manager, $manager->getUnitOfWork()->getEntityChangeSet($entity)),
+            'changes' => $this->calculateChangeSet($unitOfWork, $unitOfWork->getEntityChangeSet($entity)),
         ]);
 
         $this->identifier = array_merge($this->identifier, [$entity->getId()]);
@@ -194,17 +195,17 @@ final class ActivityLogSubscriber implements EventSubscriber
     }
 
     /**
-     * @param EntityManager $entityManager
-     * @param array         $changeSet
+     * @param UnitOfWork $unitOfWork
+     * @param array      $changeSet
      *
      * @return array
      */
-    private function calculateChangeSet(EntityManager $entityManager, array $changeSet)
+    private function calculateChangeSet(UnitOfWork $unitOfWork, array $changeSet)
     {
         $realChangeSet = [];
         foreach ($changeSet as $field => $item) {
             if (is_object($item[1]) && !$item[1] instanceof \DateTime) {
-                $this->calculateChangeSet($entityManager, $entityManager->getUnitOfWork()->getEntityChangeSet($item[1]));
+                $this->calculateChangeSet($unitOfWork, $unitOfWork->getEntityChangeSet($item[1]));
             } else {
                 $realChangeSet[$field] = $item;
             }
