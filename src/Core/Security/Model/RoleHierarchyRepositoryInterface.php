@@ -10,6 +10,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 interface RoleHierarchyRepositoryInterface extends RepositoryInterface
 {
+    const CACHEID = 'HRPERSONA_ROLE_HIERARCHY';
+
     /**
      * @return array
      */

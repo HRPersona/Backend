@@ -53,4 +53,14 @@ final class RoleRepository implements RoleRepositoryInterface
     {
         return $this->managerFactory->getWriteManager()->getRepository($this->class)->findBy(['module' => $module, 'deletedAt' => null]);
     }
+
+    /**
+     * @param UserInterface $user
+     *
+     * @return array|null
+     */
+    public function findByUser(UserInterface $user): ? array
+    {
+        return $this->managerFactory->getReadManager()->getRepository($this->class)->findBy(['user' => $user, 'deletedAt' => null]);
+    }
 }

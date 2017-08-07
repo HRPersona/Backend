@@ -8,6 +8,7 @@ use Persona\Hris\Core\Security\Model\RoleHierarchyRepositoryInterface;
 use Persona\Hris\Core\Security\Model\RoleInterface;
 use Persona\Hris\Core\Security\Model\RoleRepositoryInterface;
 use Persona\Hris\Core\Security\Model\UserInterface;
+use Persona\Hris\Core\Util\StringUtil;
 use Persona\Hris\Repository\AbstractRepository;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
@@ -60,6 +61,11 @@ final class RoleHierarchyRepository extends AbstractRepository implements RoleHi
      */
     public function mapRoles(): array
     {
+        $cacheDriver = $this->managerFactory->getCacheDriver();
+        if ($cacheDriver->contains(self::CACHEID)) {
+            return $cacheDriver->fetch(self::CACHEID);
+        }
+
         $roles = [];
         $data = $this->managerFactory->getReadManager()->getRepository($this->class)->findBy(['deletedAt' => null]);
         foreach ($data as $user) {
@@ -72,26 +78,28 @@ final class RoleHierarchyRepository extends AbstractRepository implements RoleHi
                 $roles[sprintf('ROLE_%s', $userRole[0])] = [];
             }
 
-            $r = $this->managerFactory->getReadManager()->getRepository('PersonaHrisBundle:Role')->findBy(['user' => $user, 'deletedAt' => null]);
+            $r = $this->roleRepository->findByUser($user);
             /** @var RoleInterface $item */
             foreach ($r as $item) {
                 if ($item->getAddable()) {
-                    $roles[sprintf('ROLE_%s', $userRole[0])][] = sprintf('ROLE_%s_ADD', $item->getModule()->getPath());
+                    $roles[sprintf('ROLE_%s', $userRole[0])][] = sprintf('ROLE_%s_ADD', StringUtil::underscore($item->getModule()->getName()));
                 }
 
                 if ($item->getEditable()) {
-                    $roles[sprintf('ROLE_%s', $userRole[0])][] = sprintf('ROLE_%s_EDIT', $item->getModule()->getPath());
+                    $roles[sprintf('ROLE_%s', $userRole[0])][] = sprintf('ROLE_%s_EDIT', StringUtil::underscore($item->getModule()->getName()));
                 }
 
                 if ($item->getDeletable()) {
-                    $roles[sprintf('ROLE_%s', $userRole[0])][] = sprintf('ROLE_%s_DELETE', $item->getModule()->getPath());
+                    $roles[sprintf('ROLE_%s', $userRole[0])][] = sprintf('ROLE_%s_DELETE', StringUtil::underscore($item->getModule()->getName()));
                 }
 
                 if ($item->getViewable()) {
-                    $roles[sprintf('ROLE_%s', $userRole[0])][] = sprintf('ROLE_%s_VIEW', $item->getModule()->getPath());
+                    $roles[sprintf('ROLE_%s', $userRole[0])][] = sprintf('ROLE_%s_VIEW', StringUtil::underscore($item->getModule()->getName()));
                 }
             }
         }
+
+        $cacheDriver->save(self::CACHEID, $roles);
 
         return $roles;
     }

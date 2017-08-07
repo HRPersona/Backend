@@ -48,8 +48,6 @@ final class UserSessionSubscriber implements EventSubscriberInterface
     private $kernel;
 
     /**
-     * UserSessionSubscriber constructor.
-     *
      * @param KernelInterface         $kernel
      * @param ManagerFactory          $managerFactory
      * @param UserRepositoryInterface $userRepository

@@ -23,4 +23,11 @@ interface RoleRepositoryInterface extends RepositoryInterface
      * @return array|null
      */
     public function findByModule(ModuleInterface $module): ? array;
+
+    /**
+     * @param UserInterface $user
+     *
+     * @return array|null
+     */
+    public function findByUser(UserInterface $user): ? array;
 }
