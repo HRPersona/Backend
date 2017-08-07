@@ -63,7 +63,7 @@ final class TaxCalculator
             EmployeeInterface::TAX_KI_2,
             EmployeeInterface::TAX_KI_3,
         ])) {
-            return $this->kawinIstriTidakKerja->getCalculatedValue($payroll);
+            return $this->kawinIstriKerja->getCalculatedValue($payroll);
         }
 
         return $this->tidakKawin->getCalculatedValue($payroll);

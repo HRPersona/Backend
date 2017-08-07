@@ -14,26 +14,6 @@ use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInt
 final class ResponseModificationSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var KernelInterface
-     */
-    private $kernel;
-
-    /**
-     * @var TokenStorageInterface
-     */
-    private $tokenStorage;
-
-    /**
-     * @param KernelInterface       $kernel
-     * @param TokenStorageInterface $tokenStorage
-     */
-    public function __construct(KernelInterface $kernel, TokenStorageInterface $tokenStorage)
-    {
-        $this->kernel = $kernel;
-        $this->tokenStorage = $tokenStorage;
-    }
-
-    /**
      * @param FilterResponseEvent $event
      */
     public function onKernelResponse(FilterResponseEvent $event)

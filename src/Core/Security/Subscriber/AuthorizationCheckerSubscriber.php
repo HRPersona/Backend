@@ -17,11 +17,6 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 final class AuthorizationCheckerSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var ManagerFactory
-     */
-    private $managerFactory;
-
-    /**
      * @var ModuleRepositoryInterface
      */
     private $moduleRepository;
@@ -37,18 +32,15 @@ final class AuthorizationCheckerSubscriber implements EventSubscriberInterface
     private $authorizationFactory;
 
     /**
-     * @param ManagerFactory                   $managerFactory
      * @param ModuleRepositoryInterface        $moduleRepository
      * @param RoleHierarchyRepositoryInterface $roleHierarchyRepository
      * @param AuthorizationFactory             $authorizationFactory
      */
     public function __construct(
-        ManagerFactory $managerFactory,
         ModuleRepositoryInterface $moduleRepository,
         RoleHierarchyRepositoryInterface $roleHierarchyRepository,
         AuthorizationFactory $authorizationFactory
     ) {
-        $this->managerFactory = $managerFactory;
         $this->moduleRepository = $moduleRepository;
         $this->roleHierarchy = $roleHierarchyRepository;
         $this->authorizationFactory = $authorizationFactory;

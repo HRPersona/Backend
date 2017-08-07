@@ -1,9 +1,6 @@
 services:
     persona.subscriber.response_subscriber:
         class: 'Persona\Hris\Core\Subscriber\ResponseModificationSubscriber'
-        arguments:
-            - '@kernel'
-            - '@security.token_storage'
         tags:
             - { name: 'kernel.event_subscriber' }
 
@@ -42,7 +39,6 @@ services:
     persona.security.authorization.authorization_checker:
         class: 'Persona\Hris\Core\Security\Subscriber\AuthorizationCheckerSubscriber'
         arguments:
-            - '@persona.manager.manager_factory'
             - '@persona.repository.orm.module_repository'
             - '@persona.repository.orm.role_hierarchy_repository'
             - '@persona.security.authorization.authorization_factory'
