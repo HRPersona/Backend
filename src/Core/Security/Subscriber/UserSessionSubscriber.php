@@ -136,7 +136,7 @@ final class UserSessionSubscriber implements EventSubscriberInterface
     public function createToken(JWTCreatedEvent $event)
     {
         $expiration = new \DateTime();
-        if ($this->requestStack->getCurrentRequest()->get('_remember_me')) {
+        if (1 === (int) $this->requestStack->getCurrentRequest()->get('_remember_me', 0)) {
             $interval = new \DateInterval('P1M7DT7H9M17S');
         } else {
             $interval = new \DateInterval('PT7H9M17S');
