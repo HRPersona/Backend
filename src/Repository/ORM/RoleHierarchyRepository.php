@@ -72,7 +72,7 @@ final class RoleHierarchyRepository extends AbstractRepository implements RoleHi
                 $roles[sprintf('ROLE_%s', $userRole[0])] = [];
             }
 
-            $r = $this->managerFactory->getReadManager()->getRepository('Persona\HrisBundle:Role')->findBy(['user' => $user, 'deletedAt' => null]);
+            $r = $this->managerFactory->getReadManager()->getRepository('PersonaHrisBundle:Role')->findBy(['user' => $user, 'deletedAt' => null]);
             /** @var RoleInterface $item */
             foreach ($r as $item) {
                 if ($item->getAddable()) {
