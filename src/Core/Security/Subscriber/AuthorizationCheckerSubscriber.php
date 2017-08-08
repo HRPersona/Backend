@@ -2,7 +2,6 @@
 
 namespace Persona\Hris\Core\Security\Subscriber;
 
-use Persona\Hris\Core\Manager\ManagerFactory;
 use Persona\Hris\Core\Security\Authorization\AuthorizationFactory;
 use Persona\Hris\Core\Security\Model\ModuleRepositoryInterface;
 use Persona\Hris\Core\Security\Model\RoleHierarchyRepositoryInterface;

@@ -3,9 +3,12 @@
 namespace Persona\Hris\Controller;
 
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
+use Persona\Hris\Employee\Model\EmployeeInterface;
 use Persona\Hris\Entity\Payroll;
 use Persona\Hris\Entity\PayrollDetail;
 use Persona\Hris\Salary\Model\BenefitInterface;
+use Persona\Hris\Salary\Model\PayrollInterface;
+use Persona\Hris\Salary\SalaryCalculator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -81,44 +84,7 @@ final class CalculateSalaryController extends Controller
             $payroll->setTakeHomePay($salaryCalculator->getGrossSalary() + $overtime);
 
             $manager->persist($payroll);
-
-            $payrollDetailRepository = $this->container->get('persona.repository.orm.payroll_detail_repository');
-
-            foreach ($salaryCalculator->getPlusBenefits($employee) as $k => $benefit) {
-                if ($existDetail = $payrollDetailRepository->findByPayrollAndBenefit($payroll, $benefit)) {
-                    $payrollDetail = $existDetail;
-                } else {
-                    $payrollDetail = new PayrollDetail();
-                }
-
-                $payrollDetail->setPayroll($payroll);
-                $payrollDetail->setBenefit($benefit['benefit']);
-                $payrollDetail->setBenefitValue($benefit['value']);
-                $payrollDetail->setBenefitType(BenefitInterface::TYPE_PLUS);
-
-                $manager->persist($payrollDetail);
-                if (0 === $k % 17) {
-                    $manager->flush();
-                }
-            }
-
-            foreach ($salaryCalculator->getMinusBenefits($employee) as $i => $benefit) {
-                if ($existDetail = $payrollDetailRepository->findByPayrollAndBenefit($payroll, $benefit)) {
-                    $payrollDetail = $existDetail;
-                } else {
-                    $payrollDetail = new PayrollDetail();
-                }
-
-                $payrollDetail->setPayroll($payroll);
-                $payrollDetail->setBenefit($benefit['benefit']);
-                $payrollDetail->setBenefitValue($benefit['value']);
-                $payrollDetail->setBenefitType(BenefitInterface::TYPE_MINUS);
-
-                $manager->persist($payrollDetail);
-                if (0 === $i % 17) {
-                    $manager->flush();
-                }
-            }
+            $this->saveBenefit($salaryCalculator, $employee, $payroll);
 
             if (0 === $key % 17) {
                 $manager->flush();
@@ -175,12 +141,10 @@ final class CalculateSalaryController extends Controller
         }
 
         $salaryCalculator = $this->container->get('persona.salary.salary_calculator');
+        $salaryCalculator->calculate($employee);
 
-        $salary = $salaryCalculator->calculate($employee);
         $overtime = 0;
-
         $employeeOvertime = $this->container->get('persona.repository.orm.employee_overtime_history_repository');
-
         if ($employee->isHaveOvertimeBenefit()) {
             $overtime = $employeeOvertime->getHistoryByEmployee($employee, $year, $month);
         }
@@ -196,11 +160,24 @@ final class CalculateSalaryController extends Controller
         $payroll->setPayrollMonth($month);
         $payroll->setBasicSalary($employee->getBasicSalary());
         $payroll->setOvertimeValue($overtime);
-        $payroll->setTakeHomePay($salary + $overtime);
+        $payroll->setTakeHomePay($salaryCalculator->getGrossSalary() + $overtime);
 
         $manager->persist($payroll);
+        $this->saveBenefit($salaryCalculator, $employee, $payroll);
+        $manager->flush();
 
+        return new JsonResponse(['status' => JsonResponse::HTTP_CREATED, 'message' => 'Employee salary has been calculated']);
+    }
+
+    /**
+     * @param SalaryCalculator  $salaryCalculator
+     * @param EmployeeInterface $employee
+     * @param PayrollInterface  $payroll
+     */
+    private function saveBenefit(SalaryCalculator $salaryCalculator, EmployeeInterface $employee, PayrollInterface $payroll)
+    {
         $payrollDetailRepository = $this->container->get('persona.repository.orm.payroll_detail_repository');
+        $manager = $this->container->get('persona.manager.manager_factory')->getWriteManager();
 
         foreach ($salaryCalculator->getPlusBenefits($employee) as $k => $benefit) {
             if ($existDetail = $payrollDetailRepository->findByPayrollAndBenefit($payroll, $benefit)) {
@@ -237,9 +214,5 @@ final class CalculateSalaryController extends Controller
                 $manager->flush();
             }
         }
-
-        $manager->flush();
-
-        return new JsonResponse(['status' => JsonResponse::HTTP_CREATED, 'message' => 'Employee salary has been calculated']);
     }
 }
