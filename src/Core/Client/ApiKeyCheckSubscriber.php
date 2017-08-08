@@ -4,7 +4,6 @@ namespace Persona\Hris\Core\Client;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
@@ -25,8 +24,8 @@ final class ApiKeyCheckSubscriber implements EventSubscriberInterface
     private $kernel;
 
     /**
-     * @param ApiKeyChecker $apiKeyChecker
-     * @param KernelInterface           $kernel
+     * @param ApiKeyChecker   $apiKeyChecker
+     * @param KernelInterface $kernel
      */
     public function __construct(ApiKeyChecker $apiKeyChecker, KernelInterface $kernel)
     {

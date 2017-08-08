@@ -11,7 +11,7 @@ final class QueryParamManipulator
 {
     /**
      * @param Request $request
-     * @param string $paramKey
+     * @param string  $paramKey
      */
     public static function manipulate(Request $request, string $paramKey): void
     {

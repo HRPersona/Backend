@@ -2,13 +2,11 @@
 
 namespace Persona\Hris\Core\Security\Subscriber;
 
-use Persona\Hris\Core\Security\CredentialDumper;
 use Persona\Hris\Core\Security\CredentialNormalizer;
 use Persona\Hris\Core\Util\QueryParamManipulator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Symfony\Component\Serializer\Serializer;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>

@@ -1,6 +1,7 @@
 <?php
 
 namespace Persona\Hris\Attendance;
+
 use Persona\Hris\Attendance\Model\EmployeeAttendanceInterface;
 
 /**
