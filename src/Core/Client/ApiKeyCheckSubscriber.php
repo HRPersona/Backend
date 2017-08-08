@@ -7,6 +7,7 @@ use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
@@ -14,9 +15,9 @@ use Symfony\Component\HttpKernel\KernelInterface;
 final class ApiKeyCheckSubscriber implements EventSubscriberInterface
 {
     /**
-     * @var ClientRepositoryInterface
+     * @var ApiKeyChecker
      */
-    private $repository;
+    private $apiKeyChecker;
 
     /**
      * @var KernelInterface
@@ -24,12 +25,12 @@ final class ApiKeyCheckSubscriber implements EventSubscriberInterface
     private $kernel;
 
     /**
-     * @param ClientRepositoryInterface $clientRepository
+     * @param ApiKeyChecker $apiKeyChecker
      * @param KernelInterface           $kernel
      */
-    public function __construct(ClientRepositoryInterface $clientRepository, KernelInterface $kernel)
+    public function __construct(ApiKeyChecker $apiKeyChecker, KernelInterface $kernel)
     {
-        $this->repository = $clientRepository;
+        $this->apiKeyChecker = $apiKeyChecker;
         $this->kernel = $kernel;
     }
 
@@ -42,26 +43,8 @@ final class ApiKeyCheckSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $request = $event->getRequest();
-        $uri = $request->getPathInfo();
-        if (preg_match('/api\//i', $uri)) {
-            $apiKey = 'api_key';
-            if (!$request->query->has($apiKey)) {
-                $rawRequest = json_decode($request->getContent(), true);
-                if (is_array($rawRequest) && array_key_exists($apiKey, $rawRequest)) {
-                    $request->query->set($apiKey, $rawRequest[$apiKey]);
-                } else {
-                    $request->query->set($apiKey, $request->get($apiKey));
-                }
-            }
-
-            if (null === $request->query->get($apiKey)) {
-                throw new UnauthorizedHttpException(sprintf('Client not found. Please correct your API Key.'));
-            }
-
-            if (!$this->repository->findByApiKey($request->query->get($apiKey)) instanceof ClientInterface) {
-                throw new UnauthorizedHttpException(sprintf('Client not found. Please correct your API Key.'));
-            }
+        if (!$this->apiKeyChecker->isValid($event->getRequest())) {
+            throw new AccessDeniedException(sprintf('Please provide valid Api Key.'));
         }
     }
 

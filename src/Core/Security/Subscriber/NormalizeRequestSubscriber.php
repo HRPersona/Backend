@@ -3,6 +3,8 @@
 namespace Persona\Hris\Core\Security\Subscriber;
 
 use Persona\Hris\Core\Security\CredentialDumper;
+use Persona\Hris\Core\Security\CredentialNormalizer;
+use Persona\Hris\Core\Util\QueryParamManipulator;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -13,17 +15,19 @@ use Symfony\Component\Serializer\Serializer;
  */
 final class NormalizeRequestSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @var Serializer
-     */
-    private $serializer;
+    const TOKENKEY_PARAMETER = 'access_token';
 
     /**
-     * @param Serializer $serializer
+     * @var CredentialNormalizer
      */
-    public function __construct(Serializer $serializer)
+    private $credentialNormazer;
+
+    /**
+     * @param CredentialNormalizer $credentialNormalizer
+     */
+    public function __construct(CredentialNormalizer $credentialNormalizer)
     {
-        $this->serializer = $serializer;
+        $this->credentialNormazer = $credentialNormalizer;
     }
 
     /**
@@ -36,28 +40,8 @@ final class NormalizeRequestSubscriber implements EventSubscriberInterface
         }
 
         $request = $event->getRequest();
-
-        $tokenKey = 'access_token';
-        if (!$request->query->has($tokenKey)) {
-            $rawRequest = json_decode($request->getContent(), true);
-            if (is_array($rawRequest) && array_key_exists($tokenKey, $rawRequest)) {
-                $request->query->set($tokenKey, $rawRequest[$tokenKey]);
-            } else {
-                $request->query->set($tokenKey, $request->get($tokenKey));
-            }
-        }
-
-        if ('form' === $request->getContentType()) {
-            return;
-        }
-
-        $uri = $request->getPathInfo();
-        if (false !== strpos($uri, '/api/login') && !empty($content = $request->getContent())) {
-            /** @var CredentialDumper $credential */
-            $credential = $this->serializer->deserialize($content, CredentialDumper::class, $request->getRequestFormat('json'));
-            $request->request->set('username', $credential->getUsername()); //username is the value of username_parameter in security.yml
-            $request->request->set('password', $credential->getPassword()); //password is the value of password_parameter in security.yml
-        }
+        QueryParamManipulator::manipulate($request, self::TOKENKEY_PARAMETER);
+        $this->credentialNormazer->normalize($request);
     }
 
     /**

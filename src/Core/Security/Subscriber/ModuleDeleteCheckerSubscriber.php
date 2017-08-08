@@ -36,12 +36,7 @@ final class ModuleDeleteCheckerSubscriber implements EventSubscriber
             return;
         }
 
-        $roles = $this->roleRepository->findByModule($entity);
-        $manager = $eventArgs->getEntityManager();
-        foreach ($roles as $role) {
-            $manager->remove($role);
-        }
-        $manager->flush();
+        $this->roleRepository->removeByModule($entity);
     }
 
     /**

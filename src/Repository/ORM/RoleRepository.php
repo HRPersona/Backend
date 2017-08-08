@@ -55,6 +55,24 @@ final class RoleRepository implements RoleRepositoryInterface
     }
 
     /**
+     * @param ModuleInterface $module
+     */
+    public function removeByModule(ModuleInterface $module): void
+    {
+        $roles = $this->findByModule($module);
+        $manager = $this->managerFactory->getWriteManager();
+        foreach ($roles as $key => $role) {
+            $manager->remove($role);
+
+            if (0 === $key % 17) {
+                $manager->flush();
+            }
+        }
+
+        $manager->flush();
+    }
+
+    /**
      * @param UserInterface $user
      *
      * @return array|null

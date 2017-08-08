@@ -7,7 +7,7 @@ services:
     persona.client.check_api_key_subscriber:
         class: 'Persona\Hris\Core\Client\ApiKeyCheckSubscriber'
         arguments:
-            - '@persona.repository.orm.client_repository'
+            - '@persona.client.api_key_checker'
             - '@kernel'
         tags:
             - { name: 'kernel.event_subscriber' }
@@ -15,7 +15,7 @@ services:
     persona.security.normalize_request_subscriber:
         class: 'Persona\Hris\Core\Security\Subscriber\NormalizeRequestSubscriber'
         arguments:
-            - '@serializer'
+            - '@persona.security.credential_normalizer'
         tags:
             - { name: 'kernel.event_subscriber' }
 
@@ -31,7 +31,7 @@ services:
     persona.subscriber.exception_subscriber:
         class: 'Persona\Hris\Core\Subscriber\ExceptionSubscriber'
         arguments:
-            - '@serializer'
+            - '@api_platform.serializer'
             - '@logger'
         tags:
             - { name: 'kernel.event_subscriber' }

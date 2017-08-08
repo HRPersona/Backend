@@ -22,8 +22,8 @@ final class ApiKeyGeneratorSubscriber implements EventSubscriber
             return;
         }
 
-        $this->checkUserRelation($entity);
-        $entity->setApiKey(sha1(sprintf('%s_%s_%s', date('YmdHis'), $entity->getName(), $entity->getEmail())));
+        $this->makeSureClientEmail($entity);
+        $entity->setApiKey(ApiKeyGenerator::generate($entity));
     }
 
     /**
@@ -36,13 +36,13 @@ final class ApiKeyGeneratorSubscriber implements EventSubscriber
             return;
         }
 
-        $this->checkUserRelation($entity);
+        $this->makeSureClientEmail($entity);
     }
 
     /**
      * @param ClientInterface $entity
      */
-    private function checkUserRelation(ClientInterface $entity)
+    private function makeSureClientEmail(ClientInterface $entity)
     {
         if ($entity->getUser() instanceof UserInterface && $email = $entity->getUser()->getEmail()) {
             $entity->setEmail($email);

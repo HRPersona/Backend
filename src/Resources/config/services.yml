@@ -166,6 +166,16 @@ services:
         tags:
             - { name: persona.insurance_formula }
 
+    persona.client.api_key_checker:
+        class: 'Persona\Hris\Core\Client\ApiKeyChecker'
+        arguments:
+            - '@persona.repository.orm.client_repository'
+
+    persona.security.credential_normalizer:
+        class: 'Persona\Hris\Core\Security\CredentialNormalizer'
+        arguments:
+            - '@api_platform.serializer'
+
     ad3n.username.generator_factory:
         class: 'Ihsan\UsernameGenerator\UsernameFactory'
         arguments:
