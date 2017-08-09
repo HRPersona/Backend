@@ -27,12 +27,12 @@ services:
             
     persona.filter.module_search:
         parent:    'api_platform.doctrine.orm.search_filter'
-        arguments: [ { module.id: 'exact', module.code: 'exact' } ]
+        arguments: [ { module.id: 'exact' } ]
         tags:      [ { name: 'api_platform.filter', id: 'module.search' } ]
 
     persona.filter.service_search:
         parent:    'api_platform.doctrine.orm.search_filter'
-        arguments: [ { service.id: 'exact', service.code: 'exact' } ]
+        arguments: [ { service.id: 'exact' } ]
         tags:      [ { name: 'api_platform.filter', id: 'service.search' } ]
             
     persona.filter.menu_display_search:
