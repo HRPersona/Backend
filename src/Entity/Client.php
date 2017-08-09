@@ -9,7 +9,7 @@ use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Core\Client\ClientInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
-use Persona\Hris\Core\Security\Model\UserInterface;
+use Persona\Hris\Core\Security\Model\UserAwareInterface;
 use Persona\Hris\Core\Util\StringUtil;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -17,7 +17,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="c_clients", indexes={@ORM\Index(name="client_search_idx", columns={"email", "name"})})
+ * @ORM\Table(name="c_clients", indexes={
+ *     @ORM\Index(name="client_search_idx", columns={"email", "name", "user_id"}),
+ *     @ORM\Index(name="client_search_idx_email", columns={"email"}),
+ *     @ORM\Index(name="client_search_idx_name", columns={"name"}),
+ *     @ORM\Index(name="client_search_idx_user", columns={"user_id"})
+ * })
  *
  * @ApiResource(
  *     attributes={
@@ -36,7 +41,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class Client implements ClientInterface, ActionLoggerAwareInterface
+class Client implements ClientInterface, UserAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -72,18 +77,17 @@ class Client implements ClientInterface, ActionLoggerAwareInterface
 
     /**
      * @Groups({"read"})
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", unique=true)
      *
      * @var string
      */
     private $apiKey;
 
     /**
-     * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\User", fetch="EAGER")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
+     * @Groups({"read"})
+     * @ORM\Column(type="string", name="user_id")
      *
-     * @var UserInterface
+     * @var string
      */
     private $user;
 
@@ -144,17 +148,17 @@ class Client implements ClientInterface, ActionLoggerAwareInterface
     }
 
     /**
-     * @return UserInterface|null
+     * @return string
      */
-    public function getUser(): ? UserInterface
+    public function getUser(): string
     {
-        return $this->user;
+        return (string) $this->user;
     }
 
     /**
-     * @param UserInterface $user
+     * @param string $user
      */
-    public function setUser(UserInterface $user = null): void
+    public function setUser(string $user = null): void
     {
         $this->user = $user;
     }

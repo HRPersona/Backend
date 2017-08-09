@@ -2,8 +2,6 @@
 
 namespace Persona\Hris\Core\Client;
 
-use Persona\Hris\Core\Security\Model\UserInterface;
-
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
@@ -45,7 +43,7 @@ interface ClientInterface
     public function setApiKey(string $apiKey);
 
     /**
-     * @return UserInterface|null
+     * @return string
      */
-    public function getUser(): ? UserInterface;
+    public function getUser(): string;
 }

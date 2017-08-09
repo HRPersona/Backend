@@ -38,10 +38,17 @@ services:
         tags:
             - { name: 'doctrine.event_subscriber' }
             
-    persona.security.authorization.module_delete_checker_subscriber:
+    persona.security.module_delete_checker_subscriber:
         class: 'Persona\Hris\Core\Security\Subscriber\ModuleDeleteCheckerSubscriber'
         arguments:
             - '@persona.repository.orm.role_repository'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
+    persona.security.check_valid_user_subscriber:
+        class: 'Persona\Hris\Core\Security\Subscriber\CheckValidUserSubscriber'
+        arguments:
+            - '@persona.repository.orm.user_repository'
         tags:
             - { name: 'doctrine.event_subscriber' }
             
