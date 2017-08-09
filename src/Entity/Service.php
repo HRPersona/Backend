@@ -8,34 +8,29 @@ use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
+use Persona\Hris\Core\Security\Model\ServiceInterface;
 use Persona\Hris\Core\Util\StringUtil;
-use Persona\Hris\Share\Model\ProvinceInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="s_provinces", indexes={@ORM\Index(name="province_search_idx", columns={"code", "name"})})
+ * @ORM\Table(name="c_services", indexes={@ORM\Index(name="service_search_idx", columns={"name"})})
  *
  * @ApiResource(
  *     attributes={
- *         "filters"={
- *             "order.filter",
- *             "code.search",
- *             "name.search"
- *         },
+ *         "filters"={"order.filter", "name.search"},
  *         "normalization_context"={"groups"={"read"}},
  *         "denormalization_context"={"groups"={"write"}}
  *     }
  * )
  *
- * @UniqueEntity("code")
  * @UniqueEntity("name")
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class Province implements ProvinceInterface, ActionLoggerAwareInterface
+class Service implements ServiceInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -50,15 +45,6 @@ class Province implements ProvinceInterface, ActionLoggerAwareInterface
      * @var string
      */
     private $id;
-
-    /**
-     * @Groups({"read", "write"})
-     * @ORM\Column(type="string", length=7)
-     * @Assert\NotBlank()
-     *
-     * @var string
-     */
-    private $code;
 
     /**
      * @Groups({"read", "write"})
@@ -80,22 +66,6 @@ class Province implements ProvinceInterface, ActionLoggerAwareInterface
     /**
      * @return string
      */
-    public function getCode(): string
-    {
-        return $this->code;
-    }
-
-    /**
-     * @param string $code
-     */
-    public function setCode(string $code)
-    {
-        $this->code = StringUtil::uppercase($code);
-    }
-
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
@@ -104,7 +74,7 @@ class Province implements ProvinceInterface, ActionLoggerAwareInterface
     /**
      * @param string $name
      */
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->name = StringUtil::uppercase($name);
     }

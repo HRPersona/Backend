@@ -10,12 +10,13 @@ use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Util\StringUtil;
 use Persona\Hris\Performance\Model\AppraisalPeriodInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="ap_appraisal_periods")
+ * @ORM\Table(name="ap_appraisal_periods", indexes={@ORM\Index(name="appraisal_period_search_idx", columns={"name"})})
  *
  * @ApiResource(
  *     attributes={
@@ -24,6 +25,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         "denormalization_context"={"groups"={"write"}}
  *     }
  * )
+ *
+ * @UniqueEntity("name")
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */

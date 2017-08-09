@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="s_cities", indexes={@ORM\Index(name="city_search_idx", columns={"code"})})
+ * @ORM\Table(name="s_cities", indexes={@ORM\Index(name="city_search_idx", columns={"code", "name"})})
  *
  * @ApiResource(
  *     attributes={
@@ -32,6 +32,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  *
  * @UniqueEntity("code")
+ * @UniqueEntity("name")
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */

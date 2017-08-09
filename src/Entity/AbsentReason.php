@@ -15,7 +15,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="at_absent_reasons", indexes={@ORM\Index(name="absent_reason_search_idx", columns={"code"})})
+ * @ORM\Table(name="at_absent_reasons", indexes={@ORM\Index(name="absent_reason_search_idx", columns={"code", "name"})})
  *
  * @ApiResource(
  *     attributes={
@@ -30,6 +30,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * )
  *
  * @UniqueEntity("code")
+ * @UniqueEntity("name")
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */

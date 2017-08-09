@@ -9,13 +9,15 @@ use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Security\Model\ModuleInterface;
+use Persona\Hris\Core\Security\Model\ServiceInterface;
 use Persona\Hris\Core\Util\StringUtil;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="c_modules", indexes={@ORM\Index(name="module_search_idx", columns={"path"})})
+ * @ORM\Table(name="c_modules", indexes={@ORM\Index(name="module_search_idx", columns={"path", "name"})})
  *
  * @ApiResource(
  *     attributes={
@@ -24,6 +26,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         "denormalization_context"={"groups"={"write"}}
  *     }
  * )
+ *
+ * @UniqueEntity("name")
+ * @UniqueEntity("path")
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
@@ -42,6 +47,16 @@ class Module implements ModuleInterface, ActionLoggerAwareInterface
      * @var string
      */
     private $id;
+
+    /**
+     * @Groups({"write", "read"})
+     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Service", fetch="EAGER")
+     * @ORM\JoinColumn(name="service_id", referencedColumnName="id")
+     * @Assert\NotBlank()
+     *
+     * @var ServiceInterface
+     */
+    private $service;
 
     /**
      * @Groups({"read", "write"})
@@ -117,6 +132,22 @@ class Module implements ModuleInterface, ActionLoggerAwareInterface
     public function getId(): string
     {
         return (string) $this->id;
+    }
+
+    /**
+     * @return ServiceInterface
+     */
+    public function getService(): ? ServiceInterface
+    {
+        return $this->service;
+    }
+
+    /**
+     * @param ServiceInterface $service
+     */
+    public function setService(ServiceInterface $service = null): void
+    {
+        $this->service = $service;
     }
 
     /**

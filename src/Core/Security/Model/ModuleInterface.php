@@ -13,14 +13,24 @@ interface ModuleInterface
     public function getId(): string;
 
     /**
-     * @param string $name
+     * @return null|ServiceInterface
      */
-    public function setName(string $name);
+    public function getService(): ? ServiceInterface;
+
+    /**
+     * @param ServiceInterface $service
+     */
+    public function setService(ServiceInterface $service = null): void;
 
     /**
      * @return string
      */
     public function getName(): string;
+
+    /**
+     * @param string $name
+     */
+    public function setName(string $name);
 
     /**
      * @return string
@@ -58,6 +68,11 @@ interface ModuleInterface
     public function getDescription(): ? string;
 
     /**
+     * @return string
+     */
+    public function getIconCls(): string;
+
+    /**
      * @param string $iconCls
      */
     public function setIconCls(string $iconCls);
@@ -65,15 +80,10 @@ interface ModuleInterface
     /**
      * @return string
      */
-    public function getIconCls(): string;
+    public function getPath(): string;
 
     /**
      * @param string $path
      */
     public function setPath(string $path);
-
-    /**
-     * @return string
-     */
-    public function getPath(): string;
 }
