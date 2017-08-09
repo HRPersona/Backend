@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ApiResource(
  *     attributes={
- *         "filters"={"order.filter", "name.search"},
+ *         "filters"={"order.filter", "name.search", "service.search"},
  *         "normalization_context"={"groups"={"read"}},
  *         "denormalization_context"={"groups"={"write"}}
  *     }
