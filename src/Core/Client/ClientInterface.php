@@ -46,4 +46,9 @@ interface ClientInterface
      * @return string
      */
     public function getUser(): string;
+
+    /**
+     * @param string $user
+     */
+    public function setUser(string $user = null);
 }

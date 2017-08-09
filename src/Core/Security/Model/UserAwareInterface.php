@@ -15,5 +15,5 @@ interface UserAwareInterface
     /**
      * @param string|null $user
      */
-    public function setUser(string $user = null): void;
+    public function setUser(string $user = null);
 }

@@ -13,14 +13,14 @@ interface RoleInterface
     public function getId(): string;
 
     /**
-     * @param UserInterface $user
+     * @param string $user
      */
-    public function setUser(UserInterface $user);
+    public function setUser(string $user = null);
 
     /**
-     * @return UserInterface|null
+     * @return string
      */
-    public function getUser(): ? UserInterface;
+    public function getUser(): string;
 
     /**
      * @param ModuleInterface $module

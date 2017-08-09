@@ -84,7 +84,7 @@ class Client implements ClientInterface, UserAwareInterface, ActionLoggerAwareIn
     private $apiKey;
 
     /**
-     * @Groups({"read"})
+     * @Groups({"read", "write"})
      * @ORM\Column(type="string", name="user_id")
      *
      * @var string
@@ -158,7 +158,7 @@ class Client implements ClientInterface, UserAwareInterface, ActionLoggerAwareIn
     /**
      * @param string $user
      */
-    public function setUser(string $user = null): void
+    public function setUser(string $user = null)
     {
         $this->user = $user;
     }

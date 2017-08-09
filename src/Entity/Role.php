@@ -10,7 +10,7 @@ use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Security\Model\ModuleInterface;
 use Persona\Hris\Core\Security\Model\RoleInterface;
-use Persona\Hris\Core\Security\Model\UserInterface;
+use Persona\Hris\Core\Security\Model\UserAwareInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -36,7 +36,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class Role implements RoleInterface, ActionLoggerAwareInterface
+class Role implements RoleInterface, UserAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -54,11 +54,9 @@ class Role implements RoleInterface, ActionLoggerAwareInterface
 
     /**
      * @Groups({"write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\User", fetch="EAGER")
-     * @ORM\JoinColumn(name="user_id", referencedColumnName="id")
-     * @Assert\NotBlank()
+     * @ORM\Column(type="string", name="user_id")
      *
-     * @var UserInterface
+     * @var string
      */
     private $user;
 
@@ -121,17 +119,17 @@ class Role implements RoleInterface, ActionLoggerAwareInterface
     }
 
     /**
-     * @return UserInterface|null
+     * @return string
      */
-    public function getUser(): ? UserInterface
+    public function getUser(): string
     {
-        return $this->user;
+        return (string) $this->user;
     }
 
     /**
-     * @param UserInterface $user
+     * @param string $user
      */
-    public function setUser(UserInterface $user)
+    public function setUser(string $user = null)
     {
         $this->user = $user;
     }
