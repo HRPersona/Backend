@@ -2,7 +2,7 @@
 
 namespace Persona\Hris\Logger;
 
-use Persona\Hris\Core\Logger\ExcludePathInterface;
+use Persona\Hris\Core\Logger\Model\ExcludePathInterface;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>

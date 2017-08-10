@@ -1,10 +1,12 @@
 <?php
 
-namespace Persona\Hris\Core\Client;
+namespace Persona\Hris\Core\Client\Subscriber;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
+use Persona\Hris\Core\Client\ApiKeyGenerator;
+use Persona\Hris\Core\Client\Model\ClientInterface;
 use Persona\Hris\Core\Security\Model\UserInterface;
 
 /**

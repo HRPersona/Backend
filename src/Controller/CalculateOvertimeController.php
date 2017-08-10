@@ -59,7 +59,7 @@ final class CalculateOvertimeController extends Controller
             }
 
             if ($employeeHistoryRepository->isExisting($employee, $year, $month)) {
-                $overtimeHistory = $employeeHistoryRepository->getExistData();
+                $overtimeHistory = $employeeHistoryRepository->getExistingData();
             } else {
                 $overtimeHistory = new OvertimeHistory();
             }
@@ -124,7 +124,7 @@ final class CalculateOvertimeController extends Controller
         }
 
         if ($employeeHistoryRepository->isExisting($employee, $year, $month)) {
-            $overtimeHistory = $employeeHistoryRepository->getExistData();
+            $overtimeHistory = $employeeHistoryRepository->getExistingData();
         } else {
             $overtimeHistory = new OvertimeHistory();
         }

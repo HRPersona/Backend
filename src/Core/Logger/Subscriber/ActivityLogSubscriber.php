@@ -1,13 +1,15 @@
 <?php
 
-namespace Persona\Hris\Core\Logger;
+namespace Persona\Hris\Core\Logger\Subscriber;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use Doctrine\ORM\UnitOfWork;
-use Persona\Hris\Core\Client\ClientInterface;
-use Persona\Hris\Core\Client\ClientRepositoryInterface;
+use Persona\Hris\Core\Client\Model\ClientInterface;
+use Persona\Hris\Core\Client\Model\ClientRepositoryInterface;
+use Persona\Hris\Core\Logger\ExcludeLoggerFactory;
+use Persona\Hris\Core\Logger\Model\ActivityLoggerInterface;
 use Persona\Hris\Core\Manager\ManagerFactory;
 use Persona\Hris\Core\Security\Model\UserInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForExceptionEvent;

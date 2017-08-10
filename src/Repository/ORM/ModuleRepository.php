@@ -34,6 +34,29 @@ final class ModuleRepository extends AbstractRepository implements ModuleReposit
     }
 
     /**
+     * @param string $id
+     *
+     * @return ModuleInterface|null
+     */
+    public function find(string $id): ? ModuleInterface
+    {
+        $cache = $this->managerFactory->getCacheDriver();
+        if ($cache->contains($this->class)) {
+            $data = $cache->fetch($this->class);
+            $this->managerFactory->merge([$data]);
+
+            return $data;
+        }
+
+        $data = $this->managerFactory->getWriteManager()->getRepository($this->class)->findOneBy(['id' => $id, 'deletedAt' => null]);
+        if ($data) {
+            $cache->save($this->class, $data);
+        }
+
+        return $data;
+    }
+
+    /**
      * @param string $path
      *
      * @return ModuleInterface|null

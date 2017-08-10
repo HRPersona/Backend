@@ -6,9 +6,10 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
-use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
+use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Security\Model\ModuleInterface;
+use Persona\Hris\Core\Security\Model\ServiceAwareInterface;
 use Persona\Hris\Core\Security\Model\ServiceInterface;
 use Persona\Hris\Core\Util\StringUtil;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -18,9 +19,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity()
  * @ORM\Table(name="c_modules", indexes={
- *     @ORM\Index(name="module_search_idx", columns={"path", "name"}),
+ *     @ORM\Index(name="module_search_idx", columns={"path", "name", "service_id"}),
  *     @ORM\Index(name="module_search_idx_path", columns={"path"}),
- *     @ORM\Index(name="module_search_idx_name", columns={"name"})
+ *     @ORM\Index(name="module_search_idx_name", columns={"name"}),
+ *     @ORM\Index(name="module_search_idx_service", columns={"service_id"})
  * })
  *
  * @ApiResource(
@@ -36,7 +38,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class Module implements ModuleInterface, ActionLoggerAwareInterface
+class Module implements ModuleInterface, ServiceAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -53,11 +55,15 @@ class Module implements ModuleInterface, ActionLoggerAwareInterface
     private $id;
 
     /**
-     * @Groups({"write", "read"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Service", fetch="EAGER")
-     * @ORM\JoinColumn(name="service_id", referencedColumnName="id")
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $serviceId;
+
+    /**
      * @var ServiceInterface
      */
     private $service;
@@ -136,6 +142,22 @@ class Module implements ModuleInterface, ActionLoggerAwareInterface
     public function getId(): string
     {
         return (string) $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getServiceId(): string
+    {
+        return (string) $this->serviceId;
+    }
+
+    /**
+     * @param string $serviceId
+     */
+    public function setServiceId(string $serviceId = null)
+    {
+        $this->serviceId = $serviceId;
     }
 
     /**

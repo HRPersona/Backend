@@ -6,10 +6,11 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
-use Persona\Hris\Core\Client\ClientInterface;
-use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
+use Persona\Hris\Core\Client\Model\ClientInterface;
+use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Security\Model\UserAwareInterface;
+use Persona\Hris\Core\Security\Model\UserInterface;
 use Persona\Hris\Core\Util\StringUtil;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -84,10 +85,15 @@ class Client implements ClientInterface, UserAwareInterface, ActionLoggerAwareIn
     private $apiKey;
 
     /**
-     * @Groups({"read", "write"})
-     * @ORM\Column(type="string", name="user_id")
+     * @Groups({"write", "read"})
+     * @ORM\Column(type="string", nullable=true)
      *
      * @var string
+     */
+    private $userId;
+
+    /**
+     * @var UserInterface
      */
     private $user;
 
@@ -150,16 +156,35 @@ class Client implements ClientInterface, UserAwareInterface, ActionLoggerAwareIn
     /**
      * @return string
      */
-    public function getUser(): string
+    public function getUserId(): string
     {
-        return (string) $this->user;
+        return (string) $this->userId;
     }
 
     /**
-     * @param string $user
+     * @param string $userId
      */
-    public function setUser(string $user = null)
+    public function setUserId(string $userId = null)
+    {
+        $this->userId = $userId;
+    }
+
+    /**
+     * @return UserInterface
+     */
+    public function getUser(): UserInterface
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param UserInterface $user
+     */
+    public function setUser(UserInterface $user = null): void
     {
         $this->user = $user;
+        if ($user) {
+            $this->userId = $user->getId();
+        }
     }
 }

@@ -5,7 +5,7 @@ namespace Persona\Hris\Entity;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
-use Persona\Hris\Core\Logger\ActivityLoggerInterface;
+use Persona\Hris\Core\Logger\Model\ActivityLoggerInterface;
 use Persona\Hris\Core\Util\StringUtil;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

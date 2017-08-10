@@ -1,6 +1,8 @@
 <?php
 
-namespace Persona\Hris\Core\Client;
+namespace Persona\Hris\Core\Client\Model;
+
+use Persona\Hris\Core\Security\Model\UserInterface;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
@@ -43,12 +45,12 @@ interface ClientInterface
     public function setApiKey(string $apiKey);
 
     /**
-     * @return string
+     * @return UserInterface
      */
-    public function getUser(): string;
+    public function getUser(): ? UserInterface;
 
     /**
-     * @param string $user
+     * @param UserInterface $user
      */
-    public function setUser(string $user = null);
+    public function setUser(UserInterface $user = null): void;
 }

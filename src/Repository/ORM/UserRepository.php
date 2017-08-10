@@ -38,7 +38,20 @@ final class UserRepository extends AbstractRepository implements UserRepositoryI
      */
     public function find(string $id): ? UserInterface
     {
-        return $this->managerFactory->getWriteManager()->getRepository($this->class)->findOneBy(['id' => $id, 'deletedAt' => null]);
+        $cache = $this->managerFactory->getCacheDriver();
+        if ($cache->contains($this->class)) {
+            $data = $cache->fetch($this->class);
+            $this->managerFactory->merge([$data]);
+
+            return $data;
+        }
+
+        $data = $this->managerFactory->getWriteManager()->getRepository($this->class)->findOneBy(['id' => $id, 'deletedAt' => null]);
+        if ($data) {
+            $cache->save($this->class, $data);
+        }
+
+        return $data;
     }
 
     /**

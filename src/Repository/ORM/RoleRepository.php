@@ -41,7 +41,7 @@ final class RoleRepository implements RoleRepositoryInterface
      */
     public function findByUserAndModule(UserInterface $user, ModuleInterface $module): ? RoleInterface
     {
-        return $this->managerFactory->getReadManager()->getRepository($this->class)->findOneBy(['module' => $module, 'user' => $user, 'deletedAt' => null]);
+        return $this->managerFactory->getReadManager()->getRepository($this->class)->findOneBy(['module' => $module, 'userId' => $user->getId(), 'deletedAt' => null]);
     }
 
     /**
@@ -79,6 +79,6 @@ final class RoleRepository implements RoleRepositoryInterface
      */
     public function findByUser(UserInterface $user): ? array
     {
-        return $this->managerFactory->getReadManager()->getRepository($this->class)->findBy(['user' => $user, 'deletedAt' => null]);
+        return $this->managerFactory->getReadManager()->getRepository($this->class)->findBy(['userId' => $user->getId(), 'deletedAt' => null]);
     }
 }

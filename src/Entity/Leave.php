@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Attendance\Model\AbsentReasonInterface;
-use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
+use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Util\StringUtil;
 use Persona\Hris\Leave\Model\LeaveInterface;

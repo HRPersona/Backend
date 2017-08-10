@@ -1,18 +1,18 @@
 services:
     persona.logger.action_logger:
-        class: 'Persona\Hris\Core\Logger\ActionLoggerSubscriber'
+        class: 'Persona\Hris\Core\Logger\Subscriber\ActionLoggerSubscriber'
         arguments:
             - '@security.token_storage'
         tags:
             - { name: 'doctrine.event_subscriber' }
 
     persona.client.check_api_key_generator_subscriber:
-        class: 'Persona\Hris\Core\Client\ApiKeyGeneratorSubscriber'
+        class: 'Persona\Hris\Core\Client\Subscriber\ApiKeyGeneratorSubscriber'
         tags:
             - { name: 'doctrine.event_subscriber' }
 
     persona.logger.activity_log_subscriber:
-        class: 'Persona\Hris\Core\Logger\ActivityLogSubscriber'
+        class: 'Persona\Hris\Core\Logger\Subscriber\ActivityLogSubscriber'
         arguments:
             - '@persona.manager.manager_factory'
             - '@security.token_storage'
@@ -42,13 +42,6 @@ services:
         class: 'Persona\Hris\Core\Security\Subscriber\ModuleDeleteCheckerSubscriber'
         arguments:
             - '@persona.repository.orm.role_repository'
-        tags:
-            - { name: 'doctrine.event_subscriber' }
-
-    persona.security.check_valid_user_subscriber:
-        class: 'Persona\Hris\Core\Security\Subscriber\CheckValidUserSubscriber'
-        arguments:
-            - '@persona.repository.orm.user_repository'
         tags:
             - { name: 'doctrine.event_subscriber' }
             

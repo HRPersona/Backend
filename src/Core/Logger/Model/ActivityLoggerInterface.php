@@ -1,6 +1,6 @@
 <?php
 
-namespace Persona\Hris\Core\Logger;
+namespace Persona\Hris\Core\Logger\Model;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

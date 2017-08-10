@@ -10,6 +10,13 @@ use Persona\Hris\Repository\RepositoryInterface;
 interface ModuleRepositoryInterface extends RepositoryInterface
 {
     /**
+     * @param string $id
+     *
+     * @return null|ModuleInterface
+     */
+    public function find(string $id): ? ModuleInterface;
+
+    /**
      * @param string $path
      *
      * @return ModuleInterface|null

@@ -5,10 +5,8 @@ namespace Persona\Hris\Core\Manager;
 use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\Common\Cache\ArrayCache;
 use Doctrine\Common\Cache\Cache;
-use Doctrine\Common\Cache\PredisCache;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Proxy\Exception\InvalidArgumentException;
-use Predis\Client;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
@@ -26,33 +24,19 @@ final class ManagerFactory
     private $writeRegistry;
 
     /**
-     * @var Client
-     */
-    private $client;
-
-    /**
-     * @var PredisCache
+     * @var ArrayCache
      */
     private $cache;
 
     /**
-     * @var string
+     * @param array $registies
      */
-    private $env;
-
-    /**
-     * @param Client $client
-     * @param array  $registies
-     * @param string $environment
-     */
-    public function __construct(Client $client, array $registies, $environment = 'dev')
+    public function __construct(array $registies)
     {
         if (!array_key_exists('read', $registies) || !array_key_exists('write', $registies)) {
             throw new InvalidArgumentException('Invalid Doctrine Registry.');
         }
 
-        $this->client = $client;
-        $this->env = $environment;
         $this->readRegistry = $registies['read'];
         $this->writeRegistry = $registies['write'];
     }
@@ -63,11 +47,7 @@ final class ManagerFactory
     public function getCacheDriver()
     {
         if (null === $this->cache) {
-            if ('prod' === strtolower($this->env)) {
-                $this->cache = new PredisCache($this->client);
-            } else {
-                $this->cache = new ArrayCache();
-            }
+            $this->cache = new ArrayCache();
         }
 
         return $this->cache;

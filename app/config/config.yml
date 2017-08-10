@@ -183,7 +183,7 @@ api_platform:
         xml:      ['application/xml', 'text/xml']
 
 nelmio_api_doc:
-    name: 'BIG Internal API'
+    name: 'Persona API'
     cache:
         enabled: true
     sandbox:

@@ -1,6 +1,6 @@
 <?php
 
-namespace Persona\Hris\Core\Client;
+namespace Persona\Hris\Core\Client\Model;
 
 use Persona\Hris\Repository\RepositoryInterface;
 

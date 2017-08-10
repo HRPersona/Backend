@@ -1,6 +1,6 @@
 <?php
 
-namespace Persona\Hris\Core\Logger;
+namespace Persona\Hris\Core\Logger\Model;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>

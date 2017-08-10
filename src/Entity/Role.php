@@ -6,17 +6,23 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
-use Persona\Hris\Core\Logger\ActionLoggerAwareInterface;
+use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
+use Persona\Hris\Core\Security\Model\ModuleAwareInterface;
 use Persona\Hris\Core\Security\Model\ModuleInterface;
 use Persona\Hris\Core\Security\Model\RoleInterface;
 use Persona\Hris\Core\Security\Model\UserAwareInterface;
+use Persona\Hris\Core\Security\Model\UserInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="c_roles")
+ * @ORM\Table(name="c_roles", indexes={
+ *     @ORM\Index(name="client_search_idx", columns={"module_id", "user_id"}),
+ *     @ORM\Index(name="client_search_idx_module", columns={"module_id"}),
+ *     @ORM\Index(name="client_search_idx_user", columns={"user_id"})
+ * })
  *
  * @ApiResource(
  *     collectionOperations={
@@ -36,7 +42,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class Role implements RoleInterface, UserAwareInterface, ActionLoggerAwareInterface
+class Role implements RoleInterface, ModuleAwareInterface, UserAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -54,18 +60,28 @@ class Role implements RoleInterface, UserAwareInterface, ActionLoggerAwareInterf
 
     /**
      * @Groups({"write"})
-     * @ORM\Column(type="string", name="user_id")
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank()
      *
      * @var string
+     */
+    private $userId;
+
+    /**
+     * @var UserInterface
      */
     private $user;
 
     /**
      * @Groups({"write", "read"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Module", fetch="EAGER")
-     * @ORM\JoinColumn(name="module_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $moduleId;
+
+    /**
      * @var ModuleInterface
      */
     private $module;
@@ -121,17 +137,52 @@ class Role implements RoleInterface, UserAwareInterface, ActionLoggerAwareInterf
     /**
      * @return string
      */
-    public function getUser(): string
+    public function getUserId(): string
     {
-        return (string) $this->user;
+        return (string) $this->userId;
     }
 
     /**
-     * @param string $user
+     * @param string $userId
      */
-    public function setUser(string $user = null)
+    public function setUserId(string $userId = null)
+    {
+        $this->userId = $userId;
+    }
+
+    /**
+     * @return UserInterface
+     */
+    public function getUser(): UserInterface
+    {
+        return $this->user;
+    }
+
+    /**
+     * @param UserInterface $user
+     */
+    public function setUser(UserInterface $user = null): void
     {
         $this->user = $user;
+        if ($user) {
+            $this->userId = $user->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getModuleId(): string
+    {
+        return (string) $this->moduleId;
+    }
+
+    /**
+     * @param string $moduleId
+     */
+    public function setModuleId(string $moduleId = null)
+    {
+        $this->moduleId = $moduleId;
     }
 
     /**
@@ -145,9 +196,12 @@ class Role implements RoleInterface, UserAwareInterface, ActionLoggerAwareInterf
     /**
      * @param ModuleInterface $module
      */
-    public function setModule(ModuleInterface $module): void
+    public function setModule(ModuleInterface $module = null): void
     {
         $this->module = $module;
+        if ($module) {
+            $this->moduleId = $module->getId();
+        }
     }
 
     /**

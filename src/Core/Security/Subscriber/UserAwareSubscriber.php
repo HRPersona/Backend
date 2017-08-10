@@ -13,7 +13,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-final class CheckValidUserSubscriber implements EventSubscriber
+final class UserAwareSubscriber implements EventSubscriber
 {
     /**
      * @var UserRepositoryInterface
@@ -35,7 +35,7 @@ final class CheckValidUserSubscriber implements EventSubscriber
     {
         $entity = $eventArgs->getEntity();
         if ($entity instanceof UserAwareInterface) {
-            $this->isValidUserOrException($entity->getUser());
+            $this->isValidOrException($entity->getUserId());
         }
     }
 
@@ -46,19 +46,30 @@ final class CheckValidUserSubscriber implements EventSubscriber
     {
         $entity = $eventArgs->getEntity();
         if ($entity instanceof UserAwareInterface) {
-            $this->isValidUserOrException($entity->getUser());
+            $this->isValidOrException($entity->getUserId());
         }
     }
 
     /**
-     * @param string $userId
+     * @param LifecycleEventArgs $eventArgs
+     */
+    public function postLoad(LifecycleEventArgs $eventArgs)
+    {
+        $entity = $eventArgs->getEntity();
+        if ($entity instanceof UserAwareInterface) {
+            $entity->setUser($this->repository->find($entity->getUserId()));
+        }
+    }
+
+    /**
+     * @param string $id
      *
      * @return bool|null
      */
-    private function isValidUserOrException(string $userId): ? bool
+    private function isValidOrException(string $id): ? bool
     {
-        if (!$this->repository->find($userId) instanceof UserInterface) {
-            throw new NotFoundHttpException(sprintf('User with id %s is not found.', $userId));
+        if (!$this->repository->find($id) instanceof UserInterface) {
+            throw new NotFoundHttpException(sprintf('User with id %s is not found.', $id));
         }
 
         return true;
@@ -69,6 +80,6 @@ final class CheckValidUserSubscriber implements EventSubscriber
      */
     public function getSubscribedEvents(): array
     {
-        return [Events::prePersist, Events::preUpdate];
+        return [Events::prePersist, Events::preUpdate, Events::postLoad];
     }
 }

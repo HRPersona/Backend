@@ -2,6 +2,7 @@
 
 namespace Persona\Hris\Core\Client;
 
+use Persona\Hris\Core\Client\Model\ClientRepositoryInterface;
 use Persona\Hris\Core\Util\QueryParamManipulator;
 use Symfony\Component\HttpFoundation\Request;
 

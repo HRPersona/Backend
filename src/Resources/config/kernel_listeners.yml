@@ -5,7 +5,7 @@ services:
             - { name: 'kernel.event_subscriber' }
 
     persona.client.check_api_key_subscriber:
-        class: 'Persona\Hris\Core\Client\ApiKeyCheckSubscriber'
+        class: 'Persona\Hris\Core\Client\Subscriber\ApiKeyCheckSubscriber'
         arguments:
             - '@persona.client.api_key_checker'
             - '@kernel'

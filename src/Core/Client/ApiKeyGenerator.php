@@ -2,10 +2,12 @@
 
 namespace Persona\Hris\Core\Client;
 
+use Persona\Hris\Core\Client\Model\ClientInterface;
+
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class ApiKeyGenerator
+final class ApiKeyGenerator
 {
     /**
      * @param ClientInterface $client

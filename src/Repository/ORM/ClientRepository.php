@@ -2,8 +2,8 @@
 
 namespace Persona\Hris\Repository\ORM;
 
-use Persona\Hris\Core\Client\ClientInterface;
-use Persona\Hris\Core\Client\ClientRepositoryInterface;
+use Persona\Hris\Core\Client\Model\ClientInterface;
+use Persona\Hris\Core\Client\Model\ClientRepositoryInterface;
 use Persona\Hris\Core\Manager\ManagerFactory;
 use Persona\Hris\Repository\AbstractRepository;
 

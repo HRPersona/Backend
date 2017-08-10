@@ -36,7 +36,7 @@ final class LoadRoleData extends AbstractFixture implements OrderedFixtureInterf
                 /** @var ModuleInterface $moduleObj */
                 $moduleObj = $this->getReference($module['ref']);
 
-                $role->setUser($userObj);
+                $role->setUserId($userObj);
                 $role->setModule($moduleObj);
                 $role->setAddable(true);
                 $role->setEditable(true);

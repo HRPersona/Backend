@@ -31,6 +31,18 @@ services:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\User'
 
+    persona.repository.orm.service_repository:
+        class: 'Persona\Hris\Repository\ORM\ServiceRepository'
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\Service'
+
+    persona.repository.orm.absent_reason_repository:
+        class: 'Persona\Hris\Repository\ORM\AbsentReasonRepository'
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\AbsentReason'
+
     persona.repository.orm.employee_absent_repository:
         class: 'Persona\Hris\Repository\ORM\EmployeeAbsentRepository'
         arguments:

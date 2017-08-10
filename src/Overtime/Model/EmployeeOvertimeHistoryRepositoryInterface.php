@@ -40,5 +40,5 @@ interface EmployeeOvertimeHistoryRepositoryInterface extends RepositoryInterface
     /**
      * @return EmployeeOvertimeHistoryInterface
      */
-    public function getExistData(): EmployeeOvertimeHistoryInterface;
+    public function getExistingData(): EmployeeOvertimeHistoryInterface;
 }

@@ -20,9 +20,7 @@ services:
     persona.manager.manager_factory:
         class: 'Persona\Hris\Core\Manager\ManagerFactory'
         arguments:
-            - '@snc_redis.cache'
             - {'read': '@persona.doctrine_read_registry', 'write':'@persona.doctrine_write_registry'}
-            - '%kernel.environment%'
 
     persona.data_provider.collection_provider:
         class: 'Persona\Hris\Core\DataProvider\ORM\CollectionDataProvider'

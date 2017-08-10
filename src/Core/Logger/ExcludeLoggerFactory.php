@@ -2,6 +2,8 @@
 
 namespace Persona\Hris\Core\Logger;
 
+use Persona\Hris\Core\Logger\Model\ExcludePathInterface;
+
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */

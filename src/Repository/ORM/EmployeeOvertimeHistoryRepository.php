@@ -82,7 +82,7 @@ final class EmployeeOvertimeHistoryRepository extends AbstractRepository impleme
     /**
      * @return EmployeeOvertimeHistoryInterface
      */
-    public function getExistData(): EmployeeOvertimeHistoryInterface
+    public function getExistingData(): EmployeeOvertimeHistoryInterface
     {
         return $this->exist;
     }

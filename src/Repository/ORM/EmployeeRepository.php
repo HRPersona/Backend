@@ -42,6 +42,19 @@ final class EmployeeRepository extends AbstractRepository implements EmployeeRep
      */
     public function find(string $id): ? EmployeeInterface
     {
-        return $this->managerFactory->getWriteManager()->getRepository($this->class)->find($id);
+        $cache = $this->managerFactory->getCacheDriver();
+        if ($cache->contains($this->class)) {
+            $data = $cache->fetch($this->class);
+            $this->managerFactory->merge([$data]);
+
+            return $data;
+        }
+
+        $data = $this->managerFactory->getWriteManager()->getRepository($this->class)->findOneBy(['id' => $id, 'deletedAt' => null]);
+        if ($data) {
+            $cache->save($this->class, $data);
+        }
+
+        return $data;
     }
 }
