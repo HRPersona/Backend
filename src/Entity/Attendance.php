@@ -6,18 +6,26 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
+use Persona\Hris\Attendance\Model\AbsentReasonAwareInterface;
 use Persona\Hris\Attendance\Model\AbsentReasonInterface;
 use Persona\Hris\Attendance\Model\EmployeeAttendanceInterface;
+use Persona\Hris\Attendance\Model\ShiftmentAwareInterface;
 use Persona\Hris\Attendance\Model\ShiftmentInterface;
-use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
+use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
+use Persona\Hris\Employee\Model\EmployeeAwareInterface;
 use Persona\Hris\Employee\Model\EmployeeInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="at_attendances")
+ * @ORM\Table(name="at_attendances", indexes={
+ *     @ORM\Index(name="client_search_idx", columns={"employee_id", "shiftment_id", "absent_reason_id"}),
+ *     @ORM\Index(name="client_search_idx_employee", columns={"employee_id"}),
+ *     @ORM\Index(name="client_search_idx_shiftment", columns={"shiftment_id"}),
+ *     @ORM\Index(name="client_search_idx_absent_reason", columns={"absent_reason_id"})
+ * })
  *
  * @ApiResource(
  *     attributes={
@@ -29,7 +37,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class Attendance implements EmployeeAttendanceInterface, ActionLoggerAwareInterface
+class Attendance implements EmployeeAttendanceInterface, EmployeeAwareInterface, AbsentReasonAwareInterface, ShiftmentAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -47,20 +55,28 @@ class Attendance implements EmployeeAttendanceInterface, ActionLoggerAwareInterf
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
-     * @ORM\JoinColumn(name="employee_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $employeeId;
+
+    /**
      * @var EmployeeInterface
      */
     private $employee;
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Shiftment", fetch="EAGER")
-     * @ORM\JoinColumn(name="shiftment_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $shiftmentId;
+
+    /**
      * @var ShiftmentInterface
      */
     private $shiftment;
@@ -134,9 +150,14 @@ class Attendance implements EmployeeAttendanceInterface, ActionLoggerAwareInterf
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\AbsentReason", fetch="EAGER")
-     * @ORM\JoinColumn(name="absen_reason_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $absentReasonId;
+
+    /**
      * @var AbsentReasonInterface
      */
     private $absentReason;
@@ -164,6 +185,22 @@ class Attendance implements EmployeeAttendanceInterface, ActionLoggerAwareInterf
     }
 
     /**
+     * @return string
+     */
+    public function getEmployeeId(): string
+    {
+        return (string) $this->employeeId;
+    }
+
+    /**
+     * @param string $employeeId
+     */
+    public function setEmployeeId(string $employeeId = null)
+    {
+        $this->employeeId = $employeeId;
+    }
+
+    /**
      * @return EmployeeInterface
      */
     public function getEmployee(): ? EmployeeInterface
@@ -177,6 +214,25 @@ class Attendance implements EmployeeAttendanceInterface, ActionLoggerAwareInterf
     public function setEmployee(EmployeeInterface $employee = null): void
     {
         $this->employee = $employee;
+        if ($employee) {
+            $this->employeeId = $employee->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getShiftmentId(): string
+    {
+        return (string) $this->shiftmentId;
+    }
+
+    /**
+     * @param string $shiftmentId
+     */
+    public function setShiftmentId(string $shiftmentId = null)
+    {
+        $this->shiftmentId = $shiftmentId;
     }
 
     /**
@@ -193,6 +249,9 @@ class Attendance implements EmployeeAttendanceInterface, ActionLoggerAwareInterf
     public function setShiftment(ShiftmentInterface $shiftment = null): void
     {
         $this->shiftment = $shiftment;
+        if ($shiftment) {
+            $this->shiftmentId = $shiftment->getId();
+        }
     }
 
     /**
@@ -324,6 +383,22 @@ class Attendance implements EmployeeAttendanceInterface, ActionLoggerAwareInterf
     }
 
     /**
+     * @return string
+     */
+    public function getAbsentReasonId(): string
+    {
+        return (string) $this->absentReasonId;
+    }
+
+    /**
+     * @param string $absentReasonId
+     */
+    public function setAbsentReasonId(string $absentReasonId = null)
+    {
+        $this->absentReasonId = $absentReasonId;
+    }
+
+    /**
      * @return AbsentReasonInterface
      */
     public function getAbsentReason(): ? AbsentReasonInterface
@@ -337,6 +412,9 @@ class Attendance implements EmployeeAttendanceInterface, ActionLoggerAwareInterf
     public function setAbsentReason(AbsentReasonInterface $absentReason = null): void
     {
         $this->absentReason = $absentReason;
+        if ($absentReason) {
+            $this->absentReasonId = $absentReason->getId();
+        }
     }
 
     /**

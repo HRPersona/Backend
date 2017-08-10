@@ -6,17 +6,23 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
+use Persona\Hris\Attendance\Model\AbsentReasonAwareInterface;
 use Persona\Hris\Attendance\Model\AbsentReasonInterface;
 use Persona\Hris\Attendance\Model\EmployeeAbsentInterface;
-use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
+use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
+use Persona\Hris\Employee\Model\EmployeeAwareInterface;
 use Persona\Hris\Employee\Model\EmployeeInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="at_absents")
+ * @ORM\Table(name="at_absents", indexes={
+ *     @ORM\Index(name="client_search_idx", columns={"employee_id", "absent_reason_id"}),
+ *     @ORM\Index(name="client_search_idx_employee", columns={"employee_id"}),
+ *     @ORM\Index(name="client_search_idx_absent_reason", columns={"absent_reason_id"})
+ * })
  *
  * @ApiResource(
  *     attributes={
@@ -28,7 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class Absent implements EmployeeAbsentInterface, ActionLoggerAwareInterface
+class Absent implements EmployeeAbsentInterface, EmployeeAwareInterface, AbsentReasonAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -46,10 +52,14 @@ class Absent implements EmployeeAbsentInterface, ActionLoggerAwareInterface
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
-     * @ORM\JoinColumn(name="employee_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $employeeId;
+
+    /**
      * @var EmployeeInterface
      */
     private $employee;
@@ -65,10 +75,14 @@ class Absent implements EmployeeAbsentInterface, ActionLoggerAwareInterface
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\AbsentReason", fetch="EAGER")
-     * @ORM\JoinColumn(name="absent_reason_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $absentReasonId;
+
+    /**
      * @var AbsentReasonInterface
      */
     private $absentReason;
@@ -91,6 +105,22 @@ class Absent implements EmployeeAbsentInterface, ActionLoggerAwareInterface
     }
 
     /**
+     * @return string
+     */
+    public function getEmployeeId(): string
+    {
+        return (string) $this->employeeId;
+    }
+
+    /**
+     * @param string $employeeId
+     */
+    public function setEmployeeId(string $employeeId = null)
+    {
+        $this->employeeId = $employeeId;
+    }
+
+    /**
      * @return EmployeeInterface
      */
     public function getEmployee(): EmployeeInterface
@@ -104,6 +134,9 @@ class Absent implements EmployeeAbsentInterface, ActionLoggerAwareInterface
     public function setEmployee(EmployeeInterface $employee = null): void
     {
         $this->employee = $employee;
+        if ($employee) {
+            $this->employeeId = $employee->getId();
+        }
     }
 
     /**
@@ -123,6 +156,22 @@ class Absent implements EmployeeAbsentInterface, ActionLoggerAwareInterface
     }
 
     /**
+     * @return string
+     */
+    public function getAbsentReasonId(): string
+    {
+        return (string) $this->absentReasonId;
+    }
+
+    /**
+     * @param string $absentReasonId
+     */
+    public function setAbsentReasonId(string $absentReasonId = null)
+    {
+        $this->absentReasonId = $absentReasonId;
+    }
+
+    /**
      * @return AbsentReasonInterface
      */
     public function getAbsentReason(): ? AbsentReasonInterface
@@ -136,6 +185,9 @@ class Absent implements EmployeeAbsentInterface, ActionLoggerAwareInterface
     public function setAbsentReason(AbsentReasonInterface $absentReason = null): void
     {
         $this->absentReason = $absentReason;
+        if ($absentReason) {
+            $this->absentReasonId = $absentReason->getId();
+        }
     }
 
     /**

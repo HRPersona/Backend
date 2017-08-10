@@ -39,7 +39,7 @@ final class EmployeeAbsentRepository extends AbstractRepository implements Emplo
     public function findByEmployeeAndDate(EmployeeInterface $employee, \DateTime $absentDate): EmployeeAbsentInterface
     {
         /** @var EmployeeAbsentInterface $data */
-        $data = $this->managerFactory->getWriteManager()->getRepository($this->class)->findOneBy(['employee' => $employee, 'absentDate' => $absentDate, 'deletedAt' => null]);
+        $data = $this->managerFactory->getWriteManager()->getRepository($this->class)->findOneBy(['employeeId' => $employee->getId(), 'absentDate' => $absentDate, 'deletedAt' => null]);
         if (!$data) {
             $data = new $this->class();
             $data->setEmployee($employee);

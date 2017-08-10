@@ -1,29 +1,29 @@
 <?php
 
-namespace Persona\Hris\Core\Security\Subscriber;
+namespace Persona\Hris\Share\Subscriber;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
-use Persona\Hris\Core\Security\Model\ServiceAwareInterface;
-use Persona\Hris\Core\Security\Model\ServiceInterface;
-use Persona\Hris\Core\Security\Model\ServiceRepositoryInterface;
+use Persona\Hris\Share\Model\ProvinceAwareInterface;
+use Persona\Hris\Share\Model\ProvinceInterface;
+use Persona\Hris\Share\Model\ProvinceRepositoryInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-final class ServiceAwareSubscriber implements EventSubscriber
+final class ProvinceAwareSubscriber implements EventSubscriber
 {
     /**
-     * @var ServiceRepositoryInterface
+     * @var ProvinceRepositoryInterface
      */
     private $repository;
 
     /**
-     * @param ServiceRepositoryInterface $repository
+     * @param ProvinceRepositoryInterface $repository
      */
-    public function __construct(ServiceRepositoryInterface $repository)
+    public function __construct(ProvinceRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
@@ -34,8 +34,8 @@ final class ServiceAwareSubscriber implements EventSubscriber
     public function prePersist(LifecycleEventArgs $eventArgs)
     {
         $entity = $eventArgs->getEntity();
-        if ($entity instanceof ServiceAwareInterface) {
-            $this->isValidOrException($entity->getServiceId());
+        if ($entity instanceof ProvinceAwareInterface) {
+            $this->isValidOrException($entity->getModuleId());
         }
     }
 
@@ -45,8 +45,8 @@ final class ServiceAwareSubscriber implements EventSubscriber
     public function preUpdate(LifecycleEventArgs $eventArgs)
     {
         $entity = $eventArgs->getEntity();
-        if ($entity instanceof ServiceAwareInterface) {
-            $this->isValidOrException($entity->getServiceId());
+        if ($entity instanceof ProvinceAwareInterface) {
+            $this->isValidOrException($entity->getModuleId());
         }
     }
 
@@ -57,8 +57,8 @@ final class ServiceAwareSubscriber implements EventSubscriber
      */
     private function isValidOrException(string $id): ? bool
     {
-        if (!$this->repository->find($id) instanceof ServiceInterface) {
-            throw new NotFoundHttpException(sprintf('Service with id %s is not found.', $id));
+        if (!$this->repository->find($id) instanceof ProvinceInterface) {
+            throw new NotFoundHttpException(sprintf('Province with id %s is not found.', $id));
         }
 
         return true;

@@ -132,3 +132,15 @@ services:
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\EmployeeCourse'
+
+    persona.repository.orm.shiftment_repository:
+        class: 'Persona\Hris\Repository\ORM\ShiftmentRepository'
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\Shiftment'
+
+    persona.repository.orm.province_repository:
+        class: 'Persona\Hris\Repository\ORM\ProvinceRepository'
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\Province'

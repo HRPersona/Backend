@@ -26,3 +26,24 @@ services:
             - '@persona.repository.orm.absent_reason_repository'
         tags:
             - { name: 'doctrine.event_subscriber' }
+
+    persona.attendance.shiftment_subscriber:
+        class: 'Persona\Hris\Attendance\Subscriber\ShiftmentAwareSubscriber'
+        arguments:
+            - '@persona.repository.orm.shiftment_repository'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
+    persona.employee.employee_aware_subscriber:
+        class: 'Persona\Hris\Employee\Subscriber\EmployeeAwareSubscriber'
+        arguments:
+            - '@persona.repository.orm.employee_repository'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
+    persona.share.province_subscriber:
+        class: 'Persona\Hris\Share\Subscriber\ProvinceAwareSubscriber'
+        arguments:
+            - '@persona.repository.orm.province_repository'
+        tags:
+            - { name: 'doctrine.event_subscriber' }

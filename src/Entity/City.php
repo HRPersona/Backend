@@ -6,10 +6,11 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
-use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
+use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Util\StringUtil;
 use Persona\Hris\Share\Model\CityInterface;
+use Persona\Hris\Share\Model\ProvinceAwareInterface;
 use Persona\Hris\Share\Model\ProvinceInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -18,8 +19,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity()
  * @ORM\Table(name="s_cities", indexes={
- *     @ORM\Index(name="city_search_idx", columns={"code", "name"}),
+ *     @ORM\Index(name="city_search_idx", columns={"province_id", "code", "name"}),
  *     @ORM\Index(name="city_search_idx_code", columns={"code"}),
+ *     @ORM\Index(name="city_search_idx_province", columns={"province_id"}),
  *     @ORM\Index(name="city_search_idx_name", columns={"name"})
  * })
  *
@@ -40,7 +42,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class City implements CityInterface, ActionLoggerAwareInterface
+class City implements CityInterface, ProvinceAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -58,10 +60,14 @@ class City implements CityInterface, ActionLoggerAwareInterface
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Province", fetch="EAGER")
-     * @ORM\JoinColumn(name="province_id", referencedColumnName="id")
+     * @ORM\Column(type="string")
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $provinceId;
+
+    /**
      * @var ProvinceInterface
      */
     private $province;
@@ -101,6 +107,22 @@ class City implements CityInterface, ActionLoggerAwareInterface
     }
 
     /**
+     * @return string
+     */
+    public function getProvinceId(): string
+    {
+        return (string) $this->provinceId;
+    }
+
+    /**
+     * @param string $provinceId
+     */
+    public function setProvinceId(string $provinceId = null)
+    {
+        $this->provinceId = $provinceId;
+    }
+
+    /**
      * @return ProvinceInterface
      */
     public function getProvince(): ? ProvinceInterface
@@ -114,6 +136,9 @@ class City implements CityInterface, ActionLoggerAwareInterface
     public function setProvince(ProvinceInterface $province = null): void
     {
         $this->province = $province;
+        if ($province) {
+            $this->provinceId = $province->getId();
+        }
     }
 
     /**
