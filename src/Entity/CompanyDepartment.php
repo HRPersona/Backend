@@ -93,7 +93,7 @@ class CompanyDepartment implements CompanyDepartmentInterface, CompanyAwareInter
      */
     public function getCompanyId(): string
     {
-        return $this->companyId;
+        return (string) $this->companyId;
     }
 
     /**
@@ -128,7 +128,7 @@ class CompanyDepartment implements CompanyDepartmentInterface, CompanyAwareInter
      */
     public function getDepartmentId(): string
     {
-        return $this->departmentId;
+        return (string) $this->departmentId;
     }
 
     /**

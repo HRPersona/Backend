@@ -109,7 +109,7 @@ class CourseAttendance implements CourseAttendanceInterface, CourseAwareInterfac
      */
     public function getCourseId(): string
     {
-        return $this->courseId;
+        return (string) $this->courseId;
     }
 
     /**
@@ -144,7 +144,7 @@ class CourseAttendance implements CourseAttendanceInterface, CourseAwareInterfac
      */
     public function getEmployeeId(): string
     {
-        return $this->employeeId;
+        return (string) $this->employeeId;
     }
 
     /**

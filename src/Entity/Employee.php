@@ -9,10 +9,16 @@ use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
 use Persona\Hris\Employee\Model\EmployeeInterface;
+use Persona\Hris\Organization\Model\CompanyAwareInterface;
 use Persona\Hris\Organization\Model\CompanyInterface;
+use Persona\Hris\Organization\Model\DepartmentAwareInterface;
 use Persona\Hris\Organization\Model\DepartmentInterface;
+use Persona\Hris\Organization\Model\JobTitleAwareInterface;
 use Persona\Hris\Organization\Model\JobTitleInterface;
+use Persona\Hris\Share\Model\CityAwareInterface;
 use Persona\Hris\Share\Model\CityInterface;
+use Persona\Hris\Share\Model\PlaceOfBirthAwareInterface;
+use Persona\Hris\Share\Model\ProvinceAwareInterface;
 use Persona\Hris\Share\Model\ProvinceInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -22,7 +28,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity()
  * @ORM\Table(name="em_employees", indexes={
  *     @ORM\Index(name="employee_search_idx", columns={"code", "email", "tax_number", "phone_number"}),
+ *     @ORM\Index(name="employee_search_idx_relation", columns={"company_id", "department_id", "job_title_id", "birth_city_id"}),
  *     @ORM\Index(name="employee_search_idx_code", columns={"code"}),
+ *     @ORM\Index(name="employee_search_idx_company", columns={"company_id"}),
+ *     @ORM\Index(name="employee_search_idx_department", columns={"department_id"}),
+ *     @ORM\Index(name="employee_search_idx_job_title", columns={"job_title_id"}),
+ *     @ORM\Index(name="employee_search_idx_birth_city", columns={"birth_city_id"}),
+ *     @ORM\Index(name="employee_search_idx_city", columns={"city_id"}),
+ *     @ORM\Index(name="employee_search_idx_province", columns={"province_id"}),
  *     @ORM\Index(name="employee_search_idx_email", columns={"email"}),
  *     @ORM\Index(name="employee_search_idx_tax_number", columns={"tax_number"}),
  *     @ORM\Index(name="employee_search_idx_phone_number", columns={"phone_number"})
@@ -48,7 +61,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class Employee implements EmployeeInterface, ActionLoggerAwareInterface
+class Employee implements EmployeeInterface, ProvinceAwareInterface, CityAwareInterface, PlaceOfBirthAwareInterface, JobTitleAwareInterface, CompanyAwareInterface, DepartmentAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -102,30 +115,42 @@ class Employee implements EmployeeInterface, ActionLoggerAwareInterface
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\JobTitle", fetch="EAGER")
-     * @ORM\JoinColumn(name="jobtitle_id", referencedColumnName="id")
+     * @ORM\Column(type="string")
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $jobTitleId;
+
+    /**
      * @var JobTitleInterface
      */
     private $jobTitle;
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Company", fetch="EAGER")
-     * @ORM\JoinColumn(name="company_id", referencedColumnName="id")
+     * @ORM\Column(type="string")
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $companyId;
+
+    /**
      * @var CompanyInterface
      */
     private $company;
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Department", fetch="EAGER")
-     * @ORM\JoinColumn(name="department_id", referencedColumnName="id")
+     * @ORM\Column(type="string")
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $departmentId;
+
+    /**
      * @var DepartmentInterface
      */
     private $department;
@@ -150,10 +175,14 @@ class Employee implements EmployeeInterface, ActionLoggerAwareInterface
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\City", fetch="EAGER")
-     * @ORM\JoinColumn(name="birth_city_id", referencedColumnName="id")
+     * @ORM\Column(type="string", name="birth_city_id")
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $placeOfBirthId;
+
+    /**
      * @var CityInterface
      */
     private $placeOfBirth;
@@ -205,20 +234,28 @@ class Employee implements EmployeeInterface, ActionLoggerAwareInterface
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\City", fetch="EAGER")
-     * @ORM\JoinColumn(name="city_id", referencedColumnName="id")
+     * @ORM\Column(type="string")
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $cityId;
+
+    /**
      * @var CityInterface
      */
     private $city;
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Province", fetch="EAGER")
-     * @ORM\JoinColumn(name="province_id", referencedColumnName="id")
+     * @ORM\Column(type="string")
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $provinceId;
+
+    /**
      * @var ProvinceInterface
      */
     private $province;
@@ -373,9 +410,25 @@ class Employee implements EmployeeInterface, ActionLoggerAwareInterface
     }
 
     /**
+     * @return string
+     */
+    public function getJobTitleId(): string
+    {
+        return (string) $this->jobTitleId;
+    }
+
+    /**
+     * @param string $jobTitleId
+     */
+    public function setJobTitleId(string $jobTitleId = null)
+    {
+        $this->jobTitleId = $jobTitleId;
+    }
+
+    /**
      * @return JobTitleInterface
      */
-    public function getJobTitle(): JobTitleInterface
+    public function getJobTitle(): ? JobTitleInterface
     {
         return $this->jobTitle;
     }
@@ -386,12 +439,31 @@ class Employee implements EmployeeInterface, ActionLoggerAwareInterface
     public function setJobTitle(JobTitleInterface $jobTitle = null): void
     {
         $this->jobTitle = $jobTitle;
+        if ($jobTitle) {
+            $this->jobTitleId = $jobTitle->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyId(): string
+    {
+        return (string) $this->companyId;
+    }
+
+    /**
+     * @param string $companyId
+     */
+    public function setCompanyId(string $companyId = null)
+    {
+        $this->companyId = $companyId;
     }
 
     /**
      * @return CompanyInterface
      */
-    public function getCompany(): CompanyInterface
+    public function getCompany(): ? CompanyInterface
     {
         return $this->company;
     }
@@ -402,12 +474,31 @@ class Employee implements EmployeeInterface, ActionLoggerAwareInterface
     public function setCompany(CompanyInterface $company = null): void
     {
         $this->company = $company;
+        if ($company) {
+            $this->companyId = $company->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getDepartmentId(): string
+    {
+        return (string) $this->departmentId;
+    }
+
+    /**
+     * @param string $departmentId
+     */
+    public function setDepartmentId(string $departmentId = null)
+    {
+        $this->departmentId = $departmentId;
     }
 
     /**
      * @return DepartmentInterface
      */
-    public function getDepartment(): DepartmentInterface
+    public function getDepartment(): ? DepartmentInterface
     {
         return $this->department;
     }
@@ -418,6 +509,9 @@ class Employee implements EmployeeInterface, ActionLoggerAwareInterface
     public function setDepartment(DepartmentInterface $department = null): void
     {
         $this->department = $department;
+        if ($department) {
+            $this->departmentId = $department->getId();
+        }
     }
 
     /**
@@ -453,9 +547,25 @@ class Employee implements EmployeeInterface, ActionLoggerAwareInterface
     }
 
     /**
+     * @return string
+     */
+    public function getPlaceOfBirthId(): string
+    {
+        return (string) $this->placeOfBirthId;
+    }
+
+    /**
+     * @param string $placeOfBirthId
+     */
+    public function setPlaceOfBirthId(string $placeOfBirthId = null)
+    {
+        $this->placeOfBirthId = $placeOfBirthId;
+    }
+
+    /**
      * @return CityInterface
      */
-    public function getPlaceOfBirth(): CityInterface
+    public function getPlaceOfBirth(): ? CityInterface
     {
         return $this->placeOfBirth;
     }
@@ -466,6 +576,9 @@ class Employee implements EmployeeInterface, ActionLoggerAwareInterface
     public function setPlaceOfBirth(CityInterface $placeOfBirth = null): void
     {
         $this->placeOfBirth = $placeOfBirth;
+        if ($placeOfBirth) {
+            $this->placeOfBirthId = $placeOfBirth->getId();
+        }
     }
 
     /**
@@ -549,9 +662,25 @@ class Employee implements EmployeeInterface, ActionLoggerAwareInterface
     }
 
     /**
+     * @return string
+     */
+    public function getCityId(): string
+    {
+        return (string) $this->cityId;
+    }
+
+    /**
+     * @param string $cityId
+     */
+    public function setCityId(string $cityId = null)
+    {
+        $this->cityId = $cityId;
+    }
+
+    /**
      * @return CityInterface
      */
-    public function getCity(): CityInterface
+    public function getCity(): ? CityInterface
     {
         return $this->city;
     }
@@ -562,12 +691,31 @@ class Employee implements EmployeeInterface, ActionLoggerAwareInterface
     public function setCity(CityInterface $city = null): void
     {
         $this->city = $city;
+        if ($city) {
+            $this->cityId = $city->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getProvinceId(): string
+    {
+        return (string) $this->provinceId;
+    }
+
+    /**
+     * @param string $provinceId
+     */
+    public function setProvinceId(string $provinceId = null)
+    {
+        $this->provinceId = $provinceId;
     }
 
     /**
      * @return ProvinceInterface
      */
-    public function getProvince(): ProvinceInterface
+    public function getProvince(): ? ProvinceInterface
     {
         return $this->province;
     }
@@ -578,6 +726,9 @@ class Employee implements EmployeeInterface, ActionLoggerAwareInterface
     public function setProvince(ProvinceInterface $province = null): void
     {
         $this->province = $province;
+        if ($province) {
+            $this->provinceId = $province->getId();
+        }
     }
 
     /**

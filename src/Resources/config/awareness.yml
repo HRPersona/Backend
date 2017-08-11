@@ -69,6 +69,13 @@ services:
         tags:
             - { name: 'doctrine.event_subscriber' }
 
+    persona.organization.job_title_subscriber:
+        class: 'Persona\Hris\Organization\Subscriber\JobTitleAwareSubscriber'
+        arguments:
+            - '@persona.repository.orm.job_title_repository'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
     persona.performance.indicator_subscriber:
         class: 'Persona\Hris\Performance\Subscriber\IndicatorAwareSubscriber'
         arguments:

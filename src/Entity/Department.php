@@ -102,7 +102,7 @@ class Department implements DepartmentInterface, ParentDepartmentAwareInterface,
      */
     public function getParentId(): string
     {
-        return $this->parentId;
+        return (string) $this->parentId;
     }
 
     /**

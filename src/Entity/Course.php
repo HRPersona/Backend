@@ -222,7 +222,7 @@ class Course implements CourseInterface, UniversityAwareInterface, IndicatorAwar
      */
     public function getIndicatorId(): string
     {
-        return $this->indicatorId;
+        return (string) $this->indicatorId;
     }
 
     /**
@@ -257,7 +257,7 @@ class Course implements CourseInterface, UniversityAwareInterface, IndicatorAwar
      */
     public function getUniversityId(): string
     {
-        return $this->universityId;
+        return (string) $this->universityId;
     }
 
     /**

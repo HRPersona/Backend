@@ -174,3 +174,9 @@ services:
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\Course'
+
+    persona.repository.orm.job_title_repository:
+        class: 'Persona\Hris\Repository\ORM\JobTitleRepository'
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\Course'

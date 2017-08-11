@@ -160,7 +160,7 @@ class Company implements CompanyInterface, ParentCompanyAwareInterface, ActionLo
      */
     public function getParentId(): string
     {
-        return $this->parentId;
+        return (string) $this->parentId;
     }
 
     /**
