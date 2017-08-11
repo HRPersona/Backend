@@ -13,9 +13,9 @@ interface EmployeeAwareInterface
     public function getEmployeeId(): string;
 
     /**
-     * @param string|null $module
+     * @param string|null $employee
      */
-    public function setEmployeeId(string $module = null);
+    public function setEmployeeId(string $employee = null);
 
     /**
      * @return null|EmployeeInterface
@@ -23,7 +23,7 @@ interface EmployeeAwareInterface
     public function getEmployee(): ? EmployeeInterface;
 
     /**
-     * @param EmployeeInterface|null $module
+     * @param EmployeeInterface|null $employee
      */
-    public function setEmployee(EmployeeInterface $module = null): void;
+    public function setEmployee(EmployeeInterface $employee = null): void;
 }

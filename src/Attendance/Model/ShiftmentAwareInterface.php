@@ -13,9 +13,9 @@ interface ShiftmentAwareInterface
     public function getShiftmentId(): string;
 
     /**
-     * @param string|null $module
+     * @param string|null $shiftment
      */
-    public function setShiftmentId(string $module = null);
+    public function setShiftmentId(string $shiftment = null);
 
     /**
      * @return null|ShiftmentInterface
@@ -23,7 +23,7 @@ interface ShiftmentAwareInterface
     public function getShiftment(): ? ShiftmentInterface;
 
     /**
-     * @param ShiftmentInterface|null $module
+     * @param ShiftmentInterface|null $shiftment
      */
-    public function setShiftment(ShiftmentInterface $module = null): void;
+    public function setShiftment(ShiftmentInterface $shiftment = null): void;
 }

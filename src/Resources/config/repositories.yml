@@ -144,3 +144,15 @@ services:
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\Province'
+
+    persona.repository.orm.company_repository:
+        class: 'Persona\Hris\Repository\ORM\CompanyRepository'
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\Company'
+
+    persona.repository.orm.department_repository:
+        class: 'Persona\Hris\Repository\ORM\DepartmentRepository'
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\Department'

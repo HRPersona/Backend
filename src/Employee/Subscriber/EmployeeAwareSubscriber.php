@@ -35,7 +35,7 @@ final class EmployeeAwareSubscriber implements EventSubscriber
     {
         $entity = $eventArgs->getEntity();
         if ($entity instanceof EmployeeAwareInterface) {
-            $this->isValidOrException($entity->getModuleId());
+            $this->isValidOrException($entity->getEmployeeId());
         }
     }
 
@@ -46,7 +46,7 @@ final class EmployeeAwareSubscriber implements EventSubscriber
     {
         $entity = $eventArgs->getEntity();
         if ($entity instanceof EmployeeAwareInterface) {
-            $this->isValidOrException($entity->getModuleId());
+            $this->isValidOrException($entity->getEmployeeId());
         }
     }
 
@@ -57,7 +57,7 @@ final class EmployeeAwareSubscriber implements EventSubscriber
     {
         $entity = $eventArgs->getEntity();
         if ($entity instanceof EmployeeAwareInterface) {
-            $entity->setModule($this->repository->find($entity->getModuleId()));
+            $entity->setEmployee($this->repository->find($entity->getEmployeeId()));
         }
     }
 

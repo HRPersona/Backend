@@ -10,6 +10,7 @@ use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Util\StringUtil;
 use Persona\Hris\Organization\Model\CompanyInterface;
+use Persona\Hris\Organization\Model\ParentCompanyAwareInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -17,7 +18,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity()
  * @ORM\Table(name="og_companies", indexes={
- *     @ORM\Index(name="company_search_idx", columns={"code", "email", "tax_number", "phone_number"}),
+ *     @ORM\Index(name="company_search_idx", columns={"parent_id", "code", "email", "tax_number", "phone_number"}),
+ *     @ORM\Index(name="company_search_idx_parent", columns={"parent_id"}),
  *     @ORM\Index(name="company_search_idx_code", columns={"code"}),
  *     @ORM\Index(name="company_search_idx_email", columns={"email"}),
  *     @ORM\Index(name="company_search_idx_tax_number", columns={"tax_number"}),
@@ -44,7 +46,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class Company implements CompanyInterface, ActionLoggerAwareInterface
+class Company implements CompanyInterface, ParentCompanyAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -62,9 +64,14 @@ class Company implements CompanyInterface, ActionLoggerAwareInterface
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Company", fetch="EAGER")
-     * @ORM\JoinColumn(name="company_id", referencedColumnName="id")
+     * @ORM\Column(type="string")
+     * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $parentId;
+
+    /**
      * @var CompanyInterface
      */
     private $parent;
@@ -149,6 +156,22 @@ class Company implements CompanyInterface, ActionLoggerAwareInterface
     }
 
     /**
+     * @return string
+     */
+    public function getParentId(): string
+    {
+        return $this->parentId;
+    }
+
+    /**
+     * @param string $parentId
+     */
+    public function setParentId(string $parentId = null)
+    {
+        $this->parentId = $parentId;
+    }
+
+    /**
      * @return CompanyInterface
      */
     public function getParent(): ? CompanyInterface
@@ -162,6 +185,9 @@ class Company implements CompanyInterface, ActionLoggerAwareInterface
     public function setParent(CompanyInterface $parent = null): void
     {
         $this->parent = $parent;
+        if ($parent) {
+            $this->parentId = $parent;
+        }
     }
 
     /**

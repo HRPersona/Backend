@@ -47,3 +47,17 @@ services:
             - '@persona.repository.orm.province_repository'
         tags:
             - { name: 'doctrine.event_subscriber' }
+
+    persona.organization.company_subscriber:
+        class: 'Persona\Hris\Organization\Subscriber\CompanyAwareSubscriber'
+        arguments:
+            - '@persona.repository.orm.company_repository'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
+    persona.organization.department_subscriber:
+        class: 'Persona\Hris\Organization\Subscriber\DepartmentAwareSubscriber'
+        arguments:
+            - '@persona.repository.orm.department_repository'
+        tags:
+            - { name: 'doctrine.event_subscriber' }

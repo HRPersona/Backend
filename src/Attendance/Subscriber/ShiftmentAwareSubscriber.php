@@ -35,7 +35,7 @@ final class ShiftmentAwareSubscriber implements EventSubscriber
     {
         $entity = $eventArgs->getEntity();
         if ($entity instanceof ShiftmentAwareInterface) {
-            $this->isValidOrException($entity->getModuleId());
+            $this->isValidOrException($entity->getShiftmentId());
         }
     }
 
@@ -46,7 +46,7 @@ final class ShiftmentAwareSubscriber implements EventSubscriber
     {
         $entity = $eventArgs->getEntity();
         if ($entity instanceof ShiftmentAwareInterface) {
-            $this->isValidOrException($entity->getModuleId());
+            $this->isValidOrException($entity->getShiftmentId());
         }
     }
 
@@ -57,7 +57,7 @@ final class ShiftmentAwareSubscriber implements EventSubscriber
     {
         $entity = $eventArgs->getEntity();
         if ($entity instanceof ShiftmentAwareInterface) {
-            $entity->setModule($this->repository->find($entity->getModuleId()));
+            $entity->setShiftment($this->repository->find($entity->getShiftmentId()));
         }
     }
 

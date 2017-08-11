@@ -13,9 +13,9 @@ interface ProvinceAwareInterface
     public function getProvinceId(): string;
 
     /**
-     * @param string|null $module
+     * @param string|null $province
      */
-    public function setProvinceId(string $module = null);
+    public function setProvinceId(string $province = null);
 
     /**
      * @return null|ProvinceInterface
@@ -23,7 +23,7 @@ interface ProvinceAwareInterface
     public function getProvince(): ? ProvinceInterface;
 
     /**
-     * @param ProvinceInterface|null $module
+     * @param ProvinceInterface|null $province
      */
-    public function setProvince(ProvinceInterface $module = null): void;
+    public function setProvince(ProvinceInterface $province = null): void;
 }

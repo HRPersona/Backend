@@ -10,6 +10,7 @@ use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Util\StringUtil;
 use Persona\Hris\Organization\Model\DepartmentInterface;
+use Persona\Hris\Organization\Model\ParentDepartmentAwareInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -17,7 +18,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity()
  * @ORM\Table(name="og_departments", indexes={
- *     @ORM\Index(name="department_search_idx", columns={"code", "name"}),
+ *     @ORM\Index(name="department_search_idx", columns={"parent_id", "code", "name"}),
+ *     @ORM\Index(name="department_search_idx_parent", columns={"parent_id"}),
  *     @ORM\Index(name="department_search_idx_code", columns={"code"}),
  *     @ORM\Index(name="department_search_idx_name", columns={"name"})
  * })
@@ -39,7 +41,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class Department implements DepartmentInterface, ActionLoggerAwareInterface
+class Department implements DepartmentInterface, ParentDepartmentAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -57,9 +59,14 @@ class Department implements DepartmentInterface, ActionLoggerAwareInterface
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Department", fetch="EAGER")
-     * @ORM\JoinColumn(name="department_id", referencedColumnName="id")
+     * @ORM\Column(type="string")
+     * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $parentId;
+
+    /**
      * @var DepartmentInterface
      */
     private $parent;
@@ -91,6 +98,22 @@ class Department implements DepartmentInterface, ActionLoggerAwareInterface
     }
 
     /**
+     * @return string
+     */
+    public function getParentId(): string
+    {
+        return $this->parentId;
+    }
+
+    /**
+     * @param string $parentId
+     */
+    public function setParentId(string $parentId = null)
+    {
+        $this->parentId = $parentId;
+    }
+
+    /**
      * @return DepartmentInterface
      */
     public function getParent(): ? DepartmentInterface
@@ -104,6 +127,9 @@ class Department implements DepartmentInterface, ActionLoggerAwareInterface
     public function setParent(DepartmentInterface $parent = null): void
     {
         $this->parent = $parent;
+        if ($parent) {
+            $this->parentId = $parent->getId();
+        }
     }
 
     /**

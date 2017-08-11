@@ -13,9 +13,9 @@ interface AbsentReasonAwareInterface
     public function getAbsentReasonId(): string;
 
     /**
-     * @param string|null $module
+     * @param string|null $absentReason
      */
-    public function setAbsentReasonId(string $module = null);
+    public function setAbsentReasonId(string $absentReason = null);
 
     /**
      * @return null|AbsentReasonInterface
@@ -23,7 +23,7 @@ interface AbsentReasonAwareInterface
     public function getAbsentReason(): ? AbsentReasonInterface;
 
     /**
-     * @param AbsentReasonInterface|null $module
+     * @param AbsentReasonInterface|null $absentReason
      */
-    public function setAbsentReason(AbsentReasonInterface $module = null): void;
+    public function setAbsentReason(AbsentReasonInterface $absentReason = null): void;
 }

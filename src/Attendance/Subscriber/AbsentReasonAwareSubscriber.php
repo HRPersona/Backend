@@ -35,7 +35,7 @@ final class AbsentReasonAwareSubscriber implements EventSubscriber
     {
         $entity = $eventArgs->getEntity();
         if ($entity instanceof AbsentReasonAwareInterface) {
-            $this->isValidOrException($entity->getModuleId());
+            $this->isValidOrException($entity->getAbsentReasonId());
         }
     }
 
@@ -46,7 +46,7 @@ final class AbsentReasonAwareSubscriber implements EventSubscriber
     {
         $entity = $eventArgs->getEntity();
         if ($entity instanceof AbsentReasonAwareInterface) {
-            $this->isValidOrException($entity->getModuleId());
+            $this->isValidOrException($entity->getAbsentReasonId());
         }
     }
 
@@ -57,7 +57,7 @@ final class AbsentReasonAwareSubscriber implements EventSubscriber
     {
         $entity = $eventArgs->getEntity();
         if ($entity instanceof AbsentReasonAwareInterface) {
-            $entity->setModule($this->repository->find($entity->getModuleId()));
+            $entity->setAbsentReason($this->repository->find($entity->getAbsentReasonId()));
         }
     }
 

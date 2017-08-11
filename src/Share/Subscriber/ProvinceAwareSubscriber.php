@@ -35,7 +35,7 @@ final class ProvinceAwareSubscriber implements EventSubscriber
     {
         $entity = $eventArgs->getEntity();
         if ($entity instanceof ProvinceAwareInterface) {
-            $this->isValidOrException($entity->getModuleId());
+            $this->isValidOrException($entity->getProvinceId());
         }
     }
 
@@ -46,7 +46,7 @@ final class ProvinceAwareSubscriber implements EventSubscriber
     {
         $entity = $eventArgs->getEntity();
         if ($entity instanceof ProvinceAwareInterface) {
-            $this->isValidOrException($entity->getModuleId());
+            $this->isValidOrException($entity->getProvinceId());
         }
     }
 
