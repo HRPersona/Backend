@@ -8,16 +8,24 @@ use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
+use Persona\Hris\Employee\Model\EmployeeAwareInterface;
 use Persona\Hris\Employee\Model\EmployeeEducationInterface;
 use Persona\Hris\Employee\Model\EmployeeInterface;
+use Persona\Hris\Share\Model\EducationTitleAwareInterface;
 use Persona\Hris\Share\Model\EducationTitleInterface;
+use Persona\Hris\Share\Model\UniversityAwareInterface;
 use Persona\Hris\Share\Model\UniversityInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="em_employee_educations")
+ * @ORM\Table(name="em_employee_educations", indexes={
+ *     @ORM\Index(name="employee_education_search_idx", columns={"employee_id", "university_id", "education_title_id"}),
+ *     @ORM\Index(name="employee_education_search_idx_employee", columns={"employee_id"}),
+ *     @ORM\Index(name="employee_education_search_idx_university", columns={"university_id"}),
+ *     @ORM\Index(name="employee_education_search_idx_education_title", columns={"education_title_id"})
+ * })
  *
  * @ApiResource(
  *     attributes={
@@ -29,7 +37,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class EmployeeEducation implements EmployeeEducationInterface, ActionLoggerAwareInterface
+class EmployeeEducation implements EmployeeEducationInterface, EmployeeAwareInterface, UniversityAwareInterface, EducationTitleAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -47,10 +55,14 @@ class EmployeeEducation implements EmployeeEducationInterface, ActionLoggerAware
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
-     * @ORM\JoinColumn(name="employee_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $employeeId;
+
+    /**
      * @var EmployeeInterface
      */
     private $employee;
@@ -75,20 +87,28 @@ class EmployeeEducation implements EmployeeEducationInterface, ActionLoggerAware
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\University", fetch="EAGER")
-     * @ORM\JoinColumn(name="university_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $universityId;
+
+    /**
      * @var UniversityInterface
      */
     private $university;
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\EducationTitle", fetch="EAGER")
-     * @ORM\JoinColumn(name="education_title_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $educationTitleId;
+
+    /**
      * @var EducationTitleInterface
      */
     private $educationTitle;
@@ -111,9 +131,25 @@ class EmployeeEducation implements EmployeeEducationInterface, ActionLoggerAware
     }
 
     /**
+     * @return string
+     */
+    public function getEmployeeId(): string
+    {
+        return (string) $this->employeeId;
+    }
+
+    /**
+     * @param string $employeeId
+     */
+    public function setEmployeeId(string $employeeId = null)
+    {
+        $this->employeeId = $employeeId;
+    }
+
+    /**
      * @return EmployeeInterface
      */
-    public function getEmployee(): EmployeeInterface
+    public function getEmployee(): ? EmployeeInterface
     {
         return $this->employee;
     }
@@ -124,6 +160,9 @@ class EmployeeEducation implements EmployeeEducationInterface, ActionLoggerAware
     public function setEmployee(EmployeeInterface $employee = null): void
     {
         $this->employee = $employee;
+        if ($employee) {
+            $this->employeeId = $employee->getId();
+        }
     }
 
     /**
@@ -159,9 +198,25 @@ class EmployeeEducation implements EmployeeEducationInterface, ActionLoggerAware
     }
 
     /**
+     * @return string
+     */
+    public function getUniversityId(): string
+    {
+        return (string) $this->universityId;
+    }
+
+    /**
+     * @param string $universityId
+     */
+    public function setUniversityId(string $universityId = null)
+    {
+        $this->universityId = $universityId;
+    }
+
+    /**
      * @return UniversityInterface
      */
-    public function getUniversity(): UniversityInterface
+    public function getUniversity(): ? UniversityInterface
     {
         return $this->university;
     }
@@ -172,12 +227,31 @@ class EmployeeEducation implements EmployeeEducationInterface, ActionLoggerAware
     public function setUniversity(UniversityInterface $university = null): void
     {
         $this->university = $university;
+        if ($university) {
+            $this->universityId = $university->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getEducationTitleId(): string
+    {
+        return (string) $this->educationTitleId;
+    }
+
+    /**
+     * @param string $educationTitleId
+     */
+    public function setEducationTitleId(string $educationTitleId = null)
+    {
+        $this->educationTitleId = $educationTitleId;
     }
 
     /**
      * @return EducationTitleInterface
      */
-    public function getEducationTitle(): EducationTitleInterface
+    public function getEducationTitle(): ? EducationTitleInterface
     {
         return $this->educationTitle;
     }
@@ -188,6 +262,9 @@ class EmployeeEducation implements EmployeeEducationInterface, ActionLoggerAware
     public function setEducationTitle(EducationTitleInterface $educationTitle = null): void
     {
         $this->educationTitle = $educationTitle;
+        if ($educationTitle) {
+            $this->educationTitleId = $educationTitle->getId();
+        }
     }
 
     /**

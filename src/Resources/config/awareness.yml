@@ -55,6 +55,13 @@ services:
         tags:
             - { name: 'doctrine.event_subscriber' }
 
+    persona.share.education_title_subscriber:
+        class: 'Persona\Hris\Share\Subscriber\EducationTitleAwareSubscriber'
+        arguments:
+            - '@persona.repository.orm.education_title_repository'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
     persona.organization.company_subscriber:
         class: 'Persona\Hris\Organization\Subscriber\CompanyAwareSubscriber'
         arguments:

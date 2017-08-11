@@ -115,7 +115,7 @@ class Employee implements EmployeeInterface, ProvinceAwareInterface, CityAwareIn
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
      * @var string
@@ -129,7 +129,7 @@ class Employee implements EmployeeInterface, ProvinceAwareInterface, CityAwareIn
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
      * @var string
@@ -143,7 +143,7 @@ class Employee implements EmployeeInterface, ProvinceAwareInterface, CityAwareIn
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
      * @var string
@@ -175,7 +175,7 @@ class Employee implements EmployeeInterface, ProvinceAwareInterface, CityAwareIn
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string", name="birth_city_id")
+     * @ORM\Column(type="string", name="birth_city_id", nullable=true)
      * @Assert\NotBlank()
      *
      * @var string
@@ -234,7 +234,7 @@ class Employee implements EmployeeInterface, ProvinceAwareInterface, CityAwareIn
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
      * @var string
@@ -248,7 +248,7 @@ class Employee implements EmployeeInterface, ProvinceAwareInterface, CityAwareIn
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
      * @var string

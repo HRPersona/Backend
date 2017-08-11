@@ -6,6 +6,12 @@
 Persona HRIS adalah sistem informasi yang bertujuan untuk membantu pekerjaan HRD (Human Resources Department) dan Penggajian
 yang fokus pada regulasi perundangan yang berlaku di Indonesia.
 
+## WARNING
+
+Persona HRIS menggunakan schemaless arsitektur sehingga tidak ada relasi langsung antara satu tabel dengan tabel lainnya di database.
+Hal ini bertujuan untuk memudahkann porting dan integrasi dengan Data Storage lain seperti NoSQL Database dan Graph Database.
+Penanganan relasi dan validasinya dilakukan pada level aplikasi. 
+
 ## Minimal Requirement
 
 ```
@@ -66,6 +72,7 @@ yang fokus pada regulasi perundangan yang berlaku di Indonesia.
 
 - Limit day per leave
 - Leave Adjustment
+- Resign Managementnya lupa cuy
 - Remove All Query and Result Cache, Use Response Cache Only Instaed - Done
 - Create subscriber for Overtime base on real case - Done
 - Taxing (perpajakan) - Done

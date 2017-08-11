@@ -13,6 +13,7 @@ use Persona\Hris\Organization\Model\CompanyDepartmentInterface;
 use Persona\Hris\Organization\Model\CompanyInterface;
 use Persona\Hris\Organization\Model\DepartmentAwareInterface;
 use Persona\Hris\Organization\Model\DepartmentInterface;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -34,6 +35,8 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     }
  * )
  *
+ * @UniqueEntity({"company", "department"})
+ *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
 class CompanyDepartment implements CompanyDepartmentInterface, CompanyAwareInterface, DepartmentAwareInterface, ActionLoggerAwareInterface
@@ -54,7 +57,7 @@ class CompanyDepartment implements CompanyDepartmentInterface, CompanyAwareInter
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
      * @var string
@@ -68,7 +71,7 @@ class CompanyDepartment implements CompanyDepartmentInterface, CompanyAwareInter
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
      * @var string

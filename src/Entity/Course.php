@@ -103,7 +103,7 @@ class Course implements CourseInterface, UniversityAwareInterface, IndicatorAwar
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
      * @var string
@@ -117,7 +117,7 @@ class Course implements CourseInterface, UniversityAwareInterface, IndicatorAwar
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
      * @var string
