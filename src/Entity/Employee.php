@@ -832,7 +832,27 @@ class Employee implements EmployeeInterface, ProvinceAwareInterface, CityAwareIn
      */
     public function isResign(): bool
     {
-        return $this->resign;
+        if (!$this->getResignDate()) {
+            return false;
+        }
+
+        $lastDayOfMonth = \DateTime::createFromFormat('Y-m-d', date('Y-m-t'));
+        $resignDateString = sprintf(
+            '%s-%s-%s %s:%s:%s',
+            $this->getResignDate()->format('Y'),
+            $this->getResignDate()->format('m'),
+            $this->getResignDate()->format('d'),
+            $lastDayOfMonth->format('H'),
+            $lastDayOfMonth->format('i'),
+            $lastDayOfMonth->format('s')
+        );
+
+        $resignDate = \DateTime::createFromFormat('Y-m-d H:i:s', $resignDateString);
+        if ($resignDate > $lastDayOfMonth && $this->resign) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -846,7 +866,7 @@ class Employee implements EmployeeInterface, ProvinceAwareInterface, CityAwareIn
     /**
      * @return \DateTime
      */
-    public function getResignDate(): \DateTime
+    public function getResignDate(): ? \DateTime
     {
         return $this->resignDate;
     }

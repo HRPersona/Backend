@@ -73,6 +73,7 @@ Penanganan relasi dan validasinya dilakukan pada level aplikasi.
 - Limit day per leave
 - Leave Adjustment
 - Resign Managementnya lupa cuy
+- Hidup Gaji proporsional sesuai tanggal masuk atau resign
 - Remove All Query and Result Cache, Use Response Cache Only Instaed - Done
 - Create subscriber for Overtime base on real case - Done
 - Taxing (perpajakan) - Done
