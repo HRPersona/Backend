@@ -48,6 +48,13 @@ services:
         tags:
             - { name: 'doctrine.event_subscriber' }
 
+    persona.share.university_subscriber:
+        class: 'Persona\Hris\Share\Subscriber\UniversityAwareSubscriber'
+        arguments:
+            - '@persona.repository.orm.university_repository'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
     persona.organization.company_subscriber:
         class: 'Persona\Hris\Organization\Subscriber\CompanyAwareSubscriber'
         arguments:
@@ -59,5 +66,19 @@ services:
         class: 'Persona\Hris\Organization\Subscriber\DepartmentAwareSubscriber'
         arguments:
             - '@persona.repository.orm.department_repository'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
+    persona.performance.indicator_subscriber:
+        class: 'Persona\Hris\Performance\Subscriber\IndicatorAwareSubscriber'
+        arguments:
+            - '@persona.repository.orm.indicator_repository'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
+    persona.course.course_subscriber:
+        class: 'Persona\Hris\Course\Subscriber\CourseAwareSubscriber'
+        arguments:
+            - '@persona.repository.orm.course_repository'
         tags:
             - { name: 'doctrine.event_subscriber' }

@@ -17,32 +17,32 @@ services:
             
     persona.filter.parent_filter:
         parent:    'api_platform.doctrine.orm.search_filter'
-        arguments: [ { parent.id: 'exact', parent.name: 'partial' } ]
+        arguments: [ { parentId: 'exact' } ]
         tags:      [ { name: 'api_platform.filter', id: 'parent.search' } ]
             
     persona.filter.user_search:
         parent:    'api_platform.doctrine.orm.search_filter'
-        arguments: [ { user.id: 'exact', user.username: 'exact', user.email: 'exact' } ]
+        arguments: [ { userId: 'exact' } ]
         tags:      [ { name: 'api_platform.filter', id: 'user.search' } ]
             
     persona.filter.module_search:
         parent:    'api_platform.doctrine.orm.search_filter'
-        arguments: [ { module.id: 'exact' } ]
+        arguments: [ { moduleId: 'exact' } ]
         tags:      [ { name: 'api_platform.filter', id: 'module.search' } ]
 
     persona.filter.service_search:
         parent:    'api_platform.doctrine.orm.search_filter'
-        arguments: [ { service.id: 'exact' } ]
+        arguments: [ { serviceId: 'exact' } ]
         tags:      [ { name: 'api_platform.filter', id: 'service.search' } ]
             
     persona.filter.menu_display_search:
         parent:    'api_platform.doctrine.orm.boolean_filter'
-        arguments: [ { module.menuDisplay: ~ } ]
+        arguments: [ { menuDisplay: ~ } ]
         tags:      [ { name: 'api_platform.filter', id: 'menu_display.search' } ]
             
     persona.filter.path_filter:
         parent:    'api_platform.doctrine.orm.search_filter'
-        arguments: [ { method: 'partial' } ]
+        arguments: [ { path: 'partial' } ]
         tags:      [ { name: 'api_platform.filter', id: 'path.search' } ]
             
     persona.filter.method_filter:

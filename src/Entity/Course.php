@@ -10,7 +10,9 @@ use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
 use Persona\Hris\Core\Util\StringUtil;
 use Persona\Hris\Course\Model\CourseInterface;
+use Persona\Hris\Performance\Model\IndicatorAwareInterface;
 use Persona\Hris\Performance\Model\IndicatorInterface;
+use Persona\Hris\Share\Model\UniversityAwareInterface;
 use Persona\Hris\Share\Model\UniversityInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -18,7 +20,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="cr_courses", indexes={@ORM\Index(name="course_search_idx", columns={"name"})})
+ * @ORM\Table(name="cr_courses", indexes={
+ *     @ORM\Index(name="course_search_idx", columns={"name", "indicator_id", "university_id"}),
+ *     @ORM\Index(name="course_search_indicator", columns={"indicator_id"}),
+ *     @ORM\Index(name="course_search_university", columns={"university_id"})
+ * })
  *
  * @ApiResource(
  *     attributes={
@@ -35,7 +41,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class Course implements CourseInterface, ActionLoggerAwareInterface
+class Course implements CourseInterface, UniversityAwareInterface, IndicatorAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -97,18 +103,28 @@ class Course implements CourseInterface, ActionLoggerAwareInterface
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\PerformanceIndicator", fetch="EAGER")
-     * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id")
+     * @ORM\Column(type="string")
+     * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $indicatorId;
+
+    /**
      * @var IndicatorInterface
      */
     private $indicator;
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\University", fetch="EAGER")
-     * @ORM\JoinColumn(name="university_id", referencedColumnName="id")
+     * @ORM\Column(type="string")
+     * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $universityId;
+
+    /**
      * @var UniversityInterface
      */
     private $university;
@@ -202,6 +218,22 @@ class Course implements CourseInterface, ActionLoggerAwareInterface
     }
 
     /**
+     * @return string
+     */
+    public function getIndicatorId(): string
+    {
+        return $this->indicatorId;
+    }
+
+    /**
+     * @param string $indicatorId
+     */
+    public function setIndicatorId(string $indicatorId = null)
+    {
+        $this->indicatorId = $indicatorId;
+    }
+
+    /**
      * @return IndicatorInterface
      */
     public function getIndicator(): ? IndicatorInterface
@@ -215,6 +247,25 @@ class Course implements CourseInterface, ActionLoggerAwareInterface
     public function setIndicator(IndicatorInterface $indicator = null): void
     {
         $this->indicator = $indicator;
+        if ($indicator) {
+            $this->indicatorId = $indicator->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getUniversityId(): string
+    {
+        return $this->universityId;
+    }
+
+    /**
+     * @param string $universityId
+     */
+    public function setUniversityId(string $universityId = null)
+    {
+        $this->universityId = $universityId;
     }
 
     /**
@@ -231,5 +282,8 @@ class Course implements CourseInterface, ActionLoggerAwareInterface
     public function setUniversity(UniversityInterface $university = null): void
     {
         $this->university = $university;
+        if ($university) {
+            $this->universityId = $university->getId();
+        }
     }
 }

@@ -53,7 +53,7 @@ services:
         class: 'Persona\Hris\Repository\ORM\EmployeeAttendanceRepository'
         arguments:
             - '@persona.manager.manager_factory'
-            - 'Persona\Hris\Entity\EmployeeAttendance'
+            - 'Persona\Hris\Entity\Attendance'
 
     persona.repository.orm.holiday_repository:
         class: 'Persona\Hris\Repository\ORM\HolidayRepository'
@@ -156,3 +156,21 @@ services:
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\Department'
+
+    persona.repository.orm.indicator_repository:
+        class: 'Persona\Hris\Repository\ORM\IndicatorRepository'
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\Indicator'
+
+    persona.repository.orm.university_repository:
+        class: 'Persona\Hris\Repository\ORM\UniversityRepository'
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\University'
+
+    persona.repository.orm.course_repository:
+        class: 'Persona\Hris\Repository\ORM\CourseRepository'
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\Course'

@@ -9,14 +9,20 @@ use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
 use Persona\Hris\Course\Model\CourseAttendanceInterface;
+use Persona\Hris\Course\Model\CourseAwareInterface;
 use Persona\Hris\Course\Model\CourseInterface;
+use Persona\Hris\Employee\Model\EmployeeAwareInterface;
 use Persona\Hris\Employee\Model\EmployeeInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="cr_course_attendances")
+ * @ORM\Table(name="cr_course_attendances", indexes={
+ *     @ORM\Index(name="course_attendance_search_idx", columns={"course_id", "employee_id"}),
+ *     @ORM\Index(name="course_attendance_search_course", columns={"course_id"}),
+ *     @ORM\Index(name="course_attendance_search_employee", columns={"employee_id"})
+ * })
  *
  * @ApiResource(
  *     attributes={
@@ -28,7 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class CourseAttendance implements CourseAttendanceInterface, ActionLoggerAwareInterface
+class CourseAttendance implements CourseAttendanceInterface, CourseAwareInterface, EmployeeAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -46,20 +52,28 @@ class CourseAttendance implements CourseAttendanceInterface, ActionLoggerAwareIn
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Course", fetch="EAGER")
-     * @ORM\JoinColumn(name="course_id", referencedColumnName="id")
+     * @ORM\Column(type="string")
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $courseId;
+
+    /**
      * @var CourseInterface
      */
     private $course;
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
-     * @ORM\JoinColumn(name="employee_id", referencedColumnName="id")
+     * @ORM\Column(type="string")
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $employeeId;
+
+    /**
      * @var EmployeeInterface
      */
     private $employee;
@@ -91,6 +105,22 @@ class CourseAttendance implements CourseAttendanceInterface, ActionLoggerAwareIn
     }
 
     /**
+     * @return string
+     */
+    public function getCourseId(): string
+    {
+        return $this->courseId;
+    }
+
+    /**
+     * @param string $courseId
+     */
+    public function setCourseId(string $courseId = null)
+    {
+        $this->courseId = $courseId;
+    }
+
+    /**
      * @return CourseInterface
      */
     public function getCourse(): ? CourseInterface
@@ -104,6 +134,25 @@ class CourseAttendance implements CourseAttendanceInterface, ActionLoggerAwareIn
     public function setCourse(CourseInterface $course = null): void
     {
         $this->course = $course;
+        if ($course) {
+            $this->courseId = $course->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmployeeId(): string
+    {
+        return $this->employeeId;
+    }
+
+    /**
+     * @param string $employeeId
+     */
+    public function setEmployeeId(string $employeeId = null)
+    {
+        $this->employeeId = $employeeId;
     }
 
     /**
@@ -120,6 +169,9 @@ class CourseAttendance implements CourseAttendanceInterface, ActionLoggerAwareIn
     public function setEmployee(EmployeeInterface $employee = null): void
     {
         $this->employee = $employee;
+        if ($employee) {
+            $this->employeeId = $employee->getId();
+        }
     }
 
     /**
