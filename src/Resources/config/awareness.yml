@@ -96,3 +96,10 @@ services:
             - '@persona.repository.orm.course_repository'
         tags:
             - { name: 'doctrine.event_subscriber' }
+
+    persona.salary.benefit_subscriber:
+        class: 'Persona\Hris\Salary\Subscriber\BenefitAwareSubscriber'
+        arguments:
+            - '@persona.repository.orm.benefit_repository'
+        tags:
+            - { name: 'doctrine.event_subscriber' }

@@ -10,13 +10,20 @@ use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
 use Persona\Hris\Insurance\Model\InsuranceInterface;
 use Persona\Hris\Salary\Model\BenefitInterface;
+use Persona\Hris\Salary\Model\MinusBenefitAwareInterface;
+use Persona\Hris\Salary\Model\PlusBenefitAwareInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="in_insurances", indexes={@ORM\Index(name="insurance_search_idx", columns={"name"})})
+ * @ORM\Table(name="in_insurances", indexes={
+ *     @ORM\Index(name="insurance_search_idx", columns={"name", "plus_benefit_id", "minus_benefit_id"}),
+ *     @ORM\Index(name="insurance_search_name", columns={"name"}),
+ *     @ORM\Index(name="insurance_search_plus_benefit", columns={"plus_benefit_id"}),
+ *     @ORM\Index(name="insurance_search_minus_benefit", columns={"minus_benefit_id"})
+ * })
  *
  * @ApiResource(
  *     attributes={
@@ -30,7 +37,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class Insurance implements InsuranceInterface, ActionLoggerAwareInterface
+class Insurance implements InsuranceInterface, PlusBenefitAwareInterface, MinusBenefitAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -57,20 +64,28 @@ class Insurance implements InsuranceInterface, ActionLoggerAwareInterface
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Benefit", fetch="EAGER")
-     * @ORM\JoinColumn(name="plus_benefit_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $plusBenefitId;
+
+    /**
      * @var BenefitInterface
      */
     private $plusBenefit;
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Benefit", fetch="EAGER")
-     * @ORM\JoinColumn(name="minus_benefit_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $minusBenefitId;
+
+    /**
      * @var BenefitInterface
      */
     private $minusBenefit;
@@ -109,6 +124,22 @@ class Insurance implements InsuranceInterface, ActionLoggerAwareInterface
     }
 
     /**
+     * @return string
+     */
+    public function getPlusBenefitId(): string
+    {
+        return $this->plusBenefitId;
+    }
+
+    /**
+     * @param string $plusBenefitId
+     */
+    public function setPlusBenefitId(string $plusBenefitId = null)
+    {
+        $this->plusBenefitId = $plusBenefitId;
+    }
+
+    /**
      * @return BenefitInterface
      */
     public function getPlusBenefit(): ? BenefitInterface
@@ -122,6 +153,25 @@ class Insurance implements InsuranceInterface, ActionLoggerAwareInterface
     public function setPlusBenefit(BenefitInterface $plusBenefit = null): void
     {
         $this->plusBenefit = $plusBenefit;
+        if ($plusBenefit) {
+            $this->plusBenefitId = $plusBenefit->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getMinusBenefitId(): string
+    {
+        return $this->minusBenefitId;
+    }
+
+    /**
+     * @param string $minusBenefitId
+     */
+    public function setMinusBenefitId(string $minusBenefitId = null)
+    {
+        $this->minusBenefitId = $minusBenefitId;
     }
 
     /**
@@ -138,6 +188,9 @@ class Insurance implements InsuranceInterface, ActionLoggerAwareInterface
     public function setMinusBenefit(BenefitInterface $minusBenefit = null): void
     {
         $this->minusBenefit = $minusBenefit;
+        if ($minusBenefit) {
+            $this->minusBenefitId = $minusBenefit->getId();
+        }
     }
 
     /**

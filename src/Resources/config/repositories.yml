@@ -186,3 +186,9 @@ services:
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\EducationTitle'
+
+    persona.repository.orm.benefit_repository:
+        class: 'Persona\Hris\Repository\ORM\BenefitRepository'
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\Benefit'

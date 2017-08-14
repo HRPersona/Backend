@@ -8,14 +8,20 @@ use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
+use Persona\Hris\Employee\Model\EmployeeAwareInterface;
 use Persona\Hris\Employee\Model\EmployeeInterface;
 use Persona\Hris\Insurance\Model\EmployeeInsuranceInterface;
+use Persona\Hris\Insurance\Model\InsuranceAwareInterface;
 use Persona\Hris\Insurance\Model\InsuranceInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="in_employee_insurances")
+ * @ORM\Table(name="in_employee_insurances", indexes={
+ *     @ORM\Index(name="employee_education_search_idx", columns={"employee_id", "insurance_id"}),
+ *     @ORM\Index(name="employee_education_search_employee", columns={"employee_id"}),
+ *     @ORM\Index(name="employee_education_search_insurance", columns={"insurance_id"})
+ * })
  *
  * @ApiResource(
  *     attributes={
@@ -27,7 +33,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class EmployeeInsurance implements EmployeeInsuranceInterface, ActionLoggerAwareInterface
+class EmployeeInsurance implements EmployeeInsuranceInterface, EmployeeAwareInterface, InsuranceAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -44,19 +50,29 @@ class EmployeeInsurance implements EmployeeInsuranceInterface, ActionLoggerAware
     private $id;
 
     /**
-     * @Groups({"read"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
-     * @ORM\JoinColumn(name="employee_id", referencedColumnName="id")
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $employeeId;
+
+    /**
      * @var EmployeeInterface
      */
     private $employee;
 
     /**
-     * @Groups({"read"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Insurance", fetch="EAGER")
-     * @ORM\JoinColumn(name="insurance_id", referencedColumnName="id")
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $insuranceId;
+
+    /**
      * @var InsuranceInterface
      */
     private $insurance;
@@ -67,6 +83,22 @@ class EmployeeInsurance implements EmployeeInsuranceInterface, ActionLoggerAware
     public function getId(): string
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmployeeId(): string
+    {
+        return (string) $this->employeeId;
+    }
+
+    /**
+     * @param string $employeeId
+     */
+    public function setEmployeeId(string $employeeId = null)
+    {
+        $this->employeeId = $employeeId;
     }
 
     /**
@@ -83,6 +115,25 @@ class EmployeeInsurance implements EmployeeInsuranceInterface, ActionLoggerAware
     public function setEmployee(EmployeeInterface $employee = null): void
     {
         $this->employee = $employee;
+        if ($employee) {
+            $this->employeeId = $employee->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getInsuranceId(): string
+    {
+        return $this->insuranceId;
+    }
+
+    /**
+     * @param string $insuranceId
+     */
+    public function setInsuranceId(string $insuranceId = null)
+    {
+        $this->insuranceId = $insuranceId;
     }
 
     /**
@@ -99,5 +150,8 @@ class EmployeeInsurance implements EmployeeInsuranceInterface, ActionLoggerAware
     public function setInsurance(InsuranceInterface $insurance = null): void
     {
         $this->insurance = $insurance;
+        if ($insurance) {
+            $this->insuranceId = $insurance->getId();
+        }
     }
 }

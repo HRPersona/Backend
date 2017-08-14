@@ -50,7 +50,7 @@ final class CityAwareSubscriber implements EventSubscriber
     public function preUpdate(LifecycleEventArgs $eventArgs)
     {
         $entity = $eventArgs->getEntity();
-        if ($entity instanceof PlaceOfBirthAwareInterface) {
+        if ($entity instanceof CityAwareInterface) {
             $this->isValidOrException($entity->getCityId());
         }
 

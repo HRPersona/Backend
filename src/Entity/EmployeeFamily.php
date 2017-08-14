@@ -8,17 +8,27 @@ use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
+use Persona\Hris\Employee\Model\EmployeeAwareInterface;
 use Persona\Hris\Employee\Model\EmployeeFamilyInterface;
 use Persona\Hris\Employee\Model\EmployeeInterface;
 use Persona\Hris\Share\Model\CityInterface;
+use Persona\Hris\Share\Model\EducationTitleAwareInterface;
 use Persona\Hris\Share\Model\EducationTitleInterface;
+use Persona\Hris\Share\Model\PlaceOfBirthAwareInterface;
+use Persona\Hris\Share\Model\UniversityAwareInterface;
 use Persona\Hris\Share\Model\UniversityInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="em_employee_families")
+ * @ORM\Table(name="em_employee_families", indexes={
+ *     @ORM\Index(name="employee_education_search_idx", columns={"employee_id", "birth_city_id", "university_id", "education_title_id"}),
+ *     @ORM\Index(name="employee_education_search_employee_id", columns={"employee_id"}),
+ *     @ORM\Index(name="employee_education_search_birth_city", columns={"birth_city_id"}),
+ *     @ORM\Index(name="employee_education_search_university", columns={"university_id"}),
+ *     @ORM\Index(name="employee_education_search_education_title", columns={"education_title_id"})
+ * })
  *
  * @ApiResource(
  *     attributes={
@@ -30,7 +40,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class EmployeeFamily implements EmployeeFamilyInterface, ActionLoggerAwareInterface
+class EmployeeFamily implements EmployeeFamilyInterface, EmployeeAwareInterface, PlaceOfBirthAwareInterface, UniversityAwareInterface, EducationTitleAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -48,10 +58,14 @@ class EmployeeFamily implements EmployeeFamilyInterface, ActionLoggerAwareInterf
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
-     * @ORM\JoinColumn(name="employee_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $employeeId;
+
+    /**
      * @var EmployeeInterface
      */
     private $employee;
@@ -77,10 +91,13 @@ class EmployeeFamily implements EmployeeFamilyInterface, ActionLoggerAwareInterf
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\City", fetch="EAGER")
-     * @ORM\JoinColumn(name="birth_city_id", referencedColumnName="id")
-     * @Assert\NotBlank()
+     * @ORM\Column(type="string", name="birth_city_id", nullable=true)
      *
+     * @var string
+     */
+    private $placeOfBirthId;
+
+    /**
      * @var CityInterface
      */
     private $placeOfBirth;
@@ -96,18 +113,26 @@ class EmployeeFamily implements EmployeeFamilyInterface, ActionLoggerAwareInterf
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\University", fetch="EAGER")
-     * @ORM\JoinColumn(name="university_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      *
+     * @var string
+     */
+    private $universityId;
+
+    /**
      * @var UniversityInterface
      */
     private $university;
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\EducationTitle", fetch="EAGER")
-     * @ORM\JoinColumn(name="education_title_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      *
+     * @var string
+     */
+    private $educationTitleId;
+
+    /**
      * @var EducationTitleInterface
      */
     private $educationTitle;
@@ -118,6 +143,22 @@ class EmployeeFamily implements EmployeeFamilyInterface, ActionLoggerAwareInterf
     public function getId(): string
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getEmployeeId(): string
+    {
+        return (string) $this->employeeId;
+    }
+
+    /**
+     * @param string $employeeId
+     */
+    public function setEmployeeId(string $employeeId = null)
+    {
+        $this->employeeId = $employeeId;
     }
 
     /**
@@ -134,6 +175,9 @@ class EmployeeFamily implements EmployeeFamilyInterface, ActionLoggerAwareInterf
     public function setEmployee(EmployeeInterface $employee = null): void
     {
         $this->employee = $employee;
+        if ($employee) {
+            $this->employeeId = $employee->getId();
+        }
     }
 
     /**
@@ -173,6 +217,22 @@ class EmployeeFamily implements EmployeeFamilyInterface, ActionLoggerAwareInterf
     }
 
     /**
+     * @return string
+     */
+    public function getPlaceOfBirthId(): string
+    {
+        return (string) $this->placeOfBirthId;
+    }
+
+    /**
+     * @param string $placeOfBirthId
+     */
+    public function setPlaceOfBirthId(string $placeOfBirthId = null)
+    {
+        $this->placeOfBirthId = $placeOfBirthId;
+    }
+
+    /**
      * @return CityInterface|null
      */
     public function getPlaceOfBirth(): ? CityInterface
@@ -186,6 +246,9 @@ class EmployeeFamily implements EmployeeFamilyInterface, ActionLoggerAwareInterf
     public function setPlaceOfBirth(CityInterface $placeOfBirth = null): void
     {
         $this->placeOfBirth = $placeOfBirth;
+        if ($placeOfBirth) {
+            $this->placeOfBirthId = $placeOfBirth->getId();
+        }
     }
 
     /**
@@ -205,6 +268,22 @@ class EmployeeFamily implements EmployeeFamilyInterface, ActionLoggerAwareInterf
     }
 
     /**
+     * @return string
+     */
+    public function getUniversityId(): string
+    {
+        return (string) $this->universityId;
+    }
+
+    /**
+     * @param string $universityId
+     */
+    public function setUniversityId(string $universityId = null)
+    {
+        $this->universityId = $universityId;
+    }
+
+    /**
      * @return UniversityInterface
      */
     public function getUniversity(): ? UniversityInterface
@@ -218,6 +297,25 @@ class EmployeeFamily implements EmployeeFamilyInterface, ActionLoggerAwareInterf
     public function setUniversity(UniversityInterface $university = null): void
     {
         $this->university = $university;
+        if ($university) {
+            $this->universityId = $university->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getEducationTitleId(): string
+    {
+        return (string) $this->educationTitleId;
+    }
+
+    /**
+     * @param string $educationTitleId
+     */
+    public function setEducationTitleId(string $educationTitleId = null)
+    {
+        $this->educationTitleId = $educationTitleId;
     }
 
     /**
@@ -234,5 +332,8 @@ class EmployeeFamily implements EmployeeFamilyInterface, ActionLoggerAwareInterf
     public function setEducationTitle(EducationTitleInterface $educationTitle = null): void
     {
         $this->educationTitle = $educationTitle;
+        if ($educationTitle) {
+            $this->educationTitleId = $educationTitle->getId();
+        }
     }
 }
