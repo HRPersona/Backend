@@ -16,7 +16,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="sa_payroll_details")
+ * @ORM\Table(name="sa_payroll_details", indexes={
+ *     @ORM\Index(name="payroll_detail_search_idx", columns={"payroll_id", "benefit_id"}),
+ *     @ORM\Index(name="payroll_detail_search_payroll_id", columns={"payroll_id"}),
+ *     @ORM\Index(name="payroll_detail_search_benefit", columns={"benefit_id"})
+ * })
  *
  * @ApiResource(
  *     attributes={
@@ -45,27 +49,35 @@ class PayrollDetail implements PayrollDetailInterface, ActionLoggerAwareInterfac
     private $id;
 
     /**
-     * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Payroll", fetch="EAGER")
-     * @ORM\JoinColumn(name="payroll_id", referencedColumnName="id")
+     * @Groups({"read"})
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $payrollId;
+
+    /**
      * @var PayrollInterface
      */
     private $payroll;
 
     /**
-     * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Benefit", fetch="EAGER")
-     * @ORM\JoinColumn(name="benefit_id", referencedColumnName="id")
+     * @Groups({"read"})
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $benefitId;
+
+    /**
      * @var BenefitInterface
      */
     private $benefit;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\Column(type="string", length=1)
      * @Assert\NotBlank()
      *
@@ -74,7 +86,7 @@ class PayrollDetail implements PayrollDetailInterface, ActionLoggerAwareInterfac
     private $benefitType;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\Column(type="float", scale=27, precision=2)
      * @Assert\NotBlank()
      *
@@ -91,6 +103,22 @@ class PayrollDetail implements PayrollDetailInterface, ActionLoggerAwareInterfac
     }
 
     /**
+     * @return string
+     */
+    public function getPayrollId(): string
+    {
+        return (string) $this->payrollId;
+    }
+
+    /**
+     * @param string $payrollId
+     */
+    public function setPayrollId(string $payrollId)
+    {
+        $this->payrollId = $payrollId;
+    }
+
+    /**
      * @return PayrollInterface
      */
     public function getPayroll(): ? PayrollInterface
@@ -104,6 +132,25 @@ class PayrollDetail implements PayrollDetailInterface, ActionLoggerAwareInterfac
     public function setPayroll(PayrollInterface $payroll = null): void
     {
         $this->payroll = $payroll;
+        if ($payroll) {
+            $this->payrollId = $payroll->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getBenefitId(): string
+    {
+        return (string) $this->benefitId;
+    }
+
+    /**
+     * @param string $benefitId
+     */
+    public function setBenefitId(string $benefitId)
+    {
+        $this->benefitId = $benefitId;
     }
 
     /**
@@ -120,6 +167,9 @@ class PayrollDetail implements PayrollDetailInterface, ActionLoggerAwareInterfac
     public function setBenefit(BenefitInterface $benefit = null): void
     {
         $this->benefit = $benefit;
+        if ($benefit) {
+            $this->benefitId = $benefit->getId();
+        }
     }
 
     /**

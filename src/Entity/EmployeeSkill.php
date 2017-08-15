@@ -114,7 +114,7 @@ class EmployeeSkill implements EmployeeSkillInterface, EmployeeAwareInterface, S
     /**
      * @return EmployeeInterface
      */
-    public function getEmployee(): EmployeeInterface
+    public function getEmployee(): ? EmployeeInterface
     {
         return $this->employee;
     }

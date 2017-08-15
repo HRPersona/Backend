@@ -28,7 +28,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  *         "filters"={"order.filter"},
  *         "normalization_context"={"groups"={"read"}},
  *         "denormalization_context"={"groups"={"write"}}
- *     }
+ *     },
+ *     collectionOperations={"get"={"method"="GET"}},
+ *     itemOperations={"get"={"method"="GET"}}
  * )
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
@@ -50,7 +52,7 @@ class Overtime implements EmployeeOvertimeInterface, EmployeeAwareInterface, Pro
     private $id;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
@@ -64,7 +66,7 @@ class Overtime implements EmployeeOvertimeInterface, EmployeeAwareInterface, Pro
     private $employee;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
@@ -78,7 +80,7 @@ class Overtime implements EmployeeOvertimeInterface, EmployeeAwareInterface, Pro
     private $proposedBy;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\Column(type="date")
      * @Assert\NotBlank()
      *
@@ -87,7 +89,7 @@ class Overtime implements EmployeeOvertimeInterface, EmployeeAwareInterface, Pro
     private $overtimeDate;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\Column(type="float", scale=27, precision=2)
      * @Assert\NotBlank()
      *
@@ -104,7 +106,7 @@ class Overtime implements EmployeeOvertimeInterface, EmployeeAwareInterface, Pro
     private $offTime;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\Column(type="string")
      * @Assert\NotBlank()
      *
@@ -144,7 +146,7 @@ class Overtime implements EmployeeOvertimeInterface, EmployeeAwareInterface, Pro
     /**
      * @return EmployeeInterface
      */
-    public function getEmployee(): EmployeeInterface
+    public function getEmployee(): ? EmployeeInterface
     {
         return $this->employee;
     }

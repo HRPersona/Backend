@@ -110,7 +110,7 @@ class SalaryBenefit implements EmployeeBenefitInterface, ActionLoggerAwareInterf
     /**
      * @return EmployeeInterface
      */
-    public function getEmployee(): EmployeeInterface
+    public function getEmployee(): ? EmployeeInterface
     {
         return $this->employee;
     }

@@ -93,7 +93,7 @@ class WorkShift implements EmployeeShiftmentInterface, ActionLoggerAwareInterfac
     /**
      * @return EmployeeInterface
      */
-    public function getEmployee(): EmployeeInterface
+    public function getEmployee(): ? EmployeeInterface
     {
         return $this->employee;
     }

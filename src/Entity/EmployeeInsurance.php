@@ -105,7 +105,7 @@ class EmployeeInsurance implements EmployeeInsuranceInterface, EmployeeAwareInte
     /**
      * @return EmployeeInterface
      */
-    public function getEmployee(): EmployeeInterface
+    public function getEmployee(): ? EmployeeInterface
     {
         return $this->employee;
     }

@@ -148,7 +148,7 @@ class InsuranceHistory implements InsuranceHistoryInterface, EmployeeAwareInterf
     /**
      * @return EmployeeInterface
      */
-    public function getEmployee(): EmployeeInterface
+    public function getEmployee(): ? EmployeeInterface
     {
         return $this->employee;
     }

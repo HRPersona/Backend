@@ -91,7 +91,7 @@ class TaxHistory implements TaxHistoryInterface, ActionLoggerAwareInterface
     /**
      * @return EmployeeInterface
      */
-    public function getEmployee(): EmployeeInterface
+    public function getEmployee(): ? EmployeeInterface
     {
         return $this->employee;
     }

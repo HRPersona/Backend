@@ -8,13 +8,15 @@ use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
+use Persona\Hris\Employee\Model\EmployeeAwareInterface;
 use Persona\Hris\Employee\Model\EmployeeInterface;
 use Persona\Hris\Overtime\Model\EmployeeOvertimeHistoryInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="ov_overtime_histories")
+ * @ORM\Table(name="ov_overtime_histories", indexes={@ORM\Index(name="overtime_history_search_idx", columns={"employee_id"})})
  *
  * @ApiResource(
  *     attributes={
@@ -26,7 +28,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class OvertimeHistory implements EmployeeOvertimeHistoryInterface, ActionLoggerAwareInterface
+class OvertimeHistory implements EmployeeOvertimeHistoryInterface, EmployeeAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -44,9 +46,13 @@ class OvertimeHistory implements EmployeeOvertimeHistoryInterface, ActionLoggerA
 
     /**
      * @Groups({"read"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
-     * @ORM\JoinColumn(name="employee_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      *
+     * @var string
+     */
+    private $employeeId;
+
+    /**
      * @var EmployeeInterface
      */
     private $employee;
@@ -78,6 +84,7 @@ class OvertimeHistory implements EmployeeOvertimeHistoryInterface, ActionLoggerA
     /**
      * @Groups({"read", "write"})
      * @ORM\Column(type="boolean")
+     * @Assert\NotBlank()
      *
      * @var bool
      */
@@ -97,9 +104,25 @@ class OvertimeHistory implements EmployeeOvertimeHistoryInterface, ActionLoggerA
     }
 
     /**
+     * @return string
+     */
+    public function getEmployeeId(): string
+    {
+        return (string) $this->employeeId;
+    }
+
+    /**
+     * @param string $employeeId
+     */
+    public function setEmployeeId(string $employeeId = null)
+    {
+        $this->employeeId = $employeeId;
+    }
+
+    /**
      * @return EmployeeInterface
      */
-    public function getEmployee(): EmployeeInterface
+    public function getEmployee(): ? EmployeeInterface
     {
         return $this->employee;
     }
@@ -110,6 +133,9 @@ class OvertimeHistory implements EmployeeOvertimeHistoryInterface, ActionLoggerA
     public function setEmployee(EmployeeInterface $employee = null): void
     {
         $this->employee = $employee;
+        if ($this->employee) {
+            $this->employeeId = $employee->getId();
+        }
     }
 
     /**

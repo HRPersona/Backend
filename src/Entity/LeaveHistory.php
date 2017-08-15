@@ -160,7 +160,7 @@ class LeaveHistory implements EmployeeLeaveInterface, EmployeeAwareInterface, Le
     /**
      * @return EmployeeInterface
      */
-    public function getEmployee(): EmployeeInterface
+    public function getEmployee(): ? EmployeeInterface
     {
         return $this->employee;
     }

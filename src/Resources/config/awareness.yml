@@ -110,3 +110,10 @@ services:
             - '@persona.repository.orm.leave_repository'
         tags:
             - { name: 'doctrine.event_subscriber' }
+
+    persona.salary.payroll_subscriber:
+        class: 'Persona\Hris\Salary\Subscriber\PayrollAwareSubscriber'
+        arguments:
+            - '@persona.repository.orm.payroll_repository'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
