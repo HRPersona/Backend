@@ -22,7 +22,7 @@ abstract class AbstractRepository implements RepositoryInterface
 
     /**
      * @param ManagerFactory $managerFactory
-     * @param string $class
+     * @param string         $class
      */
     public function __construct(ManagerFactory $managerFactory, string $class)
     {
@@ -48,13 +48,12 @@ abstract class AbstractRepository implements RepositoryInterface
 
             return $this->fecth($cache, $id);
         } catch (\Exception $exception) {
-
             return $this->fecth($cache, $id);
         }
     }
 
     /**
-     * @param Cache $cache
+     * @param Cache  $cache
      * @param string $id
      *
      * @return null|object

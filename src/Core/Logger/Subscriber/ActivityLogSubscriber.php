@@ -105,8 +105,12 @@ final class ActivityLogSubscriber implements EventSubscriber
         }
 
         $request = $event->getRequest();
+        if (!$apiKey = $request->query->get('api_key')) {
+            return;
+        }
+
         /** @var ClientInterface $client */
-        $client = $this->clientRepository->findByApiKey($request->query->get('api_key'));
+        $client = $this->clientRepository->findByApiKey($apiKey);
 
         if (!$client) {
             return;
