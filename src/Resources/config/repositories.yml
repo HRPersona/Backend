@@ -192,3 +192,9 @@ services:
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\Benefit'
+
+    persona.repository.orm.leave_repository:
+        class: 'Persona\Hris\Repository\ORM\LeaveRepository'
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\Leave'

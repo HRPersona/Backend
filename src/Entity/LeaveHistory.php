@@ -8,15 +8,23 @@ use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
+use Persona\Hris\Employee\Model\ApprovedByAwareInterface;
+use Persona\Hris\Employee\Model\EmployeeAwareInterface;
 use Persona\Hris\Employee\Model\EmployeeInterface;
 use Persona\Hris\Leave\Model\EmployeeLeaveInterface;
+use Persona\Hris\Leave\Model\LeaveAwareInterface;
 use Persona\Hris\Leave\Model\LeaveInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="lv_leave_histories")
+ * @ORM\Table(name="lv_leave_histories", indexes={
+ *     @ORM\Index(name="leave_history_search_idx", columns={"employee_id", "leave_id", "approved_by_id"}),
+ *     @ORM\Index(name="leave_history_search_employee_id", columns={"employee_id"}),
+ *     @ORM\Index(name="leave_history_search_leave", columns={"leave_id"}),
+ *     @ORM\Index(name="leave_history_search_approved_by", columns={"approved_by_id"})
+ * })
  *
  * @ApiResource(
  *     attributes={
@@ -28,7 +36,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class LeaveHistory implements EmployeeLeaveInterface, ActionLoggerAwareInterface
+class LeaveHistory implements EmployeeLeaveInterface, EmployeeAwareInterface, LeaveAwareInterface, ApprovedByAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -46,20 +54,28 @@ class LeaveHistory implements EmployeeLeaveInterface, ActionLoggerAwareInterface
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
-     * @ORM\JoinColumn(name="employee_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $employeeId;
+
+    /**
      * @var EmployeeInterface
      */
     private $employee;
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Leave", fetch="EAGER")
-     * @ORM\JoinColumn(name="leave_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $leaveId;
+
+    /**
      * @var LeaveInterface
      */
     private $leave;
@@ -101,9 +117,13 @@ class LeaveHistory implements EmployeeLeaveInterface, ActionLoggerAwareInterface
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
-     * @ORM\JoinColumn(name="approved_by_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      *
+     * @var string
+     */
+    private $approvedById;
+
+    /**
      * @var EmployeeInterface
      */
     private $approvedBy;
@@ -122,9 +142,25 @@ class LeaveHistory implements EmployeeLeaveInterface, ActionLoggerAwareInterface
     }
 
     /**
+     * @return string
+     */
+    public function getEmployeeId(): string
+    {
+        return (string) $this->employeeId;
+    }
+
+    /**
+     * @param string $employeeId
+     */
+    public function setEmployeeId(string $employeeId = null)
+    {
+        $this->employeeId = $employeeId;
+    }
+
+    /**
      * @return EmployeeInterface
      */
-    public function getEmployee(): ? EmployeeInterface
+    public function getEmployee(): EmployeeInterface
     {
         return $this->employee;
     }
@@ -135,6 +171,25 @@ class LeaveHistory implements EmployeeLeaveInterface, ActionLoggerAwareInterface
     public function setEmployee(EmployeeInterface $employee = null): void
     {
         $this->employee = $employee;
+        if ($this->employee) {
+            $this->employeeId = $employee->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getLeaveId(): string
+    {
+        return (string) $this->leaveId;
+    }
+
+    /**
+     * @param string $leaveId
+     */
+    public function setLeaveId(string $leaveId = null)
+    {
+        $this->leaveId = $leaveId;
     }
 
     /**
@@ -151,6 +206,9 @@ class LeaveHistory implements EmployeeLeaveInterface, ActionLoggerAwareInterface
     public function setLeave(LeaveInterface $leave = null): void
     {
         $this->leave = $leave;
+        if ($leave) {
+            $this->leaveId = $leave->getId();
+        }
     }
 
     /**
@@ -218,6 +276,22 @@ class LeaveHistory implements EmployeeLeaveInterface, ActionLoggerAwareInterface
     }
 
     /**
+     * @return string
+     */
+    public function getApprovedById(): string
+    {
+        return (string) $this->approvedById;
+    }
+
+    /**
+     * @param string $approvedById
+     */
+    public function setApprovedById(string $approvedById = null)
+    {
+        $this->approvedById = $approvedById;
+    }
+
+    /**
      * @return EmployeeInterface
      */
     public function getApprovedBy(): ? EmployeeInterface
@@ -231,5 +305,8 @@ class LeaveHistory implements EmployeeLeaveInterface, ActionLoggerAwareInterface
     public function setApprovedBy(EmployeeInterface $approvedBy = null): void
     {
         $this->approvedBy = $approvedBy;
+        if ($approvedBy) {
+            $this->approvedById = $approvedBy->getId();
+        }
     }
 }

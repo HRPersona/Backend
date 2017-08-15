@@ -8,14 +8,20 @@ use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
+use Persona\Hris\Employee\Model\EmployeeAwareInterface;
 use Persona\Hris\Employee\Model\EmployeeInterface;
+use Persona\Hris\Employee\Model\ProposedByAwareInterface;
 use Persona\Hris\Overtime\Model\EmployeeOvertimeInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="ov_overtimes")
+ * @ORM\Table(name="ov_overtimes", indexes={
+ *     @ORM\Index(name="overtime_search_idx", columns={"employee_id", "proposed_by_id"}),
+ *     @ORM\Index(name="overtime_search_employee_id", columns={"employee_id"}),
+ *     @ORM\Index(name="overtime_search_proposed_by", columns={"proposed_by_id"})
+ * })
  *
  * @ApiResource(
  *     attributes={
@@ -27,7 +33,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class Overtime implements EmployeeOvertimeInterface, ActionLoggerAwareInterface
+class Overtime implements EmployeeOvertimeInterface, EmployeeAwareInterface, ProposedByAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -45,20 +51,28 @@ class Overtime implements EmployeeOvertimeInterface, ActionLoggerAwareInterface
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
-     * @ORM\JoinColumn(name="employee_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $employeeId;
+
+    /**
      * @var EmployeeInterface
      */
     private $employee;
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
-     * @ORM\JoinColumn(name="proposed_by_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $proposedById;
+
+    /**
      * @var EmployeeInterface
      */
     private $proposedBy;
@@ -112,6 +126,22 @@ class Overtime implements EmployeeOvertimeInterface, ActionLoggerAwareInterface
     }
 
     /**
+     * @return string
+     */
+    public function getEmployeeId(): string
+    {
+        return (string) $this->employeeId;
+    }
+
+    /**
+     * @param string $employeeId
+     */
+    public function setEmployeeId(string $employeeId = null)
+    {
+        $this->employeeId = $employeeId;
+    }
+
+    /**
      * @return EmployeeInterface
      */
     public function getEmployee(): EmployeeInterface
@@ -125,6 +155,25 @@ class Overtime implements EmployeeOvertimeInterface, ActionLoggerAwareInterface
     public function setEmployee(EmployeeInterface $employee = null): void
     {
         $this->employee = $employee;
+        if ($this->employee) {
+            $this->employeeId = $employee->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getProposedById(): string
+    {
+        return (string) $this->proposedById;
+    }
+
+    /**
+     * @param string $proposedById
+     */
+    public function setProposedById(string $proposedById = null)
+    {
+        $this->proposedById = $proposedById;
     }
 
     /**
@@ -141,6 +190,9 @@ class Overtime implements EmployeeOvertimeInterface, ActionLoggerAwareInterface
     public function setProposedBy(EmployeeInterface $proposedBy = null): void
     {
         $this->proposedBy = $proposedBy;
+        if ($proposedBy) {
+            $this->proposedById = $proposedBy->getId();
+        }
     }
 
     /**

@@ -5,9 +5,11 @@ namespace Persona\Hris\Employee\Subscriber;
 use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
+use Persona\Hris\Employee\Model\ApprovedByAwareInterface;
 use Persona\Hris\Employee\Model\EmployeeAwareInterface;
 use Persona\Hris\Employee\Model\EmployeeInterface;
 use Persona\Hris\Employee\Model\EmployeeRepositoryInterface;
+use Persona\Hris\Employee\Model\ProposedByAwareInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -37,6 +39,14 @@ final class EmployeeAwareSubscriber implements EventSubscriber
         if ($entity instanceof EmployeeAwareInterface) {
             $this->isValidOrException($entity->getEmployeeId());
         }
+
+        if ($entity instanceof ApprovedByAwareInterface) {
+            $this->isValidOrException($entity->getApprovedById());
+        }
+
+        if ($entity instanceof ProposedByAwareInterface) {
+            $this->isValidOrException($entity->getProposedById());
+        }
     }
 
     /**
@@ -47,6 +57,14 @@ final class EmployeeAwareSubscriber implements EventSubscriber
         $entity = $eventArgs->getEntity();
         if ($entity instanceof EmployeeAwareInterface) {
             $this->isValidOrException($entity->getEmployeeId());
+        }
+
+        if ($entity instanceof ApprovedByAwareInterface) {
+            $this->isValidOrException($entity->getApprovedById());
+        }
+
+        if ($entity instanceof ProposedByAwareInterface) {
+            $this->isValidOrException($entity->getProposedById());
         }
     }
 

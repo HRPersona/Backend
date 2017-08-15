@@ -103,3 +103,10 @@ services:
             - '@persona.repository.orm.benefit_repository'
         tags:
             - { name: 'doctrine.event_subscriber' }
+
+    persona.leave.leave_subscriber:
+        class: 'Persona\Hris\Leave\Subscriber\LeaveAwareSubscriber'
+        arguments:
+            - '@persona.repository.orm.leave_repository'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
