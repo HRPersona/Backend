@@ -14,18 +14,12 @@ use Persona\Hris\Salary\Model\PayrollPeriodRepositoryInterface;
 final class PayrollPeriodRepository extends AbstractRepository implements PayrollPeriodRepositoryInterface
 {
     /**
-     * @var string
-     */
-    private $class;
-
-    /**
      * @param ManagerFactory $managerFactory
      * @param string         $class
      */
     public function __construct(ManagerFactory $managerFactory, string  $class)
     {
-        parent::__construct($managerFactory);
-        $this->class = $class;
+        parent::__construct($managerFactory, $class);
     }
 
     /**

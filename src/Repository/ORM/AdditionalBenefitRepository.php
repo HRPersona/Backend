@@ -14,18 +14,12 @@ use Persona\Hris\Salary\Model\AdditionalBenefitRepositoryInterface;
 final class AdditionalBenefitRepository extends AbstractRepository implements AdditionalBenefitRepositoryInterface
 {
     /**
-     * @var string
-     */
-    private $class;
-
-    /**
      * @param ManagerFactory $managerFactory
      * @param string         $class
      */
     public function __construct(ManagerFactory $managerFactory, string  $class)
     {
-        parent::__construct($managerFactory);
-        $this->class = $class;
+        parent::__construct($managerFactory, $class);
     }
 
     /**

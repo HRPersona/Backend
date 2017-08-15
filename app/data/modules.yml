@@ -1,5 +1,5 @@
-- {name: 'klien', group: 'admin', menuOrder: 4, display: true, description: '', path: '/api/clients', ref: 'mod1'}
-- {name: 'modul', group: 'admin', menuOrder: 2, display: true, description: '', path: '/api/modules', ref: 'mod2'}
-- {name: 'hak akses', group: 'admin', menuOrder: 3, display: false, description: '', path: '/api/roles', ref: 'mod3'}
-- {name: 'pengguna', group: 'admin', menuOrder: 1, display: true, description: '', path: '/api/users', ref: 'mod4'}
-- {name: 'aktifitas pengguna', menuOrder: 5, display: true, group: 'admin', description: '', path: '/api/user-activities', ref: 'mod5'}
+- {name: 'klien', service: 'srv1', group: 'admin', menuOrder: 4, display: true, description: '', path: '/api/clients', ref: 'mod1'}
+- {name: 'modul', service: 'srv1', group: 'admin', menuOrder: 2, display: true, description: '', path: '/api/modules', ref: 'mod2'}
+- {name: 'hak akses', service: 'srv1', group: 'admin', menuOrder: 3, display: false, description: '', path: '/api/roles', ref: 'mod3'}
+- {name: 'pengguna', service: 'srv1', group: 'admin', menuOrder: 1, display: true, description: '', path: '/api/users', ref: 'mod4'}
+- {name: 'aktifitas pengguna', service: 'srv1', group: 'admin', menuOrder: 5, display: true, description: '', path: '/api/user-activities', ref: 'mod5'}

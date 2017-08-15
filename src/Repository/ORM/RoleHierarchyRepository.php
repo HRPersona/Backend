@@ -29,11 +29,6 @@ final class RoleHierarchyRepository extends AbstractRepository implements RoleHi
     private $tokenStorage;
 
     /**
-     * @var string
-     */
-    private $class;
-
-    /**
      * @var RoleRepositoryInterface
      */
     private $roleRepository;
@@ -50,10 +45,9 @@ final class RoleHierarchyRepository extends AbstractRepository implements RoleHi
         ManagerFactory $managerFactory,
         string  $class
     ) {
-        parent::__construct($managerFactory);
+        parent::__construct($managerFactory, $class);
         $this->roleRepository = $roleRepository;
         $this->tokenStorage = $tokenStorage;
-        $this->class = $class;
     }
 
     /**

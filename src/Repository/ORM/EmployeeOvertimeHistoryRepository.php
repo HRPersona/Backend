@@ -14,11 +14,6 @@ use Persona\Hris\Repository\AbstractRepository;
 final class EmployeeOvertimeHistoryRepository extends AbstractRepository implements EmployeeOvertimeHistoryRepositoryInterface
 {
     /**
-     * @var string
-     */
-    private $class;
-
-    /**
      * @var EmployeeOvertimeHistoryInterface
      */
     private $exist;
@@ -29,8 +24,7 @@ final class EmployeeOvertimeHistoryRepository extends AbstractRepository impleme
      */
     public function __construct(ManagerFactory $managerFactory, string  $class)
     {
-        parent::__construct($managerFactory);
-        $this->class = $class;
+        parent::__construct($managerFactory, $class);
     }
 
     /**

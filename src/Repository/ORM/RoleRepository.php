@@ -7,30 +7,20 @@ use Persona\Hris\Core\Security\Model\ModuleInterface;
 use Persona\Hris\Core\Security\Model\RoleInterface;
 use Persona\Hris\Core\Security\Model\RoleRepositoryInterface;
 use Persona\Hris\Core\Security\Model\UserInterface;
+use Persona\Hris\Repository\AbstractRepository;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-final class RoleRepository implements RoleRepositoryInterface
+final class RoleRepository extends AbstractRepository implements RoleRepositoryInterface
 {
-    /**
-     * @var string
-     */
-    private $class;
-
-    /**
-     * @var ManagerFactory
-     */
-    private $managerFactory;
-
     /**
      * @param ManagerFactory $managerFactory
      * @param string         $class
      */
     public function __construct(ManagerFactory $managerFactory, string $class)
     {
-        $this->managerFactory = $managerFactory;
-        $this->class = $class;
+        parent::__construct($managerFactory, $class);
     }
 
     /**

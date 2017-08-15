@@ -13,11 +13,6 @@ use Persona\Hris\Repository\AbstractRepository;
 final class ModuleRepository extends AbstractRepository implements ModuleRepositoryInterface
 {
     /**
-     * @var string
-     */
-    private $class;
-
-    /**
      * @var bool
      */
     private $recall;
@@ -28,8 +23,7 @@ final class ModuleRepository extends AbstractRepository implements ModuleReposit
      */
     public function __construct(ManagerFactory $managerFactory, string  $class)
     {
-        parent::__construct($managerFactory);
-        $this->class = $class;
+        parent::__construct($managerFactory, $class);
         $this->recall = true;
     }
 
@@ -40,20 +34,7 @@ final class ModuleRepository extends AbstractRepository implements ModuleReposit
      */
     public function find(string $id): ? ModuleInterface
     {
-        $cache = $this->managerFactory->getCacheDriver();
-        if ($cache->contains($this->class)) {
-            $data = $cache->fetch($this->class);
-            $this->managerFactory->merge([$data]);
-
-            return $data;
-        }
-
-        $data = $this->managerFactory->getWriteManager()->getRepository($this->class)->findOneBy(['id' => $id, 'deletedAt' => null]);
-        if ($data) {
-            $cache->save($this->class, $data);
-        }
-
-        return $data;
+        return $this->doFind($id);
     }
 
     /**

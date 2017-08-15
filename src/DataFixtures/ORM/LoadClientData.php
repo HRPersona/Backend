@@ -27,7 +27,7 @@ final class LoadClientData extends AbstractFixture implements OrderedFixtureInte
         foreach ($datas as $data) {
             $client = new Client();
             $client->setName($data['name']);
-            $client->setUserId($this->getReference($data['user']));
+            $client->setUser($this->getReference($data['user']));
             $this->setReference($data['ref'], $client);
 
             $manager->persist($client);

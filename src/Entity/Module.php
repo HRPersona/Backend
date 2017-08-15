@@ -174,6 +174,9 @@ class Module implements ModuleInterface, ServiceAwareInterface, ActionLoggerAwar
     public function setService(ServiceInterface $service = null): void
     {
         $this->service = $service;
+        if ($service) {
+            $this->serviceId = $service->getId();
+        }
     }
 
     /**

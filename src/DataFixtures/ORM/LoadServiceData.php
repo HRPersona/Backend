@@ -5,7 +5,7 @@ namespace Persona\Hris\DataFixtures\ORM;
 use Doctrine\Common\DataFixtures\AbstractFixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
-use Persona\Hris\Entity\Module;
+use Persona\Hris\Entity\Service;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\Yaml\Yaml;
@@ -13,7 +13,7 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-final class LoadModuleData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
+class LoadServiceData extends AbstractFixture implements OrderedFixtureInterface, ContainerAwareInterface
 {
     use ContainerAwareTrait;
 
@@ -22,20 +22,14 @@ final class LoadModuleData extends AbstractFixture implements OrderedFixtureInte
      */
     public function load(ObjectManager $manager)
     {
-        $path = sprintf('%s/data/%s', $this->container->getParameter('kernel.root_dir'), 'modules.yml');
+        $path = sprintf('%s/data/%s', $this->container->getParameter('kernel.root_dir'), 'services.yml');
         $datas = Yaml::parse(file_get_contents($path));
         foreach ($datas as $data) {
-            $module = new Module();
-            $module->setService($this->getReference($data['service']));
-            $module->setName($data['name']);
-            $module->setGroupName($data['group']);
-            $module->setDescription($data['description']);
-            $module->setPath($data['path']);
-            $module->setMenuOrder($data['menuOrder']);
-            $module->setMenuDisplay($data['display']);
-            $this->setReference($data['ref'], $module);
+            $service = new Service();
+            $service->setName($data['name']);
+            $this->setReference($data['ref'], $service);
 
-            $manager->persist($module);
+            $manager->persist($service);
         }
 
         $manager->flush();
@@ -46,6 +40,6 @@ final class LoadModuleData extends AbstractFixture implements OrderedFixtureInte
      */
     public function getOrder()
     {
-        return 4;
+        return 3;
     }
 }
