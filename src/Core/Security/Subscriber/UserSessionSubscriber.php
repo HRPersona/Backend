@@ -4,6 +4,7 @@ namespace Persona\Hris\Core\Security\Subscriber;
 
 use Lexik\Bundle\JWTAuthenticationBundle\Event\AuthenticationSuccessEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTCreatedEvent;
+use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTDecodedEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Event\JWTExpiredEvent;
 use Lexik\Bundle\JWTAuthenticationBundle\Events;
 use Persona\Hris\Core\Manager\ManagerFactory;
@@ -134,7 +135,8 @@ final class UserSessionSubscriber implements EventSubscriberInterface
     public function createToken(JWTCreatedEvent $event)
     {
         $expiration = new \DateTime();
-        if (1 === (int) $this->requestStack->getCurrentRequest()->get('_remember_me', 0)) {
+        $request = $this->requestStack->getCurrentRequest();
+        if (1 === (int) $request->get('_remember_me', 0)) {
             $interval = new \DateInterval('P1M7DT7H9M17S');
         } else {
             $interval = new \DateInterval('PT7H9M17S');
@@ -143,8 +145,26 @@ final class UserSessionSubscriber implements EventSubscriberInterface
 
         $payload = $event->getData();
         $payload['exp'] = $expiration->getTimestamp();
+        $payload['api_key'] = $request->query->get('api_key');
 
         $event->setData($payload);
+    }
+
+    /**
+     * @param JWTDecodedEvent $event
+     */
+    public function decodeToken(JWTDecodedEvent $event)
+    {
+        $request = $this->requestStack->getCurrentRequest();
+        $payload = $event->getPayload();
+
+        if (!isset($payload['api_key'])) {
+            $event->markAsInvalid();
+
+            return;
+        }
+
+        $request->query->set('api_key', $payload['api_key']);
     }
 
     /**
@@ -156,6 +176,7 @@ final class UserSessionSubscriber implements EventSubscriberInterface
             Events::AUTHENTICATION_SUCCESS => ['startSession', 1],
             Events::JWT_EXPIRED => ['resetSession', 1],
             Events::JWT_CREATED => ['createToken', 1],
+            Events::JWT_DECODED => ['decodeToken', 1],
             SecurityEvents::INTERACTIVE_LOGIN => ['checkSession', 1],
         ];
     }
