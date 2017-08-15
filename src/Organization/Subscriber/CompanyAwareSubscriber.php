@@ -8,6 +8,8 @@ use Doctrine\ORM\Events;
 use Persona\Hris\Organization\Model\CompanyAwareInterface;
 use Persona\Hris\Organization\Model\CompanyInterface;
 use Persona\Hris\Organization\Model\CompanyRepositoryInterface;
+use Persona\Hris\Organization\Model\NewCompanyAwareInterface;
+use Persona\Hris\Organization\Model\OldCompanyAwareInterface;
 use Persona\Hris\Organization\Model\ParentCompanyAwareInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -42,6 +44,14 @@ final class CompanyAwareSubscriber implements EventSubscriber
         if ($entity instanceof ParentCompanyAwareInterface) {
             $this->isValidOrException($entity->getParentId());
         }
+
+        if ($entity instanceof OldCompanyAwareInterface) {
+            $this->isValidOrException($entity->getOldCompanyId());
+        }
+
+        if ($entity instanceof NewCompanyAwareInterface) {
+            $this->isValidOrException($entity->getNewCompanyId());
+        }
     }
 
     /**
@@ -56,6 +66,25 @@ final class CompanyAwareSubscriber implements EventSubscriber
 
         if ($entity instanceof ParentCompanyAwareInterface) {
             $this->isValidOrException($entity->getParentId());
+        }
+
+        if ($entity instanceof OldCompanyAwareInterface) {
+            $this->isValidOrException($entity->getOldCompanyId());
+        }
+
+        if ($entity instanceof NewCompanyAwareInterface) {
+            $this->isValidOrException($entity->getNewCompanyId());
+        }
+    }
+
+    /**
+     * @param LifecycleEventArgs $eventArgs
+     */
+    public function postLoad(LifecycleEventArgs $eventArgs)
+    {
+        $entity = $eventArgs->getEntity();
+        if ($entity instanceof NewCompanyAwareInterface) {
+            $this->repository->find($entity->getNewCompanyId());
         }
     }
 
@@ -78,6 +107,6 @@ final class CompanyAwareSubscriber implements EventSubscriber
      */
     public function getSubscribedEvents(): array
     {
-        return [Events::prePersist, Events::preUpdate];
+        return [Events::prePersist, Events::preUpdate, Events::postLoad];
     }
 }

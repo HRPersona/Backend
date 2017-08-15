@@ -8,25 +8,28 @@ use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
+use Persona\Hris\Employee\Model\EmployeeAwareInterface;
 use Persona\Hris\Employee\Model\EmployeeInterface;
 use Persona\Hris\Insurance\Model\InsuranceHistoryInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="in_insurance_histories")
+ * @ORM\Table(name="in_insurance_histories", indexes={@ORM\Index(name="insurance_history_search_idx", columns={"employee_id"})})
  *
  * @ApiResource(
  *     attributes={
  *         "filters"={"order.filter"},
  *         "normalization_context"={"groups"={"read"}},
  *         "denormalization_context"={"groups"={"write"}}
- *     }
+ *     },
+ *     collectionOperations={"get"={"method"="GET"}},
+ *     itemOperations={"get"={"method"="GET"}}
  * )
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class InsuranceHistory implements InsuranceHistoryInterface, ActionLoggerAwareInterface
+class InsuranceHistory implements InsuranceHistoryInterface, EmployeeAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -44,9 +47,13 @@ class InsuranceHistory implements InsuranceHistoryInterface, ActionLoggerAwareIn
 
     /**
      * @Groups({"read"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
-     * @ORM\JoinColumn(name="employee_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      *
+     * @var string
+     */
+    private $employeeId;
+
+    /**
      * @var EmployeeInterface
      */
     private $employee;
@@ -123,6 +130,22 @@ class InsuranceHistory implements InsuranceHistoryInterface, ActionLoggerAwareIn
     }
 
     /**
+     * @return string
+     */
+    public function getEmployeeId(): string
+    {
+        return (string) $this->employeeId;
+    }
+
+    /**
+     * @param string $employeeId
+     */
+    public function setEmployeeId(string $employeeId = null)
+    {
+        $this->employeeId = $employeeId;
+    }
+
+    /**
      * @return EmployeeInterface
      */
     public function getEmployee(): EmployeeInterface
@@ -136,6 +159,9 @@ class InsuranceHistory implements InsuranceHistoryInterface, ActionLoggerAwareIn
     public function setEmployee(EmployeeInterface $employee = null): void
     {
         $this->employee = $employee;
+        if ($this->employee) {
+            $this->employeeId = $employee->getId();
+        }
     }
 
     /**

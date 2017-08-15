@@ -6,6 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use Doctrine\ORM\Mapping as ORM;
 use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
+use Persona\Hris\Attendance\Model\AbsentReasonAwareInterface;
 use Persona\Hris\Attendance\Model\AbsentReasonInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
@@ -18,9 +19,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity()
  * @ORM\Table(name="lv_leaves", indexes={
- *     @ORM\Index(name="leave_search_idx", columns={"code", "name"}),
+ *     @ORM\Index(name="leave_search_idx", columns={"code", "name", "absent_reason_id"}),
  *     @ORM\Index(name="leave_search_idx_code", columns={"code"}),
- *     @ORM\Index(name="leave_search_idx_name", columns={"name"})
+ *     @ORM\Index(name="leave_search_idx_name", columns={"name"}),
+ *     @ORM\Index(name="leave_search_idx_absent_reason", columns={"absent_reason_id"})
  * })
  *
  * @ApiResource(
@@ -36,7 +38,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class Leave implements LeaveInterface, ActionLoggerAwareInterface
+class Leave implements LeaveInterface, AbsentReasonAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -54,10 +56,14 @@ class Leave implements LeaveInterface, ActionLoggerAwareInterface
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\AbsentReason", fetch="EAGER")
-     * @ORM\JoinColumn(name="employee_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $absentReasonId;
+
+    /**
      * @var AbsentReasonInterface
      */
     private $absentReason;
@@ -102,9 +108,25 @@ class Leave implements LeaveInterface, ActionLoggerAwareInterface
     }
 
     /**
+     * @return string
+     */
+    public function getAbsentReasonId(): string
+    {
+        return (string) $this->absentReasonId;
+    }
+
+    /**
+     * @param string $absentReasonId
+     */
+    public function setAbsentReasonId(string $absentReasonId = null)
+    {
+        $this->absentReasonId = $absentReasonId;
+    }
+
+    /**
      * @return AbsentReasonInterface
      */
-    public function getAbsentReason(): AbsentReasonInterface
+    public function getAbsentReason(): ? AbsentReasonInterface
     {
         return $this->absentReason;
     }
@@ -115,6 +137,9 @@ class Leave implements LeaveInterface, ActionLoggerAwareInterface
     public function setAbsentReason(AbsentReasonInterface $absentReason = null): void
     {
         $this->absentReason = $absentReason;
+        if ($absentReason) {
+            $this->absentReasonId = $absentReason->getId();
+        }
     }
 
     /**

@@ -9,16 +9,26 @@ use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Allocation\Model\JobAllocationInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
+use Persona\Hris\Employee\Model\EmployeeAwareInterface;
 use Persona\Hris\Employee\Model\EmployeeInterface;
+use Persona\Hris\Organization\Model\CompanyAwareInterface;
 use Persona\Hris\Organization\Model\CompanyInterface;
+use Persona\Hris\Organization\Model\DepartmentAwareInterface;
 use Persona\Hris\Organization\Model\DepartmentInterface;
+use Persona\Hris\Organization\Model\JobTitleAwareInterface;
 use Persona\Hris\Organization\Model\JobTitleInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="ja_joballocations")
+ * @ORM\Table(name="ja_joballocations", indexes={
+ *     @ORM\Index(name="employee_joballocation_search_idx", columns={"employee_id", "job_title_id", "company_id", "department_id"}),
+ *     @ORM\Index(name="employee_joballocation_search_employee_id", columns={"employee_id"}),
+ *     @ORM\Index(name="employee_joballocation_search_job_title", columns={"job_title_id"}),
+ *     @ORM\Index(name="employee_joballocation_search_company", columns={"company_id"}),
+ *     @ORM\Index(name="employee_joballocation_search_department", columns={"department_id"})
+ * })
  *
  * @ApiResource(
  *     attributes={
@@ -30,7 +40,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class JobAllocation implements JobAllocationInterface, ActionLoggerAwareInterface
+class JobAllocation implements JobAllocationInterface, EmployeeAwareInterface, JobTitleAwareInterface, CompanyAwareInterface, DepartmentAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -48,40 +58,56 @@ class JobAllocation implements JobAllocationInterface, ActionLoggerAwareInterfac
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
-     * @ORM\JoinColumn(name="employee_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $employeeId;
+
+    /**
      * @var EmployeeInterface
      */
     private $employee;
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\JobTitle", fetch="EAGER")
-     * @ORM\JoinColumn(name="jobtitle_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $jobTitleId;
+
+    /**
      * @var JobTitleInterface
      */
     private $jobTitle;
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Company", fetch="EAGER")
-     * @ORM\JoinColumn(name="company_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $companyId;
+
+    /**
      * @var CompanyInterface
      */
     private $company;
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Department", fetch="EAGER")
-     * @ORM\JoinColumn(name="department_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $departmentId;
+
+    /**
      * @var DepartmentInterface
      */
     private $department;
@@ -129,6 +155,22 @@ class JobAllocation implements JobAllocationInterface, ActionLoggerAwareInterfac
     }
 
     /**
+     * @return string
+     */
+    public function getEmployeeId(): string
+    {
+        return (string) $this->employeeId;
+    }
+
+    /**
+     * @param string $employeeId
+     */
+    public function setEmployeeId(string $employeeId = null)
+    {
+        $this->employeeId = $employeeId;
+    }
+
+    /**
      * @return EmployeeInterface
      */
     public function getEmployee(): EmployeeInterface
@@ -142,12 +184,31 @@ class JobAllocation implements JobAllocationInterface, ActionLoggerAwareInterfac
     public function setEmployee(EmployeeInterface $employee = null): void
     {
         $this->employee = $employee;
+        if ($this->employee) {
+            $this->employeeId = $employee->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getJobTitleId(): string
+    {
+        return (string) $this->jobTitleId;
+    }
+
+    /**
+     * @param string $jobTitleId
+     */
+    public function setJobTitleId(string $jobTitleId = null)
+    {
+        $this->jobTitleId = $jobTitleId;
     }
 
     /**
      * @return JobTitleInterface
      */
-    public function getJobTitle(): JobTitleInterface
+    public function getJobTitle(): ? JobTitleInterface
     {
         return $this->jobTitle;
     }
@@ -158,6 +219,25 @@ class JobAllocation implements JobAllocationInterface, ActionLoggerAwareInterfac
     public function setJobTitle(JobTitleInterface $jobTitle = null): void
     {
         $this->jobTitle = $jobTitle;
+        if ($jobTitle) {
+            $this->jobTitleId = $jobTitle->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyId(): string
+    {
+        return (string) $this->companyId;
+    }
+
+    /**
+     * @param string $companyId
+     */
+    public function setCompanyId(string $companyId = null)
+    {
+        $this->companyId = $companyId;
     }
 
     /**
@@ -174,6 +254,25 @@ class JobAllocation implements JobAllocationInterface, ActionLoggerAwareInterfac
     public function setCompany(CompanyInterface $company = null): void
     {
         $this->company = $company;
+        if ($company) {
+            $this->companyId = $company->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getDepartmentId(): string
+    {
+        return (string) $this->departmentId;
+    }
+
+    /**
+     * @param string $departmentId
+     */
+    public function setDepartmentId(string $departmentId = null)
+    {
+        $this->departmentId = $departmentId;
     }
 
     /**
@@ -190,6 +289,9 @@ class JobAllocation implements JobAllocationInterface, ActionLoggerAwareInterfac
     public function setDepartment(DepartmentInterface $department = null): void
     {
         $this->department = $department;
+        if ($department) {
+            $this->departmentId = $department->getId();
+        }
     }
 
     /**

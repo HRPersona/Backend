@@ -8,6 +8,8 @@ use Doctrine\ORM\Events;
 use Persona\Hris\Organization\Model\DepartmentAwareInterface;
 use Persona\Hris\Organization\Model\DepartmentInterface;
 use Persona\Hris\Organization\Model\DepartmentRepositoryInterface;
+use Persona\Hris\Organization\Model\NewDepartmentAwareInterface;
+use Persona\Hris\Organization\Model\OldDepartmentAwareInterface;
 use Persona\Hris\Organization\Model\ParentDepartmentAwareInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -42,6 +44,14 @@ final class DepartmentAwareSubscriber implements EventSubscriber
         if ($entity instanceof ParentDepartmentAwareInterface) {
             $this->isValidOrException($entity->getParentId());
         }
+
+        if ($entity instanceof OldDepartmentAwareInterface) {
+            $this->isValidOrException($entity->getOldDepartmentId());
+        }
+
+        if ($entity instanceof NewDepartmentAwareInterface) {
+            $this->isValidOrException($entity->getNewDepartmentId());
+        }
     }
 
     /**
@@ -56,6 +66,25 @@ final class DepartmentAwareSubscriber implements EventSubscriber
 
         if ($entity instanceof ParentDepartmentAwareInterface) {
             $this->isValidOrException($entity->getParentId());
+        }
+
+        if ($entity instanceof OldDepartmentAwareInterface) {
+            $this->isValidOrException($entity->getOldDepartmentId());
+        }
+
+        if ($entity instanceof NewDepartmentAwareInterface) {
+            $this->isValidOrException($entity->getNewDepartmentId());
+        }
+    }
+
+    /**
+     * @param LifecycleEventArgs $eventArgs
+     */
+    public function postLoad(LifecycleEventArgs $eventArgs)
+    {
+        $entity = $eventArgs->getEntity();
+        if ($entity instanceof NewDepartmentAwareInterface) {
+            $this->repository->find($entity->getNewDepartmentId());
         }
     }
 
@@ -78,6 +107,6 @@ final class DepartmentAwareSubscriber implements EventSubscriber
      */
     public function getSubscribedEvents(): array
     {
-        return [Events::prePersist, Events::preUpdate];
+        return [Events::prePersist, Events::preUpdate, Events::postLoad];
     }
 }
