@@ -8,6 +8,7 @@ use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
+use Persona\Hris\Employee\Model\EmployeeAwareInterface;
 use Persona\Hris\Employee\Model\EmployeeInterface;
 use Persona\Hris\Tax\Model\TaxHistoryInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -15,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="tx_tax_hitories")
+ * @ORM\Table(name="tx_tax_hitories", indexes={@ORM\Index(name="tax_history_search_idx", columns={"employee_id"})})
  *
  * @ApiResource(
  *     attributes={
@@ -27,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class TaxHistory implements TaxHistoryInterface, ActionLoggerAwareInterface
+class TaxHistory implements TaxHistoryInterface, EmployeeAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -44,11 +45,15 @@ class TaxHistory implements TaxHistoryInterface, ActionLoggerAwareInterface
     private $id;
 
     /**
-     * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
-     * @ORM\JoinColumn(name="employee_id", referencedColumnName="id")
+     * @Groups({"read"})
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $employeeId;
+
+    /**
      * @var EmployeeInterface
      */
     private $employee;
@@ -89,6 +94,22 @@ class TaxHistory implements TaxHistoryInterface, ActionLoggerAwareInterface
     }
 
     /**
+     * @return string
+     */
+    public function getEmployeeId(): string
+    {
+        return (string) $this->employeeId;
+    }
+
+    /**
+     * @param string $employeeId
+     */
+    public function setEmployeeId(string $employeeId = null)
+    {
+        $this->employeeId = $employeeId;
+    }
+
+    /**
      * @return EmployeeInterface
      */
     public function getEmployee(): ? EmployeeInterface
@@ -102,6 +123,9 @@ class TaxHistory implements TaxHistoryInterface, ActionLoggerAwareInterface
     public function setEmployee(EmployeeInterface $employee = null): void
     {
         $this->employee = $employee;
+        if ($this->employee) {
+            $this->employeeId = $employee->getId();
+        }
     }
 
     /**
