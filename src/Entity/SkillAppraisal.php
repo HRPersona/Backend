@@ -8,16 +8,29 @@ use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
+use Persona\Hris\Employee\Model\EmployeeAwareInterface;
 use Persona\Hris\Employee\Model\EmployeeInterface;
+use Persona\Hris\Employee\Model\FirstSupervisorAppraisalByAwareInterface;
+use Persona\Hris\Employee\Model\SecondSupervisorAppraisalByAwareInterface;
+use Persona\Hris\Performance\Model\AppraisalPeriodAwareInterface;
 use Persona\Hris\Performance\Model\AppraisalPeriodInterface;
 use Persona\Hris\Performance\Model\EmployeeSkillAppraisalInterface;
+use Persona\Hris\Share\Model\SkillAwareInterface;
 use Persona\Hris\Share\Model\SkillInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="ap_skill_appraisals")
+ * @ORM\Table(name="ap_skill_appraisals", indexes={
+ *     @ORM\Index(name="skill_appraisal_search_idx", columns={"employee_id", "appraisal_period_id", "skill_id"}),
+ *     @ORM\Index(name="skill_appraisal_search_idx_supervisor", columns={"first_supervisor_appraisal_by_id", "second_supervisor_appraisal_by_id"}),
+ *     @ORM\Index(name="skill_appraisal_search_idx_employee", columns={"employee_id"}),
+ *     @ORM\Index(name="skill_appraisal_search_idx_appraisal_period", columns={"appraisal_period_id"}),
+ *     @ORM\Index(name="skill_appraisal_search_idx_skill", columns={"skill_id"}),
+ *     @ORM\Index(name="skill_appraisal_search_idx_first_supervisor_appraisal_by", columns={"first_supervisor_appraisal_by_id"}),
+ *     @ORM\Index(name="skill_appraisal_search_idx_second_supervisor_appraisal_by", columns={"second_supervisor_appraisal_by_id"})
+ * })
  *
  * @ApiResource(
  *     attributes={
@@ -29,7 +42,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class SkillAppraisal implements EmployeeSkillAppraisalInterface, ActionLoggerAwareInterface
+class SkillAppraisal implements EmployeeSkillAppraisalInterface, EmployeeAwareInterface, AppraisalPeriodAwareInterface, SkillAwareInterface, FirstSupervisorAppraisalByAwareInterface, SecondSupervisorAppraisalByAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -46,21 +59,29 @@ class SkillAppraisal implements EmployeeSkillAppraisalInterface, ActionLoggerAwa
     private $id;
 
     /**
-     * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
-     * @ORM\JoinColumn(name="employee_id", referencedColumnName="id")
+     * @Groups({"read"})
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $employeeId;
+
+    /**
      * @var EmployeeInterface
      */
     private $employee;
 
     /**
-     * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\AppraisalPeriod", fetch="EAGER")
-     * @ORM\JoinColumn(name="appraisal_period_id", referencedColumnName="id")
+     * @Groups({"read"})
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $appraisalPeriodId;
+
+    /**
      * @var AppraisalPeriodInterface
      */
     private $appraisalPeriod;
@@ -76,30 +97,42 @@ class SkillAppraisal implements EmployeeSkillAppraisalInterface, ActionLoggerAwa
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Skill", fetch="EAGER")
-     * @ORM\JoinColumn(name="skill_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $skillId;
+
+    /**
      * @var SkillInterface
      */
     private $skill;
 
     /**
-     * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
-     * @ORM\JoinColumn(name="first_supervisor_id", referencedColumnName="id")
+     * @Groups({"read"})
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $firstSupervisorAppraisalById;
+
+    /**
      * @var EmployeeInterface
      */
     private $firstSupervisorAppraisalBy;
 
     /**
-     * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
-     * @ORM\JoinColumn(name="second_supervisor_id", referencedColumnName="id")
+     * @Groups({"read"})
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $secondSupervisorAppraisalById;
+
+    /**
      * @var EmployeeInterface
      */
     private $secondSupervisorAppraisalBy;
@@ -167,6 +200,22 @@ class SkillAppraisal implements EmployeeSkillAppraisalInterface, ActionLoggerAwa
     }
 
     /**
+     * @return string
+     */
+    public function getEmployeeId(): string
+    {
+        return (string) $this->employeeId;
+    }
+
+    /**
+     * @param string $employeeId
+     */
+    public function setEmployeeId(string $employeeId = null)
+    {
+        $this->employeeId = $employeeId;
+    }
+
+    /**
      * @return EmployeeInterface
      */
     public function getEmployee(): ? EmployeeInterface
@@ -180,6 +229,25 @@ class SkillAppraisal implements EmployeeSkillAppraisalInterface, ActionLoggerAwa
     public function setEmployee(EmployeeInterface $employee = null): void
     {
         $this->employee = $employee;
+        if ($this->employee) {
+            $this->employeeId = $employee->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getAppraisalPeriodId(): string
+    {
+        return (string) $this->appraisalPeriodId;
+    }
+
+    /**
+     * @param string $appraisalPeriodId
+     */
+    public function setAppraisalPeriodId(string $appraisalPeriodId = null)
+    {
+        $this->appraisalPeriodId = $appraisalPeriodId;
     }
 
     /**
@@ -196,6 +264,9 @@ class SkillAppraisal implements EmployeeSkillAppraisalInterface, ActionLoggerAwa
     public function setAppraisalPeriod(AppraisalPeriodInterface $appraisalPeriod = null): void
     {
         $this->appraisalPeriod = $appraisalPeriod;
+        if ($appraisalPeriod) {
+            $this->appraisalPeriodId = $appraisalPeriod->getId();
+        }
     }
 
     /**
@@ -215,9 +286,25 @@ class SkillAppraisal implements EmployeeSkillAppraisalInterface, ActionLoggerAwa
     }
 
     /**
+     * @return string
+     */
+    public function getSkillId(): string
+    {
+        return (string) $this->skillId;
+    }
+
+    /**
+     * @param string $skillId
+     */
+    public function setSkillId(string $skillId = null)
+    {
+        $this->skillId = $skillId;
+    }
+
+    /**
      * @return SkillInterface
      */
-    public function getSkill(): ? SkillInterface
+    public function getSkill(): SkillInterface
     {
         return $this->skill;
     }
@@ -228,6 +315,25 @@ class SkillAppraisal implements EmployeeSkillAppraisalInterface, ActionLoggerAwa
     public function setSkill(SkillInterface $skill = null): void
     {
         $this->skill = $skill;
+        if ($skill) {
+            $this->skillId = $skill->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getFirstSupervisorAppraisalById(): string
+    {
+        return (string) $this->firstSupervisorAppraisalById;
+    }
+
+    /**
+     * @param string $firstSupervisorAppraisalById
+     */
+    public function setFirstSupervisorAppraisalById(string $firstSupervisorAppraisalById = null)
+    {
+        $this->firstSupervisorAppraisalById = $firstSupervisorAppraisalById;
     }
 
     /**
@@ -244,6 +350,25 @@ class SkillAppraisal implements EmployeeSkillAppraisalInterface, ActionLoggerAwa
     public function setFirstSupervisorAppraisalBy(EmployeeInterface $firstSupervisorAppraisalBy = null): void
     {
         $this->firstSupervisorAppraisalBy = $firstSupervisorAppraisalBy;
+        if ($firstSupervisorAppraisalBy) {
+            $this->firstSupervisorAppraisalById = $firstSupervisorAppraisalBy->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getSecondSupervisorAppraisalById(): string
+    {
+        return (string) $this->secondSupervisorAppraisalById;
+    }
+
+    /**
+     * @param string $secondSupervisorAppraisalById
+     */
+    public function setSecondSupervisorAppraisalById(string $secondSupervisorAppraisalById = null)
+    {
+        $this->secondSupervisorAppraisalById = $secondSupervisorAppraisalById;
     }
 
     /**
@@ -260,6 +385,9 @@ class SkillAppraisal implements EmployeeSkillAppraisalInterface, ActionLoggerAwa
     public function setSecondSupervisorAppraisalBy(EmployeeInterface $secondSupervisorAppraisalBy = null): void
     {
         $this->secondSupervisorAppraisalBy = $secondSupervisorAppraisalBy;
+        if ($secondSupervisorAppraisalBy) {
+            $this->secondSupervisorAppraisalById = $secondSupervisorAppraisalBy->getId();
+        }
     }
 
     /**

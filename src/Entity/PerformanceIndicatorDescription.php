@@ -115,7 +115,7 @@ class PerformanceIndicatorDescription implements IndicatorDescriptionInterface, 
     {
         $this->indicator = $indicator;
         if ($indicator) {
-            $this->indicatorId =  $indicator->getId();
+            $this->indicatorId = $indicator->getId();
         }
     }
 

@@ -135,7 +135,7 @@ class EmployeeSkill implements EmployeeSkillInterface, EmployeeAwareInterface, S
      */
     public function getSkillId(): string
     {
-        return $this->skillId;
+        return (string) $this->skillId;
     }
 
     /**
@@ -160,6 +160,9 @@ class EmployeeSkill implements EmployeeSkillInterface, EmployeeAwareInterface, S
     public function setSkill(SkillInterface $skill = null): void
     {
         $this->skill = $skill;
+        if ($skill) {
+            $this->skillId = $skill->getId();
+        }
     }
 
     /**
