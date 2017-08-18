@@ -117,3 +117,10 @@ services:
             - '@persona.repository.orm.payroll_repository'
         tags:
             - { name: 'doctrine.event_subscriber' }
+
+    persona.performance.appraisal_period_subscriber:
+        class: 'Persona\Hris\Performance\Subscriber\AppraisalPeriodAwareSubscriber'
+        arguments:
+            - '@persona.repository.orm.appraisal_period_repository'
+        tags:
+            - { name: 'doctrine.event_subscriber' }

@@ -47,6 +47,7 @@ class OvertimeHistory implements EmployeeOvertimeHistoryInterface, EmployeeAware
     /**
      * @Groups({"read"})
      * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank()
      *
      * @var string
      */

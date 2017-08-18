@@ -8,7 +8,9 @@ use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
+use Persona\Hris\Employee\Model\EmployeeAwareInterface;
 use Persona\Hris\Employee\Model\EmployeeInterface;
+use Persona\Hris\Salary\Model\BenefitAwareInterface;
 use Persona\Hris\Salary\Model\BenefitInterface;
 use Persona\Hris\Salary\Model\EmployeeBenefitInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -16,7 +18,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="sa_salary_benefits")
+ * @ORM\Table(name="sa_salary_benefits", indexes={
+ *     @ORM\Index(name="salary_benefit_search_idx", columns={"employee_id", "benefit_id"}),
+ *     @ORM\Index(name="salary_benefit_search_employee_id", columns={"employee_id"}),
+ *     @ORM\Index(name="salary_benefit_search_benefit", columns={"benefit_id"})
+ * })
  *
  * @ApiResource(
  *     attributes={
@@ -28,7 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class SalaryBenefit implements EmployeeBenefitInterface, ActionLoggerAwareInterface
+class SalaryBenefit implements EmployeeBenefitInterface, EmployeeAwareInterface, BenefitAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -45,21 +51,29 @@ class SalaryBenefit implements EmployeeBenefitInterface, ActionLoggerAwareInterf
     private $id;
 
     /**
-     * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Employee", fetch="EAGER")
-     * @ORM\JoinColumn(name="employee_id", referencedColumnName="id")
+     * @Groups({"read"})
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $employeeId;
+
+    /**
      * @var EmployeeInterface
      */
     private $employee;
 
     /**
-     * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\Benefit", fetch="EAGER")
-     * @ORM\JoinColumn(name="benefit_id", referencedColumnName="id")
+     * @Groups({"read"})
+     * @ORM\Column(type="string", nullable=true)
      * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $benefitId;
+
+    /**
      * @var BenefitInterface
      */
     private $benefit;
@@ -108,6 +122,22 @@ class SalaryBenefit implements EmployeeBenefitInterface, ActionLoggerAwareInterf
     }
 
     /**
+     * @return string
+     */
+    public function getEmployeeId(): string
+    {
+        return (string) $this->employeeId;
+    }
+
+    /**
+     * @param string $employeeId
+     */
+    public function setEmployeeId(string $employeeId = null)
+    {
+        $this->employeeId = $employeeId;
+    }
+
+    /**
      * @return EmployeeInterface
      */
     public function getEmployee(): ? EmployeeInterface
@@ -121,12 +151,31 @@ class SalaryBenefit implements EmployeeBenefitInterface, ActionLoggerAwareInterf
     public function setEmployee(EmployeeInterface $employee = null): void
     {
         $this->employee = $employee;
+        if ($this->employee) {
+            $this->employeeId = $employee->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getBenefitId(): string
+    {
+        return (string) $this->benefitId;
+    }
+
+    /**
+     * @param string $benefitId
+     */
+    public function setBenefitId(string $benefitId = null)
+    {
+        $this->benefitId = $benefitId;
     }
 
     /**
      * @return BenefitInterface
      */
-    public function getBenefit(): BenefitInterface
+    public function getBenefit(): ? BenefitInterface
     {
         return $this->benefit;
     }
@@ -137,6 +186,9 @@ class SalaryBenefit implements EmployeeBenefitInterface, ActionLoggerAwareInterf
     public function setBenefit(BenefitInterface $benefit = null): void
     {
         $this->benefit = $benefit;
+        if ($benefit) {
+            $this->benefitId = $benefit->getId();
+        }
     }
 
     /**

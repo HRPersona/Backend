@@ -13,4 +13,11 @@ interface AppraisalPeriodRepositoryInterface extends RepositoryInterface
      * @param AppraisalPeriodInterface $appraisalPeriod
      */
     public function inactiveOthers(AppraisalPeriodInterface $appraisalPeriod): void;
+
+    /**
+     * @param string $id
+     *
+     * @return null|AppraisalPeriodInterface
+     */
+    public function find(string $id): ? AppraisalPeriodInterface;
 }

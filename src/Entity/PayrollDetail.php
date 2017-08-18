@@ -8,7 +8,9 @@ use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
+use Persona\Hris\Salary\Model\BenefitAwareInterface;
 use Persona\Hris\Salary\Model\BenefitInterface;
+use Persona\Hris\Salary\Model\PayrollAwareInterface;
 use Persona\Hris\Salary\Model\PayrollDetailInterface;
 use Persona\Hris\Salary\Model\PayrollInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -32,7 +34,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class PayrollDetail implements PayrollDetailInterface, ActionLoggerAwareInterface
+class PayrollDetail implements PayrollDetailInterface, PayrollAwareInterface, BenefitAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -113,7 +115,7 @@ class PayrollDetail implements PayrollDetailInterface, ActionLoggerAwareInterfac
     /**
      * @param string $payrollId
      */
-    public function setPayrollId(string $payrollId)
+    public function setPayrollId(string $payrollId = null)
     {
         $this->payrollId = $payrollId;
     }
@@ -148,7 +150,7 @@ class PayrollDetail implements PayrollDetailInterface, ActionLoggerAwareInterfac
     /**
      * @param string $benefitId
      */
-    public function setBenefitId(string $benefitId)
+    public function setBenefitId(string $benefitId = null)
     {
         $this->benefitId = $benefitId;
     }

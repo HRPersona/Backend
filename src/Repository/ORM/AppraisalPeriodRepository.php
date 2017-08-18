@@ -37,4 +37,14 @@ final class AppraisalPeriodRepository extends AbstractRepository implements Appr
 
         $queryBuilder->getQuery()->execute();
     }
+
+    /**
+     * @param string $id
+     *
+     * @return null|AppraisalPeriodInterface
+     */
+    public function find(string $id): ? AppraisalPeriodInterface
+    {
+        return $this->doFind($id);
+    }
 }

@@ -8,6 +8,7 @@ use Knp\DoctrineBehaviors\Model\SoftDeletable\SoftDeletable;
 use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
+use Persona\Hris\Performance\Model\IndicatorAwareInterface;
 use Persona\Hris\Performance\Model\IndicatorDescriptionInterface;
 use Persona\Hris\Performance\Model\IndicatorInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -15,7 +16,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity()
- * @ORM\Table(name="ap_indicator_descriptions")
+ * @ORM\Table(name="ap_indicator_descriptions", indexes={@ORM\Index(name="indicator_description_search_idx", columns={"indicator_id"})})
  *
  * @ApiResource(
  *     attributes={
@@ -27,7 +28,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class PerformanceIndicatorDescription implements IndicatorDescriptionInterface, ActionLoggerAwareInterface
+class PerformanceIndicatorDescription implements IndicatorDescriptionInterface, IndicatorAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -45,9 +46,14 @@ class PerformanceIndicatorDescription implements IndicatorDescriptionInterface, 
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="Persona\Hris\Entity\PerformanceIndicator", fetch="EAGER")
-     * @ORM\JoinColumn(name="indicator_id", referencedColumnName="id")
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank()
      *
+     * @var string
+     */
+    private $indicatorId;
+
+    /**
      * @var IndicatorInterface
      */
     private $indicator;
@@ -79,9 +85,25 @@ class PerformanceIndicatorDescription implements IndicatorDescriptionInterface, 
     }
 
     /**
+     * @return string
+     */
+    public function getIndicatorId(): string
+    {
+        return (string) $this->indicatorId;
+    }
+
+    /**
+     * @param string $indicatorId
+     */
+    public function setIndicatorId(string $indicatorId = null)
+    {
+        $this->indicatorId = $indicatorId;
+    }
+
+    /**
      * @return IndicatorInterface
      */
-    public function getIndicator(): IndicatorInterface
+    public function getIndicator(): ? IndicatorInterface
     {
         return $this->indicator;
     }
@@ -92,6 +114,9 @@ class PerformanceIndicatorDescription implements IndicatorDescriptionInterface, 
     public function setIndicator(IndicatorInterface $indicator = null): void
     {
         $this->indicator = $indicator;
+        if ($indicator) {
+            $this->indicatorId =  $indicator->getId();
+        }
     }
 
     /**
