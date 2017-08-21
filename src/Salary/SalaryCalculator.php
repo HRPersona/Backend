@@ -81,11 +81,11 @@ final class SalaryCalculator
 
         foreach ($this->benefit->findByEmployee($employee) as $employeeBenefit) {
             if (BenefitInterface::TYPE_PLUS === $employeeBenefit->getBenefit()->getBenefitType()) {
-                $this->benefitValue += $this->getBenefit($employeeBenefit, $this->basicSalary);
+                $this->benefitValue += $this->getBenefitValue($employeeBenefit, $this->basicSalary);
 
                 $this->plusBenefits[$employee->getId()][] = ['benefit' => $employeeBenefit->getBenefit(), 'value' => $employeeBenefit->getBenefitValue()];
             } else {
-                $this->benefitValue -= $this->getBenefit($employeeBenefit, $this->basicSalary);
+                $this->benefitValue -= $this->getBenefitValue($employeeBenefit, $this->basicSalary);
 
                 $this->minusBenefits[$employee->getId()][] = ['benefit' => $employeeBenefit->getBenefit(), 'value' => $employeeBenefit->getBenefitValue()];
             }
@@ -134,7 +134,7 @@ final class SalaryCalculator
      *
      * @return float
      */
-    private function getBenefit(EmployeeBenefitInterface $employeeBenefit, float $basicSalary): float
+    private function getBenefitValue(EmployeeBenefitInterface $employeeBenefit, float $basicSalary): float
     {
         $percentage = $employeeBenefit->getPercentageFromBasicSalary();
         if ($percentage) {

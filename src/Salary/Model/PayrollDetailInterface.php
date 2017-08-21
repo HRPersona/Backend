@@ -38,7 +38,17 @@ interface PayrollDetailInterface
     public function getBenefitType(): string;
 
     /**
+     * @param string $type
+     */
+    public function setBenefitType(string $type): void;
+
+    /**
      * @return float
      */
     public function getBenefitValue(): float;
+
+    /**
+     * @param float $value
+     */
+    public function setBenefitValue(float $value): void;
 }

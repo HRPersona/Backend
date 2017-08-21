@@ -84,7 +84,7 @@ final class CalculateSalaryController extends Controller
             $payroll->setTakeHomePay($salaryCalculator->getGrossSalary() + $overtime);
 
             $manager->persist($payroll);
-            $this->saveBenefit($salaryCalculator, $employee, $payroll);
+            $this->saveSalaryBenefit($salaryCalculator, $employee, $payroll);
 
             if (0 === $key % 17) {
                 $manager->flush();
@@ -163,7 +163,7 @@ final class CalculateSalaryController extends Controller
         $payroll->setTakeHomePay($salaryCalculator->getGrossSalary() + $overtime);
 
         $manager->persist($payroll);
-        $this->saveBenefit($salaryCalculator, $employee, $payroll);
+        $this->saveSalaryBenefit($salaryCalculator, $employee, $payroll);
         $manager->flush();
 
         return new JsonResponse(['status' => JsonResponse::HTTP_CREATED, 'message' => 'Employee salary has been calculated']);
@@ -174,7 +174,7 @@ final class CalculateSalaryController extends Controller
      * @param EmployeeInterface $employee
      * @param PayrollInterface  $payroll
      */
-    private function saveBenefit(SalaryCalculator $salaryCalculator, EmployeeInterface $employee, PayrollInterface $payroll)
+    private function saveSalaryBenefit(SalaryCalculator $salaryCalculator, EmployeeInterface $employee, PayrollInterface $payroll)
     {
         $payrollDetailRepository = $this->container->get('persona.repository.orm.payroll_detail_repository');
         $manager = $this->container->get('persona.manager.manager_factory')->getWriteManager();
