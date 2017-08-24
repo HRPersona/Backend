@@ -25,7 +25,7 @@
     },
     "require": {
         "php": ">=7.1",
-        "symfony/symfony": "3.2.*",
+        "symfony/symfony": "^3.3",
         "api-platform/core": "^2.0",
         "doctrine/orm": "^2.5",
         "doctrine/doctrine-bundle": "^1.6",
@@ -43,7 +43,7 @@
         "snc/redis-bundle": "^2.0",
         "nelmio/api-doc-bundle": "^2.13",
         "lexik/jwt-authentication-bundle": "^2.2",
-        "friendsofsymfony/user-bundle": "~2.0@dev",
+        "friendsofsymfony/user-bundle": "^2.0",
         "guzzlehttp/psr7": "^1.4",
         "php-http/guzzle6-adapter": "^1.1",
         "ad3n/username": "~0.3"

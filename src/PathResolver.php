@@ -4,6 +4,7 @@ namespace Persona\Hris;
 
 use Persona\Hris\Core\Operation\PathResolverException;
 use Persona\Hris\Core\Operation\PathResolverInterface;
+use Persona\Hris\Core\Util\StringUtil;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@bisnis.com>
@@ -11,18 +12,14 @@ use Persona\Hris\Core\Operation\PathResolverInterface;
 final class PathResolver implements PathResolverInterface
 {
     /**
-     * @param string $moduleShortName
+     * @param string $resourceShortName
      *
      * @throws PathResolverException
      *
      * @return string
      */
-    public function getModuleAlias(string $moduleShortName): string
+    public function getModuleAlias(string $resourceShortName): string
     {
-        if ('employee' === $moduleShortName) {
-            return $moduleShortName;
-        } else {
-            throw new PathResolverException();
-        }
+        return implode('/', explode('-', StringUtil::dash($resourceShortName)));
     }
 }

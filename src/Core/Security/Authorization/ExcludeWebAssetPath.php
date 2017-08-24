@@ -14,7 +14,7 @@ class ExcludeWebAssetPath implements ExcludePathInterface
      */
     public function isExclude(string $path): bool
     {
-        if (preg_match('/^\/(css|images|js|img)\//', $path) || preg_match('/^\.(css|js|jpg|jpeg|png)$/', $path)) {
+        if (preg_match('/^\/(css|images|js|img|bundles)\//', $path) || preg_match('/^\.(css|js|jpg|jpeg|png)$/', $path)) {
             return true;
         }
 

@@ -21,17 +21,17 @@ final class ChainPathResolver implements PathResolverInterface
     }
 
     /**
-     * @param string $moduleShortName
+     * @param string $resourceShortName
      *
      * @throws PathResolverException
      *
      * @return string
      */
-    public function getModuleAlias(string $moduleShortName): string
+    public function getModuleAlias(string $resourceShortName): string
     {
         foreach ($this->pathResolvers as $pathResolver) {
             try {
-                return $pathResolver->getModuleAlias($moduleShortName);
+                return $pathResolver->getModuleAlias($resourceShortName);
             } catch (PathResolverException $e) {
                 continue;
             }

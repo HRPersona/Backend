@@ -24,7 +24,7 @@ class ExcludePath implements ExcludePathInterface
             return true;
         }
 
-        if (strpos($path, 'user-activities')) {
+        if (strpos($path, 'user/activities')) {
             return true;
         }
 

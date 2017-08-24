@@ -206,7 +206,7 @@ class PayrollDetail implements PayrollDetailInterface, PayrollAwareInterface, Be
     /**
      * @param float $benefitValue
      */
-    public function setBenefitValue(float $benefitValue)
+    public function setBenefitValue(float $benefitValue): void
     {
         $this->benefitValue = $benefitValue;
     }
