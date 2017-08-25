@@ -34,6 +34,13 @@ services:
         tags:
             - { name: 'doctrine.event_subscriber' }
 
+    persona.allocation.resign_reason_aware_subscriber:
+        class: 'Persona\Hris\Allocation\Subscriber\ResignReasonAwareSubscriber'
+        arguments:
+            - '@persona.repository.orm.resign_reason_repository'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
     persona.employee.employee_aware_subscriber:
         class: 'Persona\Hris\Employee\Subscriber\EmployeeAwareSubscriber'
         arguments:

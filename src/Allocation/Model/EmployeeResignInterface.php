@@ -27,12 +27,12 @@ interface EmployeeResignInterface
     /**
      * @return \DateTime
      */
-    public function getAbsentDate(): \DateTime;
+    public function getResignDate(): \DateTime;
 
     /**
      * @param \DateTime $resignDate
      */
-    public function setAbsentDate(\DateTime $resignDate): void;
+    public function setResignDate(\DateTime $resignDate): void;
 
     /**
      * @return null|ResignReasonInterface

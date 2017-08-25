@@ -210,3 +210,9 @@ services:
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\SalaryHistory'
+
+    persona.repository.orm.resign_reason_repository:
+        class: 'Persona\Hris\Repository\ORM\ResignReasonRepository'
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\ResignReason'
