@@ -5,6 +5,7 @@ namespace Persona\Hris\Allocation\Model;
 use Persona\Hris\Employee\Model\EmployeeInterface;
 use Persona\Hris\Organization\Model\CompanyInterface;
 use Persona\Hris\Organization\Model\DepartmentInterface;
+use Persona\Hris\Organization\Model\JobClassInterface;
 use Persona\Hris\Organization\Model\JobTitleInterface;
 
 /**
@@ -12,10 +13,19 @@ use Persona\Hris\Organization\Model\JobTitleInterface;
  */
 interface MutationInterface
 {
+    const TYPE_MUTATION = 'm';
+    const TYPE_PROMOTION = 'p';
+    const TYPE_DEMOTION = 'd';
+
     /**
      * @return string
      */
     public function getId(): string;
+
+    /**
+     * @return string
+     */
+    public function getMutationType(): string;
 
     /**
      * @return null|EmployeeInterface
@@ -46,6 +56,26 @@ interface MutationInterface
      * @param JobTitleInterface $jobTitle
      */
     public function setNewJobTitle(JobTitleInterface $jobTitle = null): void;
+
+    /**
+     * @return null|JobClassInterface
+     */
+    public function getOldJobClass(): ? JobClassInterface;
+
+    /**
+     * @param JobClassInterface $jobClass
+     */
+    public function setOldJobClass(JobClassInterface $jobClass = null): void;
+
+    /**
+     * @return null|JobClassInterface
+     */
+    public function getNewJobClass(): ? JobClassInterface;
+
+    /**
+     * @param JobClassInterface $jobClass
+     */
+    public function setNewJobClass(JobClassInterface $jobClass = null): void;
 
     /**
      * @return null|CompanyInterface

@@ -47,6 +47,16 @@ interface EmployeeAttendanceInterface
     /**
      * @return string
      */
+    public function getSnapShot(): string;
+
+    /**
+     * @return string
+     */
+    public function getGeoLocation(): string;
+
+    /**
+     * @return string
+     */
     public function getTimeIn(): string;
 
     /**

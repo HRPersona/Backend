@@ -4,6 +4,7 @@ namespace Persona\Hris\Employee\Model;
 
 use Persona\Hris\Organization\Model\CompanyInterface;
 use Persona\Hris\Organization\Model\DepartmentInterface;
+use Persona\Hris\Organization\Model\JobClassInterface;
 use Persona\Hris\Organization\Model\JobTitleInterface;
 use Persona\Hris\Share\Model\CityInterface;
 use Persona\Hris\Share\Model\ProvinceInterface;
@@ -83,6 +84,16 @@ interface EmployeeInterface
      * @param JobTitleInterface $jobTitle
      */
     public function setJobTitle(JobTitleInterface $jobTitle = null): void;
+
+    /**
+     * @return null|JobClassInterface
+     */
+    public function getJobClass(): ? JobClassInterface;
+
+    /**
+     * @param JobClassInterface $class
+     */
+    public function setJobClass(JobClassInterface $class = null): void;
 
     /**
      * @return null|CompanyInterface

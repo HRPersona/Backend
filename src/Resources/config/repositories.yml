@@ -181,6 +181,12 @@ services:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\JobTitle'
 
+    persona.repository.orm.job_class_repository:
+        class: 'Persona\Hris\Repository\ORM\JobClassRepository'
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\JobClass'
+
     persona.repository.orm.education_title_repository:
         class: 'Persona\Hris\Repository\ORM\EducationTitleRepository'
         arguments:

@@ -13,6 +13,8 @@ use Persona\Hris\Organization\Model\CompanyAwareInterface;
 use Persona\Hris\Organization\Model\CompanyInterface;
 use Persona\Hris\Organization\Model\DepartmentAwareInterface;
 use Persona\Hris\Organization\Model\DepartmentInterface;
+use Persona\Hris\Organization\Model\JobClassAwareInterface;
+use Persona\Hris\Organization\Model\JobClassInterface;
 use Persona\Hris\Organization\Model\JobTitleAwareInterface;
 use Persona\Hris\Organization\Model\JobTitleInterface;
 use Persona\Hris\Share\Model\CityAwareInterface;
@@ -61,7 +63,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class Employee implements EmployeeInterface, ProvinceAwareInterface, CityAwareInterface, PlaceOfBirthAwareInterface, JobTitleAwareInterface, CompanyAwareInterface, DepartmentAwareInterface, ActionLoggerAwareInterface
+class Employee implements EmployeeInterface, ProvinceAwareInterface, CityAwareInterface, PlaceOfBirthAwareInterface, JobTitleAwareInterface, JobClassAwareInterface, CompanyAwareInterface, DepartmentAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -126,6 +128,20 @@ class Employee implements EmployeeInterface, ProvinceAwareInterface, CityAwareIn
      * @var JobTitleInterface
      */
     private $jobTitle;
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank()
+     *
+     * @var string
+     */
+    private $jobClassId;
+
+    /**
+     * @var JobClassInterface
+     */
+    private $jobClass;
 
     /**
      * @Groups({"read", "write"})
@@ -441,6 +457,41 @@ class Employee implements EmployeeInterface, ProvinceAwareInterface, CityAwareIn
         $this->jobTitle = $jobTitle;
         if ($jobTitle) {
             $this->jobTitleId = $jobTitle->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getJobClassId(): string
+    {
+        return (string) $this->jobClassId;
+    }
+
+    /**
+     * @param string $jobClassId
+     */
+    public function setJobClassId(string $jobClassId = null)
+    {
+        $this->jobClassId = $jobClassId;
+    }
+
+    /**
+     * @return JobClassInterface
+     */
+    public function getJobClass(): ? JobClassInterface
+    {
+        return $this->jobClass;
+    }
+
+    /**
+     * @param JobClassInterface $jobClass
+     */
+    public function setJobClass(JobClassInterface $jobClass = null): void
+    {
+        $this->jobClass = $jobClass;
+        if ($jobClass) {
+            $this->jobClassId = $jobClass->getId();
         }
     }
 

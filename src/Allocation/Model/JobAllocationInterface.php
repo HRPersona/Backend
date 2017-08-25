@@ -5,6 +5,7 @@ namespace Persona\Hris\Allocation\Model;
 use Persona\Hris\Employee\Model\EmployeeInterface;
 use Persona\Hris\Organization\Model\CompanyInterface;
 use Persona\Hris\Organization\Model\DepartmentInterface;
+use Persona\Hris\Organization\Model\JobClassInterface;
 use Persona\Hris\Organization\Model\JobTitleInterface;
 
 /**
@@ -36,6 +37,16 @@ interface JobAllocationInterface
      * @param JobTitleInterface $jobTitle
      */
     public function setJobTitle(JobTitleInterface $jobTitle = null): void;
+
+    /**
+     * @return null|JobClassInterface
+     */
+    public function getJobClass(): ? JobClassInterface;
+
+    /**
+     * @param JobClassInterface $jobClass
+     */
+    public function setJobClass(JobClassInterface $jobClass = null): void;
 
     /**
      * @return null|CompanyInterface

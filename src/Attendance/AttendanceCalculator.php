@@ -14,6 +14,10 @@ final class AttendanceCalculator
      */
     public static function calculate(EmployeeAttendanceInterface $employeeAttendance): void
     {
+        if (!$employeeAttendance->getTimeOut()) {
+            return;
+        }
+
         $now = new \DateTime();
 
         $timeIn = \DateTime::createFromFormat('Y-m-d H:i:s', sprintf('%s %s', $now->format('Y-m-d'), $employeeAttendance->getTimeIn()));

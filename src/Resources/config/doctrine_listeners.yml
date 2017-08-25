@@ -74,11 +74,6 @@ services:
         tags:
             - { name: 'doctrine.event_subscriber' }
 
-    persona.allocation.promotion_subscriber:
-        class: 'Persona\Hris\Allocation\Subscriber\PromotionSubscriber'
-        tags:
-            - { name: 'doctrine.event_subscriber' }
-
     persona.attendance.absent_subscriber:
         class: 'Persona\Hris\Attendance\Subscriber\AbsentSubscriber'
         arguments:

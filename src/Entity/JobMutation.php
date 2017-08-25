@@ -13,12 +13,15 @@ use Persona\Hris\Employee\Model\EmployeeAwareInterface;
 use Persona\Hris\Employee\Model\EmployeeInterface;
 use Persona\Hris\Organization\Model\CompanyInterface;
 use Persona\Hris\Organization\Model\DepartmentInterface;
+use Persona\Hris\Organization\Model\JobClassInterface;
 use Persona\Hris\Organization\Model\JobTitleInterface;
 use Persona\Hris\Organization\Model\NewCompanyAwareInterface;
 use Persona\Hris\Organization\Model\NewDepartmentAwareInterface;
+use Persona\Hris\Organization\Model\NewJobClassAwareInterface;
 use Persona\Hris\Organization\Model\NewJobTitleAwareInterface;
 use Persona\Hris\Organization\Model\OldCompanyAwareInterface;
 use Persona\Hris\Organization\Model\OldDepartmentAwareInterface;
+use Persona\Hris\Organization\Model\OldJobClassAwareInterface;
 use Persona\Hris\Organization\Model\OldJobTitleAwareInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -26,13 +29,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity()
  * @ORM\Table(name="ja_mutations", indexes={
- *     @ORM\Index(name="mutation_search_old", columns={"employee_id", "old_jobtitle_id", "old_company_id", "old_department_id"}),
- *     @ORM\Index(name="mutation_search_new", columns={"employee_id", "new_jobtitle_id", "new_company_id", "new_department_id"}),
+ *     @ORM\Index(name="mutation_search_old", columns={"employee_id", "old_company_id", "old_department_id"}),
+ *     @ORM\Index(name="mutation_search_old_job", columns={"employee_id", "old_jobtitle_id", "old_jobclass_id"}),
+ *     @ORM\Index(name="mutation_search_new", columns={"employee_id", "new_company_id", "new_department_id"}),
+ *     @ORM\Index(name="mutation_search_new_job", columns={"employee_id", "new_jobtitle_id", "old_jobclass_id"}),
  *     @ORM\Index(name="mutation_search_employee_id", columns={"employee_id"}),
  *     @ORM\Index(name="mutation_search_old_jobtitle", columns={"old_jobtitle_id"}),
+ *     @ORM\Index(name="mutation_search_old_jobclass", columns={"old_jobclass_id"}),
  *     @ORM\Index(name="mutation_search_old_company", columns={"old_company_id"}),
  *     @ORM\Index(name="mutation_search_old_department", columns={"old_department_id"}),
  *     @ORM\Index(name="mutation_search_new_jobtitle", columns={"new_jobtitle_id"}),
+ *     @ORM\Index(name="mutation_search_new_jobclass", columns={"new_jobclass_id"}),
  *     @ORM\Index(name="mutation_search_new_company", columns={"new_company_id"}),
  *     @ORM\Index(name="mutation_search_new_department", columns={"new_department_id"})
  * })
@@ -47,7 +54,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class JobMutation implements MutationInterface, EmployeeAwareInterface, OldJobTitleAwareInterface, OldCompanyAwareInterface, OldDepartmentAwareInterface, NewJobTitleAwareInterface, NewCompanyAwareInterface, NewDepartmentAwareInterface, ActionLoggerAwareInterface
+class JobMutation implements MutationInterface, EmployeeAwareInterface, OldJobTitleAwareInterface, OldJobClassAwareInterface, OldCompanyAwareInterface, OldDepartmentAwareInterface, NewJobTitleAwareInterface, NewJobClassAwareInterface, NewCompanyAwareInterface, NewDepartmentAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -62,6 +69,15 @@ class JobMutation implements MutationInterface, EmployeeAwareInterface, OldJobTi
      * @var string
      */
     private $id;
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="string")
+     * @Assert\NotBlank()
+     *
+     * @var string
+     */
+    private $mutationType;
 
     /**
      * @Groups({"read", "write"})
@@ -90,6 +106,20 @@ class JobMutation implements MutationInterface, EmployeeAwareInterface, OldJobTi
      * @var JobTitleInterface
      */
     private $oldJobTitle;
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="string", name="old_jobclass_id", nullable=true)
+     * @Assert\NotBlank()
+     *
+     * @var string
+     */
+    private $oldJobClassId;
+
+    /**
+     * @var JobClassInterface
+     */
+    private $oldJobClass;
 
     /**
      * @Groups({"read", "write"})
@@ -132,6 +162,20 @@ class JobMutation implements MutationInterface, EmployeeAwareInterface, OldJobTi
      * @var JobTitleInterface
      */
     private $newJobTitle;
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="string", name="new_jobclass_id", nullable=true)
+     * @Assert\NotBlank()
+     *
+     * @var string
+     */
+    private $newJobClassId;
+
+    /**
+     * @var JobClassInterface
+     */
+    private $newJobClass;
 
     /**
      * @Groups({"read", "write"})
@@ -184,6 +228,26 @@ class JobMutation implements MutationInterface, EmployeeAwareInterface, OldJobTi
     public function getId(): string
     {
         return $this->id;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMutationType(): string
+    {
+        return $this->mutationType;
+    }
+
+    /**
+     * @param string $mutationType
+     */
+    public function setMutationType(string $mutationType)
+    {
+        if (!in_array($mutationType, [MutationInterface::TYPE_DEMOTION, MutationInterface::TYPE_PROMOTION, MutationInterface::TYPE_MUTATION])) {
+            throw new \InvalidArgumentException(sprintf('%s is not valid job mutation', $mutationType));
+        }
+
+        $this->mutationType = $mutationType;
     }
 
     /**
@@ -253,6 +317,41 @@ class JobMutation implements MutationInterface, EmployeeAwareInterface, OldJobTi
         $this->oldJobTitle = $oldJobTitle;
         if ($oldJobTitle) {
             $this->oldJobTitleId = $oldJobTitle->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getOldJobClassId(): string
+    {
+        return (string) $this->oldJobClassId;
+    }
+
+    /**
+     * @param string $oldJobClassId
+     */
+    public function setOldJobClassId(string $oldJobClassId = null)
+    {
+        $this->oldJobClassId = $oldJobClassId;
+    }
+
+    /**
+     * @return JobClassInterface
+     */
+    public function getOldJobClass(): ? JobClassInterface
+    {
+        return $this->oldJobClass;
+    }
+
+    /**
+     * @param JobClassInterface $oldJobClass
+     */
+    public function setOldJobClass(JobClassInterface $oldJobClass = null): void
+    {
+        $this->oldJobClass = $oldJobClass;
+        if ($oldJobClass) {
+            $this->oldJobClassId = $oldJobClass->getId();
         }
     }
 
@@ -358,6 +457,41 @@ class JobMutation implements MutationInterface, EmployeeAwareInterface, OldJobTi
         $this->newJobTitle = $newJobTitle;
         if ($newJobTitle) {
             $this->newJobTitleId = $newJobTitle->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getNewJobClassId(): string
+    {
+        return (string) $this->newJobClassId;
+    }
+
+    /**
+     * @param string $newJobClassId
+     */
+    public function setNewJobClassId(string $newJobClassId = null)
+    {
+        $this->newJobClassId = $newJobClassId;
+    }
+
+    /**
+     * @return JobClassInterface
+     */
+    public function getNewJobClass(): ? JobClassInterface
+    {
+        return $this->newJobClass;
+    }
+
+    /**
+     * @param JobClassInterface $newJobClass
+     */
+    public function setNewJobClass(JobClassInterface $newJobClass = null): void
+    {
+        $this->newJobClass = $newJobClass;
+        if ($newJobClass) {
+            $this->newJobClassId = $newJobClass->getId();
         }
     }
 

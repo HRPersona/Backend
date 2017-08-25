@@ -6,6 +6,7 @@ use Doctrine\Common\EventSubscriber;
 use Doctrine\ORM\Event\LifecycleEventArgs;
 use Doctrine\ORM\Events;
 use Persona\Hris\Allocation\Model\MutationInterface;
+use Persona\Hris\Employee\Model\EmployeeInterface;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
@@ -20,9 +21,7 @@ final class MutationSubscriber implements EventSubscriber
         $entity = $eventArgs->getEntity();
         if ($entity instanceof MutationInterface) {
             $employee = $entity->getEmployee();
-            $employee->setJobTitle($entity->getNewJobTitle());
-            $employee->setCompany($entity->getNewCompany());
-            $employee->setDepartment($entity->getNewDepartment());
+            $this->apply($entity, $employee);
         }
     }
 
@@ -34,9 +33,30 @@ final class MutationSubscriber implements EventSubscriber
         $entity = $eventArgs->getEntity();
         if ($entity instanceof MutationInterface) {
             $employee = $entity->getEmployee();
-            $employee->setJobTitle($entity->getNewJobTitle());
-            $employee->setCompany($entity->getNewCompany());
-            $employee->setDepartment($entity->getNewDepartment());
+            $this->apply($entity, $employee);
+        }
+    }
+
+    /**
+     * @param MutationInterface $mutation
+     * @param EmployeeInterface $employee
+     */
+    private function apply(MutationInterface $mutation, EmployeeInterface $employee): void
+    {
+        if ($mutation->getNewJobTitle()) {
+            $employee->setJobTitle($mutation->getNewJobTitle());
+        }
+
+        if ($mutation->getNewJobClass()) {
+            $employee->setJobClass($mutation->getNewJobClass());
+        }
+
+        if ($mutation->getNewCompany()) {
+            $employee->setCompany($mutation->getNewCompany());
+        }
+
+        if ($mutation->getNewDepartment()) {
+            $employee->setDepartment($mutation->getNewDepartment());
         }
     }
 

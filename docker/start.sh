@@ -1,15 +1,24 @@
-#!/bin/sh
-set -xe
+#!/usr/bin/env bash
+set -e
 
-# Detect the host IP
-export DOCKER_BRIDGE_IP=$(ip ro | grep default | cut -d' ' -f 3)
+for name in NGINX_WEBROOT
+do
+    eval value=\$$name
+    sed -i "s|\${${name}}|${value}|g" /etc/nginx/conf.d/default.conf
+done
 
 if [ "$SYMFONY_ENV" = 'prod' ]; then
-    composer install --prefer-dist --no-dev --no-progress --no-suggest --optimize-autoloader --classmap-authoritative
+	composer install --prefer-dist --no-dev --no-progress --no-suggest --optimize-autoloader --classmap-authoritative
 else
-    composer install --prefer-dist --no-progress --no-suggest
+	composer install --prefer-dist --no-progress --no-suggest --optimize-autoloader --classmap-authoritative
 fi
 
-# Start Apache with the right permissions after removing pre-existing PID file
-rm -f /var/run/apache2/apache2.pid
-exec docker/apache/start_safe_perms -DFOREGROUND
+chmod 777 -R var/
+
+for name in VARNISH_PORT VARNISH_CONFIG CACHE_SIZE VARNISHD_PARAMS
+do
+    eval value=\$$name
+    sed -i "s|\${${name}}|${value}|g" /etc/supervisord.conf
+done
+
+/usr/bin/supervisord -n -c /etc/supervisord.conf

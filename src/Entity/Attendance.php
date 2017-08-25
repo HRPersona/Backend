@@ -13,6 +13,7 @@ use Persona\Hris\Attendance\Model\ShiftmentAwareInterface;
 use Persona\Hris\Attendance\Model\ShiftmentInterface;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
+use Persona\Hris\Core\Upload\UploadableInterface;
 use Persona\Hris\Employee\Model\EmployeeAwareInterface;
 use Persona\Hris\Employee\Model\EmployeeInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -37,7 +38,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class Attendance implements EmployeeAttendanceInterface, EmployeeAwareInterface, AbsentReasonAwareInterface, ShiftmentAwareInterface, ActionLoggerAwareInterface
+class Attendance implements EmployeeAttendanceInterface, EmployeeAwareInterface, AbsentReasonAwareInterface, ShiftmentAwareInterface, UploadableInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -89,6 +90,22 @@ class Attendance implements EmployeeAttendanceInterface, EmployeeAwareInterface,
      * @var \DateTime
      */
     private $attendanceDate;
+
+    /**
+     * @Groups({"read"})
+     * @ORM\Column(type="string", nullable=true)
+     *
+     * @var string
+     */
+    private $snapShot;
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="json", nullable=true)
+     *
+     * @var string
+     */
+    private $geoLocation;
 
     /**
      * @Groups({"read", "write"})
@@ -170,6 +187,20 @@ class Attendance implements EmployeeAttendanceInterface, EmployeeAwareInterface,
      * @var string
      */
     private $remark;
+
+    /**
+     * @Groups({"write"})
+     *
+     * @var string
+     */
+    private $imageString;
+
+    /**
+     * @Groups({"write"})
+     *
+     * @var string
+     */
+    private $imageExtension;
 
     public function __construct()
     {
@@ -273,9 +304,45 @@ class Attendance implements EmployeeAttendanceInterface, EmployeeAwareInterface,
     /**
      * @return string
      */
+    public function getSnapShot(): string
+    {
+        if ($this->snapShot) {
+            return sprintf('%s/%s', $this->getDirectoryPrefix(), $this->snapShot);
+        }
+
+        return 'default_avatar.png';
+    }
+
+    /**
+     * @param string $snapShot
+     */
+    public function setSnapShot(string $snapShot)
+    {
+        $this->snapShot = $snapShot;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGeoLocation(): string
+    {
+        return $this->geoLocation;
+    }
+
+    /**
+     * @param string $geoLocation
+     */
+    public function setGeoLocation(string $geoLocation)
+    {
+        $this->geoLocation = $geoLocation;
+    }
+
+    /**
+     * @return string
+     */
     public function getTimeIn(): string
     {
-        return $this->timeIn;
+        return (string) $this->timeIn;
     }
 
     /**
@@ -291,7 +358,7 @@ class Attendance implements EmployeeAttendanceInterface, EmployeeAwareInterface,
      */
     public function getTimeOut(): string
     {
-        return $this->timeOut;
+        return (string) $this->timeOut;
     }
 
     /**
@@ -307,7 +374,7 @@ class Attendance implements EmployeeAttendanceInterface, EmployeeAwareInterface,
      */
     public function getEarlyIn(): string
     {
-        return $this->earlyIn;
+        return (string) $this->earlyIn;
     }
 
     /**
@@ -323,7 +390,7 @@ class Attendance implements EmployeeAttendanceInterface, EmployeeAwareInterface,
      */
     public function getEarlyOut(): string
     {
-        return $this->earlyOut;
+        return (string) $this->earlyOut;
     }
 
     /**
@@ -339,7 +406,7 @@ class Attendance implements EmployeeAttendanceInterface, EmployeeAwareInterface,
      */
     public function getLateIn(): string
     {
-        return $this->lateIn;
+        return (string) $this->lateIn;
     }
 
     /**
@@ -355,7 +422,7 @@ class Attendance implements EmployeeAttendanceInterface, EmployeeAwareInterface,
      */
     public function getLateOut(): string
     {
-        return $this->lateOut;
+        return (string) $this->lateOut;
     }
 
     /**
@@ -422,7 +489,7 @@ class Attendance implements EmployeeAttendanceInterface, EmployeeAwareInterface,
      */
     public function getRemark(): ? string
     {
-        return $this->remark;
+        return (string) $this->remark;
     }
 
     /**
@@ -431,5 +498,56 @@ class Attendance implements EmployeeAttendanceInterface, EmployeeAwareInterface,
     public function setRemark(string $remark = null): void
     {
         $this->remark = $remark;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImageString(): ? string
+    {
+        return $this->imageString;
+    }
+
+    /**
+     * @param string $imageString
+     */
+    public function setImageString(string $imageString)
+    {
+        $this->imageString = $imageString;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImageExtension(): ? string
+    {
+        return $this->imageExtension;
+    }
+
+    /**
+     * @param string $imageExtension
+     */
+    public function setImageExtension(string $imageExtension)
+    {
+        $this->imageExtension = $imageExtension;
+        if ($imageExtension) {
+            $this->snapShot = $imageExtension; //for triggering changeset
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getTargetField(): string
+    {
+        return 'snapShot';
+    }
+
+    /**
+     * @return string
+     */
+    public function getDirectoryPrefix(): string
+    {
+        return 'snapshot';
     }
 }

@@ -306,7 +306,7 @@ class User extends BaseUser implements UserInterface, UploadableInterface, Actio
     {
         $this->imageExtension = $imageExtension;
         if ($imageExtension) {
-            $this->profileImage = $imageExtension;
+            $this->profileImage = $imageExtension; //for triggering changeset
         }
     }
 

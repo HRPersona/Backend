@@ -15,6 +15,8 @@ use Persona\Hris\Organization\Model\CompanyAwareInterface;
 use Persona\Hris\Organization\Model\CompanyInterface;
 use Persona\Hris\Organization\Model\DepartmentAwareInterface;
 use Persona\Hris\Organization\Model\DepartmentInterface;
+use Persona\Hris\Organization\Model\JobClassAwareInterface;
+use Persona\Hris\Organization\Model\JobClassInterface;
 use Persona\Hris\Organization\Model\JobTitleAwareInterface;
 use Persona\Hris\Organization\Model\JobTitleInterface;
 use Symfony\Component\Serializer\Annotation\Groups;
@@ -23,9 +25,11 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * @ORM\Entity()
  * @ORM\Table(name="ja_joballocations", indexes={
- *     @ORM\Index(name="employee_joballocation_search_idx", columns={"employee_id", "job_title_id", "company_id", "department_id"}),
+ *     @ORM\Index(name="employee_joballocation_search_idx", columns={"employee_id", "company_id", "department_id"}),
+ *     @ORM\Index(name="employee_joballocation_search_idx_job", columns={"employee_id", "job_title_id", "job_class_id"}),
  *     @ORM\Index(name="employee_joballocation_search_employee_id", columns={"employee_id"}),
  *     @ORM\Index(name="employee_joballocation_search_job_title", columns={"job_title_id"}),
+ *     @ORM\Index(name="employee_joballocation_search_job_class", columns={"job_class_id"}),
  *     @ORM\Index(name="employee_joballocation_search_company", columns={"company_id"}),
  *     @ORM\Index(name="employee_joballocation_search_department", columns={"department_id"})
  * })
@@ -40,7 +44,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class JobAllocation implements JobAllocationInterface, EmployeeAwareInterface, JobTitleAwareInterface, CompanyAwareInterface, DepartmentAwareInterface, ActionLoggerAwareInterface
+class JobAllocation implements JobAllocationInterface, EmployeeAwareInterface, JobTitleAwareInterface, JobClassAwareInterface, CompanyAwareInterface, DepartmentAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -83,6 +87,20 @@ class JobAllocation implements JobAllocationInterface, EmployeeAwareInterface, J
      * @var JobTitleInterface
      */
     private $jobTitle;
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank()
+     *
+     * @var string
+     */
+    private $jobClassId;
+
+    /**
+     * @var JobClassInterface
+     */
+    private $jobClass;
 
     /**
      * @Groups({"read", "write"})
@@ -221,6 +239,41 @@ class JobAllocation implements JobAllocationInterface, EmployeeAwareInterface, J
         $this->jobTitle = $jobTitle;
         if ($jobTitle) {
             $this->jobTitleId = $jobTitle->getId();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getJobClassId(): string
+    {
+        return (string) $this->jobClassId;
+    }
+
+    /**
+     * @param string $jobClassId
+     */
+    public function setJobClassId(string $jobClassId = null)
+    {
+        $this->jobClassId = $jobClassId;
+    }
+
+    /**
+     * @return JobClassInterface
+     */
+    public function getJobClass(): ? JobClassInterface
+    {
+        return $this->jobClass;
+    }
+
+    /**
+     * @param JobClassInterface $jobClass
+     */
+    public function setJobClass(JobClassInterface $jobClass = null): void
+    {
+        $this->jobClass = $jobClass;
+        if ($jobClass) {
+            $this->jobClassId = $jobClass->getId();
         }
     }
 
