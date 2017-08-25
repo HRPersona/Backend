@@ -34,7 +34,7 @@ final class CalculateTaxController extends Controller
      *      }
      *  })
      *
-     * @Route(name="tax_calculation", path="/employee/tax/calculate.json")
+     * @Route(name="tax_calculation", path="/employee/tax/calculates.json")
      *
      * @Method({"POST"})
      *

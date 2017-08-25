@@ -33,7 +33,7 @@ final class CalculateOvertimeController extends Controller
      *      }
      *  })
      *
-     * @Route(name="overtime_calculation", path="/employee/overtime/calculate.json")
+     * @Route(name="overtime_calculation", path="/employee/overtime/calculates.json")
      *
      * @Method({"POST"})
      *

@@ -39,7 +39,7 @@ final class CalculateSalaryController extends Controller
      *      }
      *  })
      *
-     * @Route(name="salary_calculation", path="/employee/salary/calculate.json")
+     * @Route(name="salary_calculation", path="/employee/salary/calculates.json")
      *
      * @Method({"POST"})
      *
