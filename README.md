@@ -70,7 +70,7 @@ Penanganan relasi dan validasinya dilakukan pada level aplikasi.
 * s = shared
 ```
 
-## TODO:
+## Dikerjakan:
 
 - Limit day per leave
 - Leave Adjustment
