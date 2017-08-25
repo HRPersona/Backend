@@ -83,6 +83,13 @@ services:
 
     persona.attendance.attendance_calculator_subscriber:
         class: 'Persona\Hris\Attendance\Subscriber\AttendanceCalculatorSubscriber'
+        arguments:
+            - '@persona.repository.orm.employee_shiftment_repository'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
+    persona.overtime.validate_overtime_proposer_subscriber:
+        class: 'Persona\Hris\Overtime\Subscriber\ValidateOvertimeProposerSubscriber'
         tags:
             - { name: 'doctrine.event_subscriber' }
 
@@ -94,10 +101,20 @@ services:
         tags:
             - { name: 'doctrine.event_subscriber' }
 
+    persona.leave.validate_approval_subscriber:
+        class: 'Persona\Hris\Leave\Subscriber\ValidateLeaveApprovalSubscriber'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
     persona.performance.appraisal_period_subscriber:
         class: 'Persona\Hris\Performance\Subscriber\InactiveAppraisalPeriodSubscriber'
         arguments:
             - '@persona.repository.orm.appraisal_period_repository'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
+    persona.performance.validate_supervisor_subscriber:
+        class: 'Persona\Hris\Performance\Subscriber\ValidateSupervisorSubscriber'
         tags:
             - { name: 'doctrine.event_subscriber' }
 

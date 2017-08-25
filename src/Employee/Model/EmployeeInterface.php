@@ -86,6 +86,16 @@ interface EmployeeInterface
     public function setJobTitle(JobTitleInterface $jobTitle = null): void;
 
     /**
+     * @return null|EmployeeInterface
+     */
+    public function getSupervisor(): ? EmployeeInterface;
+
+    /**
+     * @param EmployeeInterface|null $employee
+     */
+    public function setSupervisor(EmployeeInterface $employee = null): void;
+
+    /**
      * @return null|JobClassInterface
      */
     public function getJobClass(): ? JobClassInterface;

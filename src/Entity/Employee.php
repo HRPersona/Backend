@@ -9,6 +9,7 @@ use Knp\DoctrineBehaviors\Model\Timestampable\Timestampable;
 use Persona\Hris\Core\Logger\ActionLoggerAwareTrait;
 use Persona\Hris\Core\Logger\Model\ActionLoggerAwareInterface;
 use Persona\Hris\Employee\Model\EmployeeInterface;
+use Persona\Hris\Employee\Model\SupervisorAwareInterface;
 use Persona\Hris\Organization\Model\CompanyAwareInterface;
 use Persona\Hris\Organization\Model\CompanyInterface;
 use Persona\Hris\Organization\Model\DepartmentAwareInterface;
@@ -30,11 +31,12 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity()
  * @ORM\Table(name="em_employees", indexes={
  *     @ORM\Index(name="employee_search_idx", columns={"code", "email", "tax_number", "phone_number"}),
- *     @ORM\Index(name="employee_search_idx_relation", columns={"company_id", "department_id", "job_title_id", "birth_city_id"}),
+ *     @ORM\Index(name="employee_search_idx_relation", columns={"company_id", "department_id", "job_title_id", "supervisor_id", "birth_city_id"}),
  *     @ORM\Index(name="employee_search_idx_code", columns={"code"}),
  *     @ORM\Index(name="employee_search_idx_company", columns={"company_id"}),
  *     @ORM\Index(name="employee_search_idx_department", columns={"department_id"}),
  *     @ORM\Index(name="employee_search_idx_job_title", columns={"job_title_id"}),
+ *     @ORM\Index(name="employee_search_idx_supervisor", columns={"supervisor_id"}),
  *     @ORM\Index(name="employee_search_idx_birth_city", columns={"birth_city_id"}),
  *     @ORM\Index(name="employee_search_idx_city", columns={"city_id"}),
  *     @ORM\Index(name="employee_search_idx_province", columns={"province_id"}),
@@ -63,7 +65,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class Employee implements EmployeeInterface, ProvinceAwareInterface, CityAwareInterface, PlaceOfBirthAwareInterface, JobTitleAwareInterface, JobClassAwareInterface, CompanyAwareInterface, DepartmentAwareInterface, ActionLoggerAwareInterface
+class Employee implements EmployeeInterface, SupervisorAwareInterface, ProvinceAwareInterface, CityAwareInterface, PlaceOfBirthAwareInterface, JobTitleAwareInterface, JobClassAwareInterface, CompanyAwareInterface, DepartmentAwareInterface, ActionLoggerAwareInterface
 {
     use ActionLoggerAwareTrait;
     use Timestampable;
@@ -114,6 +116,20 @@ class Employee implements EmployeeInterface, ProvinceAwareInterface, CityAwareIn
      * @var \DateTime
      */
     private $contractEndDate;
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank()
+     *
+     * @var string
+     */
+    private $supervisorId;
+
+    /**
+     * @var EmployeeInterface
+     */
+    private $supervisor;
 
     /**
      * @Groups({"read", "write"})
@@ -427,6 +443,41 @@ class Employee implements EmployeeInterface, ProvinceAwareInterface, CityAwareIn
     public function setContractEndDate(\DateTime $contractEndDate): void
     {
         $this->contractEndDate = $contractEndDate;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSupervisorId(): string
+    {
+        return (string) $this->supervisorId;
+    }
+
+    /**
+     * @param string $supervisorId
+     */
+    public function setSupervisorId(string $supervisorId = null)
+    {
+        $this->supervisorId = $supervisorId;
+    }
+
+    /**
+     * @return EmployeeInterface
+     */
+    public function getSupervisor(): ? EmployeeInterface
+    {
+        return $this->supervisor;
+    }
+
+    /**
+     * @param EmployeeInterface $supervisor
+     */
+    public function setSupervisor(EmployeeInterface $supervisor = null): void
+    {
+        $this->supervisor = $supervisor;
+        if ($supervisor) {
+            $this->supervisorId = $supervisor->getId();
+        }
     }
 
     /**

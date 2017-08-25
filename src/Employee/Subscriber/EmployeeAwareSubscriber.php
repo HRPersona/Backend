@@ -12,6 +12,7 @@ use Persona\Hris\Employee\Model\EmployeeRepositoryInterface;
 use Persona\Hris\Employee\Model\FirstSupervisorAppraisalByAwareInterface;
 use Persona\Hris\Employee\Model\ProposedByAwareInterface;
 use Persona\Hris\Employee\Model\SecondSupervisorAppraisalByAwareInterface;
+use Persona\Hris\Employee\Model\SupervisorAwareInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -42,6 +43,10 @@ final class EmployeeAwareSubscriber implements EventSubscriber
             $this->isValidOrException($entity->getEmployeeId());
         }
 
+        if ($entity instanceof SupervisorAwareInterface) {
+            $this->isValidOrException($entity->getSupervisorId());
+        }
+
         if ($entity instanceof ApprovedByAwareInterface) {
             $this->isValidOrException($entity->getApprovedById());
         }
@@ -69,6 +74,10 @@ final class EmployeeAwareSubscriber implements EventSubscriber
             $this->isValidOrException($entity->getEmployeeId());
         }
 
+        if ($entity instanceof SupervisorAwareInterface) {
+            $this->isValidOrException($entity->getSupervisorId());
+        }
+
         if ($entity instanceof ApprovedByAwareInterface) {
             $this->isValidOrException($entity->getApprovedById());
         }
@@ -94,6 +103,10 @@ final class EmployeeAwareSubscriber implements EventSubscriber
         $entity = $eventArgs->getEntity();
         if ($entity instanceof EmployeeAwareInterface) {
             $entity->setEmployee($this->repository->find($entity->getEmployeeId()));
+        }
+
+        if ($entity instanceof SupervisorAwareInterface) {
+            $entity->setSupervisor($this->repository->find($entity->getSupervisorId()));
         }
     }
 

@@ -8,17 +8,12 @@ use Persona\Hris\Share\Model\SkillInterface;
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-interface EmployeeSkillAppraisalInterface
+interface EmployeeSkillAppraisalInterface extends SupervisorAwareInterface
 {
     /**
      * @return string
      */
     public function getId(): string;
-
-    /**
-     * @return null|EmployeeInterface
-     */
-    public function getEmployee(): ? EmployeeInterface;
 
     /**
      * @param EmployeeInterface $employee
@@ -49,26 +44,6 @@ interface EmployeeSkillAppraisalInterface
      * @param SkillInterface $skill
      */
     public function setSkill(SkillInterface $skill = null): void;
-
-    /**
-     * @return null|EmployeeInterface
-     */
-    public function getFirstSupervisorAppraisalBy(): ? EmployeeInterface;
-
-    /**
-     * @param EmployeeInterface $employee
-     */
-    public function setFirstSupervisorAppraisalBy(EmployeeInterface $employee = null): void;
-
-    /**
-     * @return null|EmployeeInterface
-     */
-    public function getSecondSupervisorAppraisalBy(): ? EmployeeInterface;
-
-    /**
-     * @param EmployeeInterface $employee
-     */
-    public function setSecondSupervisorAppraisalBy(EmployeeInterface $employee = null): void;
 
     /**
      * @return int
