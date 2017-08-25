@@ -31,7 +31,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Entity()
  * @ORM\Table(name="em_employees", indexes={
  *     @ORM\Index(name="employee_search_idx", columns={"code", "email", "tax_number", "phone_number"}),
- *     @ORM\Index(name="employee_search_idx_relation", columns={"company_id", "department_id", "job_title_id", "supervisor_id", "birth_city_id"}),
+ *     @ORM\Index(name="employee_search_idx_relation", columns={"company_id", "department_id", "job_title_id", "birth_city_id"}),
  *     @ORM\Index(name="employee_search_idx_code", columns={"code"}),
  *     @ORM\Index(name="employee_search_idx_company", columns={"company_id"}),
  *     @ORM\Index(name="employee_search_idx_department", columns={"department_id"}),
