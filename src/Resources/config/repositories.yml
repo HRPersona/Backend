@@ -204,3 +204,9 @@ services:
         arguments:
             - '@persona.manager.manager_factory'
             - 'Persona\Hris\Entity\Leave'
+
+    persona.repository.orm.salary_history_repository:
+        class: 'Persona\Hris\Repository\ORM\SalaryHistoryRepository'
+        arguments:
+            - '@persona.manager.manager_factory'
+            - 'Persona\Hris\Entity\SalaryHistory'

@@ -59,7 +59,7 @@ class SalaryHistory implements SalaryHistoryInterface, EmployeeAwareInterface, A
     private $employee;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\Column(type="date")
      * @Assert\NotBlank()
      *
@@ -87,6 +87,7 @@ class SalaryHistory implements SalaryHistoryInterface, EmployeeAwareInterface, A
     public function __construct()
     {
         $this->active = true;
+        $this->historyDate = new \DateTime();
     }
 
     /**

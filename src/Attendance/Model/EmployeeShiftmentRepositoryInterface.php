@@ -17,4 +17,12 @@ interface EmployeeShiftmentRepositoryInterface extends RepositoryInterface
      * @return bool
      */
     public function isTimeOff(EmployeeInterface $employee, \DateTime $attendanceDate): bool;
+
+    /**
+     * @param EmployeeInterface $employee
+     * @param \DateTime         $attendanceDate
+     *
+     * @return null|EmployeeShiftmentInterface
+     */
+    public function findByEmployeeAndDate(EmployeeInterface $employee, \DateTime $attendanceDate): ? EmployeeShiftmentInterface;
 }

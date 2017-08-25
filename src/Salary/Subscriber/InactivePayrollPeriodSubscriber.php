@@ -8,6 +8,7 @@ use Doctrine\ORM\Events;
 use Persona\Hris\Salary\Model\PayrollPeriodInterface;
 use Persona\Hris\Salary\Model\PayrollPeriodRepositoryInterface;
 use Persona\Hris\Salary\Model\PayrollRepositoryInterface;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
@@ -59,10 +60,21 @@ final class InactivePayrollPeriodSubscriber implements EventSubscriber
     }
 
     /**
+     * @param LifecycleEventArgs $eventArgs
+     */
+    public function preRemove(LifecycleEventArgs $eventArgs): void
+    {
+        $payrollPeriod = $eventArgs->getEntity();
+        if ($payrollPeriod instanceof PayrollPeriodInterface && $payrollPeriod->isActive()) {
+            throw new BadRequestHttpException('Can not remove active period.');
+        }
+    }
+
+    /**
      * @return array
      */
     public function getSubscribedEvents(): array
     {
-        return [Events::prePersist, Events::preUpdate];
+        return [Events::prePersist, Events::preUpdate, Events::preRemove];
     }
 }

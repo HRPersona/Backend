@@ -313,7 +313,7 @@ class Employee implements EmployeeInterface, ProvinceAwareInterface, CityAwareIn
     private $haveOvertimeBenefit;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\Column(type="float", scale=27, precision=2)
      * @Assert\NotBlank()
      *
@@ -322,7 +322,7 @@ class Employee implements EmployeeInterface, ProvinceAwareInterface, CityAwareIn
     private $basicSalary;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\Column(type="integer")
      * @Assert\NotBlank()
      *
@@ -331,7 +331,7 @@ class Employee implements EmployeeInterface, ProvinceAwareInterface, CityAwareIn
     private $leaveBalance;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\Column(type="boolean")
      * @Assert\NotBlank()
      *
@@ -340,7 +340,7 @@ class Employee implements EmployeeInterface, ProvinceAwareInterface, CityAwareIn
     private $resign;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read"})
      * @ORM\Column(type="date")
      * @Assert\NotBlank()
      *
@@ -349,6 +349,10 @@ class Employee implements EmployeeInterface, ProvinceAwareInterface, CityAwareIn
     private $resignDate;
 
     /**
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="string")
+     * @Assert\NotBlank()
+     *
      * @var string
      */
     private $taxGroup;

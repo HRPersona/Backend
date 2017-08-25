@@ -42,7 +42,7 @@ final class DeleteUserSubscriber implements EventSubscriber
         }
 
         if ($entity->isMe($token->getUser())) {
-            throw new BadRequestHttpException(sprintf('You can\'t delete your self.'));
+            throw new BadRequestHttpException('You can\'t delete your self.');
         }
     }
 

@@ -36,7 +36,7 @@ final class PreventReopenPayrollSubscriber implements EventSubscriber
         if ($entity instanceof PayrollInterface) {
             $persistence = $this->payrollRepository->find($entity->getId());
             if ($persistence->isClosed() && !$entity->isClosed()) {
-                throw new BadRequestHttpException(sprintf('Can not reopen closed payroll.'));
+                throw new BadRequestHttpException('Can not reopen closed payroll.');
             }
         }
     }

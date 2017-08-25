@@ -38,4 +38,15 @@ final class EmployeeShiftmentRepository extends AbstractRepository implements Em
 
         return false;
     }
+
+    /**
+     * @param EmployeeInterface $employee
+     * @param \DateTime         $shiftmentDate
+     *
+     * @return EmployeeShiftmentInterface
+     */
+    public function findByEmployeeAndDate(EmployeeInterface $employee, \DateTime $shiftmentDate): EmployeeShiftmentInterface
+    {
+        return $this->managerFactory->getWriteManager()->getRepository($this->class)->findOneBy(['employee' => $employee, 'absentDate' => $shiftmentDate, 'deletedAt' => null]);
+    }
 }

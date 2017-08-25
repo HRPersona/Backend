@@ -26,6 +26,8 @@ Penanganan relasi dan validasinya dilakukan pada level aplikasi.
 ```
 * Management Pegawai
 * Management Kontrak Pegawai
+* Management Golongan Pegawai
+* Management Penempatan Pegawai
 * Management Absensi
 * Management Lembur
 * Management Cuti
