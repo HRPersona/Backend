@@ -7,7 +7,7 @@ use Persona\Hris\Employee\Model\EmployeeInterface;
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-interface EmployeeIndicatorAppraisalInterface extends SupervisorAwareInterface
+interface EmployeeIndicatorAppraisalInterface extends AppraisalAwareInterface, SupervisorAwareInterface
 {
     /**
      * @return string
@@ -43,34 +43,4 @@ interface EmployeeIndicatorAppraisalInterface extends SupervisorAwareInterface
      * @param IndicatorInterface $indicator
      */
     public function setIndicator(IndicatorInterface $indicator = null): void;
-
-    /**
-     * @return int
-     */
-    public function getSelfAppraisal(): int;
-
-    /**
-     * @return int
-     */
-    public function getFirstSupervisorAppraisal(): int;
-
-    /**
-     * @return int
-     */
-    public function getSecondSupervisorAppraisal(): int;
-
-    /**
-     * @return string
-     */
-    public function getSelfAppraisalComment(): string;
-
-    /**
-     * @return string
-     */
-    public function getFirstSupervisorAppraisalComment(): string;
-
-    /**
-     * @return string
-     */
-    public function getSecondSupervisorAppraisalComment(): string;
 }

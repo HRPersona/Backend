@@ -6,6 +6,11 @@ services:
         tags:
             - { name: 'doctrine.event_subscriber' }
 
+    persona.logger.action_aware_logger:
+        class: 'Persona\Hris\Core\Logger\Subscriber\ActionLoggerAwareSubscriber'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
     persona.client.check_api_key_generator_subscriber:
         class: 'Persona\Hris\Core\Client\Subscriber\ApiKeyGeneratorSubscriber'
         tags:
@@ -115,6 +120,11 @@ services:
 
     persona.performance.validate_supervisor_subscriber:
         class: 'Persona\Hris\Performance\Subscriber\ValidateSupervisorSubscriber'
+        tags:
+            - { name: 'doctrine.event_subscriber' }
+
+    persona.performance.appraisal_aware_subscriber:
+        class: 'Persona\Hris\Performance\Subscriber\AppraisalAwareSubscriber'
         tags:
             - { name: 'doctrine.event_subscriber' }
 
