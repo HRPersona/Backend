@@ -74,8 +74,12 @@ final class UserSessionSubscriber implements EventSubscriberInterface
      */
     public function resetSession(JWTExpiredEvent $event)
     {
-        $user = $this->userRepository->findUserBySessionId((string) $this->session->get(UserInterface::SESSION_KEY));
+        $user = $event->getException()->getToken()->getUser();
         if (!$user instanceof UserInterface) {
+            $user = $this->userRepository->findUserBySessionId((string) $this->session->get(UserInterface::SESSION_KEY));
+        }
+
+        if (!$user) {
             return;
         }
 
