@@ -12,7 +12,7 @@ use Persona\Hris\Core\Security\Model\RoleInterface;
 /**
  * @author Muhamad Surya Iksanudin <surya.iksanudin@personahris.com>
  */
-class RemoveRoleMapCacheSubscriber implements EventSubscriber
+final class RemoveRoleMapCacheSubscriber implements EventSubscriber
 {
     /**
      * @var ManagerFactory
