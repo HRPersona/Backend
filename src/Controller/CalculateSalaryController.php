@@ -61,8 +61,7 @@ final class CalculateSalaryController extends Controller
                 continue;
             }
 
-            $salaryCalculator = $this->getSalaryCalculator();
-            $salaryCalculator->calculate($employee);
+            $this->getSalaryCalculator()->calculate($employee);
             $overtime = 0;
 
             $employeeOvertime = $this->container->get('persona.repository.orm.employee_overtime_history_repository');
@@ -81,10 +80,10 @@ final class CalculateSalaryController extends Controller
             $payroll->setPayrollMonth($month);
             $payroll->setBasicSalary($employee->getBasicSalary());
             $payroll->setOvertimeValue($overtime);
-            $payroll->setTakeHomePay($salaryCalculator->getGrossSalary() + $overtime);
+            $payroll->setTakeHomePay($this->getSalaryCalculator()->getGrossSalary() + $overtime);
 
             $manager->persist($payroll);
-            $this->saveSalaryBenefit($salaryCalculator, $employee, $payroll);
+            $this->saveSalaryBenefit($this->getSalaryCalculator(), $employee, $payroll);
 
             if (0 === $key % 17) {
                 $manager->flush();
@@ -140,8 +139,7 @@ final class CalculateSalaryController extends Controller
             throw new BadRequestHttpException(sprintf('Payroll for %s is closed.', $employee->getFullName()));
         }
 
-        $salaryCalculator = $this->getSalaryCalculator();
-        $salaryCalculator->calculate($employee);
+        $this->getSalaryCalculator()->calculate($employee);
 
         $overtime = 0;
         $employeeOvertime = $this->container->get('persona.repository.orm.employee_overtime_history_repository');
@@ -160,10 +158,10 @@ final class CalculateSalaryController extends Controller
         $payroll->setPayrollMonth($month);
         $payroll->setBasicSalary($employee->getBasicSalary());
         $payroll->setOvertimeValue($overtime);
-        $payroll->setTakeHomePay($salaryCalculator->getGrossSalary() + $overtime);
+        $payroll->setTakeHomePay($this->getSalaryCalculator()->getGrossSalary() + $overtime);
 
         $manager->persist($payroll);
-        $this->saveSalaryBenefit($salaryCalculator, $employee, $payroll);
+        $this->saveSalaryBenefit($this->getSalaryCalculator(), $employee, $payroll);
         $manager->flush();
 
         return new JsonResponse(['status' => JsonResponse::HTTP_CREATED, 'message' => 'Employee salary has been calculated']);
