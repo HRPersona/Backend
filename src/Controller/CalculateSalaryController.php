@@ -47,7 +47,7 @@ final class CalculateSalaryController extends Controller
      *
      * @return JsonResponse
      */
-    public function calculateAllAction(Request $request)
+    public function calculateAction(Request $request)
     {
         $year = $request->get('year', date('Y'));
         $month = $request->get('month', date('n'));
@@ -61,7 +61,8 @@ final class CalculateSalaryController extends Controller
                 continue;
             }
 
-            $this->getSalaryCalculator()->calculate($employee);
+            $salaryCalculator = $this->container->get('persona.salary.salary_calculator');
+            $salaryCalculator->calculate($employee);
             $overtime = 0;
 
             $employeeOvertime = $this->container->get('persona.repository.orm.employee_overtime_history_repository');
@@ -80,10 +81,10 @@ final class CalculateSalaryController extends Controller
             $payroll->setPayrollMonth($month);
             $payroll->setBasicSalary($employee->getBasicSalary());
             $payroll->setOvertimeValue($overtime);
-            $payroll->setTakeHomePay($this->getSalaryCalculator()->getGrossSalary() + $overtime);
+            $payroll->setTakeHomePay($salaryCalculator->getGrossSalary() + $overtime);
 
             $manager->persist($payroll);
-            $this->saveSalaryBenefit($this->getSalaryCalculator(), $employee, $payroll);
+            $this->saveSalaryBenefit($salaryCalculator, $employee, $payroll);
 
             if (0 === $key % 17) {
                 $manager->flush();
@@ -121,7 +122,7 @@ final class CalculateSalaryController extends Controller
      *
      * @return JsonResponse
      */
-    public function calculatePerEmployeeAction(Request $request, string $id)
+    public function calculateEmployeeAction(Request $request, string $id)
     {
         $year = $request->get('year', date('Y'));
         $month = $request->get('month', date('n'));
@@ -139,7 +140,8 @@ final class CalculateSalaryController extends Controller
             throw new BadRequestHttpException(sprintf('Payroll for %s is closed.', $employee->getFullName()));
         }
 
-        $this->getSalaryCalculator()->calculate($employee);
+        $salaryCalculator = $this->container->get('persona.salary.salary_calculator');
+        $salaryCalculator->calculate($employee);
 
         $overtime = 0;
         $employeeOvertime = $this->container->get('persona.repository.orm.employee_overtime_history_repository');
@@ -158,10 +160,10 @@ final class CalculateSalaryController extends Controller
         $payroll->setPayrollMonth($month);
         $payroll->setBasicSalary($employee->getBasicSalary());
         $payroll->setOvertimeValue($overtime);
-        $payroll->setTakeHomePay($this->getSalaryCalculator()->getGrossSalary() + $overtime);
+        $payroll->setTakeHomePay($salaryCalculator->getGrossSalary() + $overtime);
 
         $manager->persist($payroll);
-        $this->saveSalaryBenefit($this->getSalaryCalculator(), $employee, $payroll);
+        $this->saveSalaryBenefit($salaryCalculator, $employee, $payroll);
         $manager->flush();
 
         return new JsonResponse(['status' => JsonResponse::HTTP_CREATED, 'message' => 'Employee salary has been calculated']);
@@ -212,13 +214,5 @@ final class CalculateSalaryController extends Controller
                 $manager->flush();
             }
         }
-    }
-
-    /**
-     * @return object|SalaryCalculator
-     */
-    private function getSalaryCalculator(): SalaryCalculator
-    {
-        return $this->container->get('persona.salary.salary_calculator');
     }
 }
