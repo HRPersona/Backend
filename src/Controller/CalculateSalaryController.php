@@ -47,7 +47,7 @@ final class CalculateSalaryController extends Controller
      *
      * @return JsonResponse
      */
-    public function calculateAction(Request $request)
+    public function calculateAllAction(Request $request)
     {
         $year = $request->get('year', date('Y'));
         $month = $request->get('month', date('n'));
@@ -61,7 +61,7 @@ final class CalculateSalaryController extends Controller
                 continue;
             }
 
-            $salaryCalculator = $this->container->get('persona.salary.salary_calculator');
+            $salaryCalculator = $this->getSalaryCalculator();
             $salaryCalculator->calculate($employee);
             $overtime = 0;
 
@@ -122,7 +122,7 @@ final class CalculateSalaryController extends Controller
      *
      * @return JsonResponse
      */
-    public function calculateEmployeeAction(Request $request, string $id)
+    public function calculatePerEmployeeAction(Request $request, string $id)
     {
         $year = $request->get('year', date('Y'));
         $month = $request->get('month', date('n'));
@@ -140,7 +140,7 @@ final class CalculateSalaryController extends Controller
             throw new BadRequestHttpException(sprintf('Payroll for %s is closed.', $employee->getFullName()));
         }
 
-        $salaryCalculator = $this->container->get('persona.salary.salary_calculator');
+        $salaryCalculator = $this->getSalaryCalculator();
         $salaryCalculator->calculate($employee);
 
         $overtime = 0;
@@ -214,5 +214,13 @@ final class CalculateSalaryController extends Controller
                 $manager->flush();
             }
         }
+    }
+
+    /**
+     * @return object|SalaryCalculator
+     */
+    private function getSalaryCalculator(): SalaryCalculator
+    {
+        return $this->container->get('persona.salary.salary_calculator');
     }
 }
