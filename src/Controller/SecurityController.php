@@ -164,7 +164,6 @@ final class SecurityController extends Controller
         }
 
         $user->setLoggedIn(false);
-        $user->setSessionId('');
 
         $this->container->get('fos_user.user_manager')->updateUser($user);
 

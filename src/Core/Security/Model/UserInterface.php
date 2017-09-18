@@ -35,6 +35,11 @@ interface UserInterface extends BaseUser
     public function setLoggedIn(bool $loggedIn);
 
     /**
+     * @return bool
+     */
+    public function getLoggedIn(): bool;
+
+    /**
      * @param UserInterface    $user
      * @param SessionInterface $session
      *
@@ -51,4 +56,9 @@ interface UserInterface extends BaseUser
      * @return string
      */
     public function getSessionId(): string;
+
+    /**
+     * @return \DateTime
+     */
+    public function getLastLogin(): \DateTime;
 }

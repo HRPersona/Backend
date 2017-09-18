@@ -226,7 +226,15 @@ class User extends BaseUser implements UserInterface, UploadableInterface, Actio
      */
     public function isLoggedIn(UserInterface $user, SessionInterface $session): bool
     {
-        return $this->getLoggedIn() && '' !== $user->getSessionId() && $user->getSessionId() !== $session->get(self::SESSION_KEY);
+        $now =  new \DateTime();
+        $lastLogin = $user->getLastLogin();
+        $oneDay = new \DateInterval('P1D');
+        if ($user->getLoggedIn() && $lastLogin->add($oneDay) > $now && '' !== $user->getSessionId() && $user->getSessionId() !== $session->get(UserInterface::SESSION_KEY)) {
+            //When user is logged and he logged lower than one day and the session id is not eq with stored session id
+            return true;
+        }
+
+        return false;
     }
 
     /**

@@ -83,9 +83,7 @@ final class UserSessionSubscriber implements EventSubscriberInterface
             return;
         }
 
-        $user->setSessionId('');
         $user->setLoggedIn(false);
-
         $this->session->remove(UserInterface::SESSION_KEY);
 
         $persister = $this->managerFactory->getWriteManager();
