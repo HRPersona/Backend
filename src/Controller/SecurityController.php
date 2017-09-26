@@ -159,13 +159,16 @@ final class SecurityController extends Controller
     public function logoutAction(Request $request)
     {
         $user = $this->getUser();
+        $userManager = $this->container->get('fos_user.user_manager');
         if (!$user instanceof UserInterface) {
-            return new BadRequestHttpException();
+            $user = $userManager->findUserBy(['sessionId' => $this->container->get('session')->get(UserInterface::SESSION_KEY)]);
+            if (!$user) {
+                throw new BadRequestHttpException();
+            }
         }
 
         $user->setLoggedIn(false);
-
-        $this->container->get('fos_user.user_manager')->updateUser($user);
+        $userManager->updateUser($user);
 
         return new JsonResponse(['message' => 'User is logged out'], JsonResponse::HTTP_OK);
     }
