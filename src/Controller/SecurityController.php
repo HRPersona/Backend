@@ -159,16 +159,12 @@ final class SecurityController extends Controller
     public function logoutAction(Request $request)
     {
         $user = $this->getUser();
-        $userManager = $this->container->get('fos_user.user_manager');
         if (!$user instanceof UserInterface) {
-            $user = $userManager->findUserBy(['sessionId' => $this->container->get('session')->get(UserInterface::SESSION_KEY)]);
-            if (!$user) {
-                throw new BadRequestHttpException();
-            }
+            return new BadRequestHttpException();
         }
 
-        $user->setLoggedIn(false);
-        $userManager->updateUser($user);
+        $user->setSessionId(null);
+        $this->container->get('fos_user.user_manager')->updateUser($user);
 
         return new JsonResponse(['message' => 'User is logged out'], JsonResponse::HTTP_OK);
     }
@@ -196,5 +192,18 @@ final class SecurityController extends Controller
         $usernameGenerator = $this->container->get('ad3n.username.generator_factory');
 
         return new JsonResponse(['username' => $usernameGenerator->generate($fullname, new \DateTime())]);
+    }
+
+    /**
+     * @return UserInterface|null
+     */
+    protected function getUser(): ? UserInterface
+    {
+        $user = parent::getUser();
+        if (!$user) {
+            $user = $this->container->get('persona.repository.orm.user_repository')->findUserBySessionId($this->container->get(UserInterface::SESSION_KEY));
+        }
+
+        return $user;
     }
 }
